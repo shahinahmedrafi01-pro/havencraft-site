@@ -23,31 +23,27 @@
     position:relative;
     overflow-x:hidden;
   }
-  /* decorative blush squares — slowly drifting, like the original */
-  .deco{position:fixed;border-radius:8px;pointer-events:none;z-index:0;animation:drift 16s ease-in-out infinite alternate}
-  .deco.d1{width:92px;height:92px;top:7%;left:6%;background:#f6c9c4;opacity:.30;--r:12deg}
-  .deco.d2{width:58px;height:58px;top:66%;left:9%;background:#f9d9c9;opacity:.34;--r:-8deg;animation-duration:19s}
-  .deco.d3{width:124px;height:124px;top:12%;right:7%;background:#f6c9c4;opacity:.24;--r:-14deg;animation-duration:22s}
-  .deco.d4{width:66px;height:66px;bottom:9%;right:11%;background:#f9d9c9;opacity:.32;--r:20deg;animation-duration:17s}
-  .deco.d5{width:42px;height:42px;top:44%;left:3%;background:#f6c9c4;opacity:.26;--r:30deg;animation-duration:14s}
-  .deco.d6{width:46px;height:46px;top:52%;right:4%;background:#f9d9c9;opacity:.26;--r:-24deg;animation-duration:20s}
-  @keyframes drift{
-    from{transform:rotate(var(--r,0deg)) translate(0,0)}
-    to{transform:rotate(calc(var(--r,0deg) + 7deg)) translate(14px,-18px)}
-  }
+  /* decorative blush squares — static, baked into the page like an image */
+  .bg{position:absolute;inset:0;overflow:hidden;z-index:0}
+  .deco{position:absolute;border-radius:8px;pointer-events:none}
+  .deco.d1{width:92px;height:92px;top:7%;left:6%;background:#f6c9c4;opacity:.30;transform:rotate(12deg)}
+  .deco.d2{width:58px;height:58px;top:66%;left:9%;background:#f9d9c9;opacity:.34;transform:rotate(-8deg)}
+  .deco.d3{width:124px;height:124px;top:12%;right:7%;background:#f6c9c4;opacity:.24;transform:rotate(-14deg)}
+  .deco.d4{width:66px;height:66px;bottom:9%;right:11%;background:#f9d9c9;opacity:.32;transform:rotate(20deg)}
+  .deco.d5{width:42px;height:42px;top:44%;left:3%;background:#f6c9c4;opacity:.26;transform:rotate(30deg)}
+  .deco.d6{width:46px;height:46px;top:52%;right:4%;background:#f9d9c9;opacity:.26;transform:rotate(-24deg)}
 
   .card{position:relative;z-index:1;width:100%;max-width:620px;margin:0 auto;text-align:center;padding:clamp(42px,9vh,84px) 22px 72px}
 
   .avatar-wrap{position:relative;display:inline-block}
-  .avatar-wrap::before{content:'';position:absolute;width:118px;height:118px;right:-56px;top:36px;background:#f9dcd6;border-radius:8px;transform:rotate(4deg);z-index:-1;animation:drift 18s ease-in-out infinite alternate;--r:4deg}
   .avatar{height:178px;width:auto;display:block;margin:0 auto}
 
-  h1{font-size:clamp(1.65rem,5.2vw,2.35rem);font-weight:700;line-height:1.3;letter-spacing:-.01em;margin:30px 0 32px}
+  h1{font-size:clamp(1.35rem,4.6vw,1.9rem);font-weight:700;line-height:1.3;letter-spacing:-.01em;margin:30px 0 32px}
 
   .icon-row{display:flex;justify-content:center;gap:20px}
-  .icon-btn{width:62px;height:62px;border-radius:50%;background:linear-gradient(160deg,#ff8168,#ff5f57);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 18px rgba(255,111,97,.35);transition:transform .18s ease}
+  .icon-btn{width:52px;height:52px;border-radius:50%;background:linear-gradient(160deg,#ff8168,#ff5f57);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 18px rgba(255,111,97,.35);transition:transform .18s ease}
   .icon-btn:hover{transform:translateY(-3px) scale(1.05)}
-  .icon-btn svg{width:27px;height:27px;fill:#fff}
+  .icon-btn svg{width:23px;height:23px;fill:#fff}
   .icon-btn svg[fill="none"]{fill:none}
 
   .pills{display:flex;flex-direction:column;gap:14px;margin-top:38px}
@@ -65,19 +61,17 @@
 
   @media (max-width:480px){
     .avatar{height:152px}
-    .avatar-wrap::before{width:96px;height:96px;right:-40px;top:30px}
     h1{margin:24px 0 26px}
-    .icon-btn{width:56px;height:56px}
+    .icon-btn{width:48px;height:48px}
   }
   @media (prefers-reduced-motion: reduce){
-    .deco,.avatar-wrap::before{animation:none}
+    .deco{animation:none}
     .rv{opacity:1;transform:none;transition:none}
   }
 </style>
 </head>
 <body>
-  <div class="deco d1"></div><div class="deco d2"></div><div class="deco d3"></div>
-  <div class="deco d4"></div><div class="deco d5"></div><div class="deco d6"></div>
+  <div class="bg"><div class="deco d1"></div><div class="deco d2"></div><div class="deco d3"></div><div class="deco d4"></div><div class="deco d5"></div><div class="deco d6"></div></div>
 
   <main class="card">
     <div class="avatar-wrap rv">
