@@ -83,8 +83,6 @@
   .skin-viewer{width:min(74vw,290px);height:372px;margin:0 auto;position:relative}
   .skin-viewer canvas{width:100%;height:100%;display:block;cursor:grab;border-radius:18px}
   .skin-viewer canvas:active{cursor:grabbing}
-  .skin-fallback{height:100%;width:auto;max-width:100%;display:block;margin:0 auto}
-  .skin-fallback[hidden]{display:none}
   .skin-note{color:var(--muted);font-size:.9rem;padding:24px 10px}
   .drag-hint{margin-top:8px;font-size:.78rem;letter-spacing:.04em;color:var(--muted)}
 
@@ -108,12 +106,12 @@
   a:focus-visible, button:focus-visible{outline:2px solid var(--focus);outline-offset:3px}
 
   /* ---------- three-dot settings ---------- */
-  .menu-wrap{position:fixed;top:14px;right:14px;z-index:60}
+  .menu-wrap{position:fixed;top:14px;left:14px;z-index:60}
   .menu-btn{width:44px;height:44px;border-radius:50%;background:var(--glass);border:1px solid var(--glass-brd);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:var(--shadow);color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .18s ease,transform .18s ease}
   .menu-btn:hover{background:var(--glass-hi)}
   .menu-btn:active{transform:scale(.94)}
   .menu-btn svg{width:20px;height:20px;fill:currentColor}
-  .settings{position:absolute;top:54px;right:0;width:min(238px,82vw);background:var(--glass);border:1px solid var(--glass-brd);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-radius:18px;box-shadow:var(--shadow);padding:14px;text-align:left}
+  .settings{position:absolute;top:54px;left:0;width:min(238px,82vw);background:var(--glass);border:1px solid var(--glass-brd);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-radius:18px;box-shadow:var(--shadow);padding:14px;text-align:left}
   .settings[hidden]{display:none}
   .set-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:4px 2px}
   .set-label{font-weight:600;font-size:.95rem}
@@ -154,10 +152,10 @@
 <body>
   <div class="bg" aria-hidden="true"><div class="cube c1"></div><div class="cube c2"></div><div class="cube c3"></div><div class="cube c4"></div><div class="cube c5"></div></div>
 
-  <!-- Settings (three-dot menu) -->
+  <!-- Settings menu (button at top-left) -->
   <div class="menu-wrap">
     <button id="menuBtn" class="menu-btn" type="button" aria-label="Settings" aria-haspopup="true" aria-expanded="false" aria-controls="settingsMenu">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="1.9"/><circle cx="12" cy="12" r="1.9"/><circle cx="12" cy="19" r="1.9"/></svg>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" fill="none"/></svg>
     </button>
     <div id="settingsMenu" class="settings" role="menu" aria-label="Settings" hidden>
       <div class="set-row">
@@ -183,7 +181,6 @@
     <div class="avatar-wrap rv">
       <div class="skin-viewer" id="skinViewer">
         <canvas id="skinCanvas" role="img" aria-label="Interactive 3D Minecraft avatar for alxxq. Drag to rotate the character."></canvas>
-        <img id="skinFallback" class="skin-fallback" src="https://mc-heads.net/body/alxxq/128" alt="Minecraft avatar for alxxq" hidden>
         <p id="skinNote" class="skin-note" hidden>3D avatar could not load. Minecraft username: <strong>alxxq</strong></p>
       </div>
       <p class="drag-hint" id="dragHint" hidden>Drag to rotate</p>
@@ -352,19 +349,14 @@
   /* ================= 3D Minecraft avatar (skinview3d) ================= */
   var canvas = document.getElementById('skinCanvas');
   var wrap = document.getElementById('skinViewer');
-  var fallbackImg = document.getElementById('skinFallback');
   var skinNote = document.getElementById('skinNote');
   var dragHint = document.getElementById('dragHint');
 
   function showFallback(){
     canvas.hidden = true;
     dragHint.hidden = true;
-    fallbackImg.hidden = false;
-  }
-  fallbackImg.addEventListener('error', function(){
-    fallbackImg.hidden = true;
     skinNote.hidden = false;
-  });
+  }
 
   function initViewer(){
     if (!window.skinview3d) { showFallback(); return; }
@@ -375,7 +367,7 @@
         width: wrap.clientWidth,
         height: wrap.clientHeight,
         pixelRatio: Math.min(window.devicePixelRatio || 1, 2),
-        zoom: 0.85
+        zoom: 0.8
       });
     } catch (e) { showFallback(); return; }
 
@@ -409,7 +401,7 @@
   }
   function startViewer(){
     if (window.skinview3d) { initViewer(); return; }
-    /* primary CDN failed: try the mirror once, then fall back to the 2D render */
+    /* primary CDN failed: try the mirror once, then show the fallback note */
     var s = document.createElement('script');
     s.src = 'https://unpkg.com/skinview3d@3.4.1/bundles/skinview3d.bundle.js';
     s.onload = initViewer;
