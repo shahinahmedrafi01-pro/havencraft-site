@@ -462,7 +462,7 @@ body.no-anim *, body.no-anim *::before, body.no-anim *::after {
 #shop-fab[hidden] { display: none; }
 .gprice { font-size: 12px; font-weight: 700; margin-top: 2px; color: #facc15; }
 .gprice.owned { color: #4ade80; }
-#buy-username { background: var(--bg); border: 1px solid var(--line); color: inherit; border-radius: 8px; padding: 8px 10px; font-size: 14px; width: 100%; margin: 6px 0 4px; }
+#buy-username, #mc-username { background: var(--bg); border: 1px solid var(--line); color: inherit; border-radius: 8px; padding: 8px 10px; font-size: 14px; width: 100%; margin: 6px 0 4px; }
 .shop-packs { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 14px 0 18px; }
 .pack-card { border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 12px; text-align: center; background: rgba(255,255,255,0.02); }
 .pack-diamonds { font-size: 24px; font-weight: 800; }
@@ -504,3 +504,15 @@ body.no-anim *, body.no-anim *::before, body.no-anim *::after {
 .support-email { font-size: 17px; word-break: break-all; margin: 10px 0 2px; }
 .support-actions { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0; }
 .support-actions .btn-play { text-decoration: none; text-align: center; }
+
+/* -------- minecraft redeem code -------- */
+.mc-panel { display: flex; gap: 14px; align-items: center; border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; margin: 14px 0; background: linear-gradient(135deg, rgba(168,85,247,.13), rgba(147,51,234,.06)); flex-wrap: wrap; }
+.mc-thumb { width: 56px; height: 84px; object-fit: cover; border-radius: 8px; border: 1px solid var(--line); }
+.mc-info { flex: 1 1 220px; min-width: 0; }
+.mc-title { font-weight: 800; font-size: 16px; }
+.mc-stock { color: #facc15; font-size: 13px; font-weight: 700; margin-top: 3px; }
+.mc-mine { margin-top: 3px; }
+.mc-side { margin-left: auto; text-align: right; }
+.mc-price { font-size: 20px; font-weight: 800; margin-bottom: 8px; }
+.mc-code-box { background: var(--bg); border: 1px dashed var(--accent); border-radius: 10px; padding: 14px; text-align: center; font-family: "Courier New", monospace; font-size: 17px; font-weight: 700; letter-spacing: .5px; word-break: break-all; margin: 10px 0; color: #d8b4fe; }
+#mc-email { width: 100%; background: var(--bg); border: 1px solid var(--line); color: inherit; border-radius: 8px; padding: 8px 10px; font-size: 14px; margin: 6px 0 4px; }

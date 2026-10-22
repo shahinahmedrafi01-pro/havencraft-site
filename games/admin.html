@@ -32,6 +32,7 @@
   .row-actions { display: flex; gap: 8px; }
   #status { min-height: 20px; margin: 0 0 12px; }
   #logout-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 16px; }
+  .mc-code { font-family: ui-monospace, monospace; font-size: 12.5px; background: #171129; border: 1px dashed rgba(168,85,247,.5); padding: 4px 8px; border-radius: 8px; word-break: break-all; }
 </style>
 </head>
 <body>
@@ -59,6 +60,9 @@
     </div>
     <p id="status" class="dim sm"></p>
     <div id="admin-orders"></div>
+    <h3 style="margin:24px 0 4px">🎮 Minecraft Code Sales</h3>
+    <p class="dim sm">Buyers of Minecraft redeem codes. The email is the buyer's — contact them if support is needed.</p>
+    <div id="admin-mc-sales"></div>
   </div>
 </main>
 <script>
@@ -138,7 +142,7 @@ document.getElementById("admin-login").addEventListener("click", function () {
       document.getElementById("login-box").hidden = true;
       document.getElementById("orders-box").hidden = false;
       document.getElementById("admin-who").textContent = email;
-      loadOrders(false);
+      loadOrders(false); loadMcSales();
     })
     .catch(function () {
       btn.disabled = false; btn.textContent = "Log In";
@@ -150,6 +154,7 @@ document.getElementById("admin-logout").addEventListener("click", function () {
   document.getElementById("orders-box").hidden = true;
   document.getElementById("login-box").hidden = false;
   document.getElementById("admin-orders").innerHTML = "";
+  document.getElementById("admin-mc-sales").innerHTML = "";
 });
 document.getElementById("admin-orders").addEventListener("click", function (e) {
   var comp = e.target.closest ? e.target.closest("[data-complete]") : null;
@@ -172,7 +177,22 @@ document.getElementById("admin-orders").addEventListener("click", function (e) {
     }).catch(function () { setStatus("Could not reach the server."); });
   }
 });
-setInterval(function () { if (accessToken) loadOrders(true); }, 30000);
+function renderMcSales(rows) {
+  var el = document.getElementById("admin-mc-sales");
+  if (!rows.length) { el.innerHTML = '<p class="dim">No Minecraft code sales yet.</p>'; return; }
+  el.innerHTML = rows.map(function (o) {
+    var when = o.sold_at ? new Date(o.sold_at).toLocaleString() : "";
+    return '<div class="admin-row"><div><strong>' + esc(o.buyer_username || "") + '</strong> — 🎮 Minecraft Code<br><span class="dim sm">📧 ' + esc(o.buyer_email || "—") + " · " + esc(when) + '</span></div><span class="mc-code">' + esc(o.code) + "</span></div>";
+  }).join("");
+}
+function loadMcSales() {
+  if (!accessToken) return;
+  fetch(SUPABASE_URL + "/rest/v1/mc_codes?select=code,buyer_username,buyer_email,sold_at&status=eq.sold&order=sold_at.desc", { headers: sbHeaders() })
+    .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, data: j }; }); })
+    .then(function (res) { if (res.ok && Array.isArray(res.data)) renderMcSales(res.data); })
+    .catch(function () {});
+}
+setInterval(function () { if (accessToken) { loadOrders(true); loadMcSales(); } }, 30000);
 </script>
 </body>
 </html>

@@ -35,6 +35,21 @@
       price: 30, // one-time unlock price in diamonds — same model as Police Chase
       scoreKey: "galaxyDefenderBest",
       scoreLabel: "Best score"
+    },
+    {
+      id: "minecraft-code",
+      product: true,
+      title: "Minecraft Java & Bedrock Redeem Code",
+      genre: "Game Code",
+      categories: ["Sandbox", "Survival"],
+      tagline: "The full Minecraft game — one redeem code, shown instantly when you buy.",
+      description: "Official Minecraft Java & Bedrock redeem code for PC — the full game that normally costs $29.99. Buy it here with Diamonds and your code is shown on screen instantly. Copy it and save it within 24 hours — after that it disappears from the site. Limited stock!",
+      controls: "Redeem at minecraft.net/redeem — sign in with your Microsoft account and enter the code.",
+      features: ["Full game: Java & Bedrock editions", "Code shown instantly after purchase", "Copy it — save within 24 hours", "Works with your Microsoft account"],
+      credits: "Your email is saved with the order so the admin can contact you if support is needed.",
+      route: "#",
+      cover: "img/cover-minecraft.svg",
+      price: 1220
     }
   ];
   var AVATARS = [
@@ -120,12 +135,12 @@
   /* ---------------- modals ---------------- */
   function openModal(id) { $(id).hidden = false; }
   function closeModals() {
-    ["info-modal", "about-modal", "support-modal", "confirm-modal", "shop-modal", "buy-modal"].forEach(function (id) { $(id).hidden = true; });
+    ["info-modal", "about-modal", "support-modal", "confirm-modal", "shop-modal", "buy-modal", "mc-modal"].forEach(function (id) { $(id).hidden = true; });
   }
   document.querySelectorAll("[data-close]").forEach(function (b) {
     b.addEventListener("click", closeModals);
   });
-  ["info-modal", "about-modal", "support-modal", "confirm-modal", "shop-modal", "buy-modal"].forEach(function (id) {
+  ["info-modal", "about-modal", "support-modal", "confirm-modal", "shop-modal", "buy-modal", "mc-modal"].forEach(function (id) {
     $(id).addEventListener("click", function (e) { if (e.target === $(id)) closeModals(); });
   });
   document.addEventListener("keydown", function (e) {
@@ -137,8 +152,8 @@
   function cardHTML(g) {
     var fav = store.favs.indexOf(g.id) !== -1;
     var owned = isOwned(g.id);
-    var priceTag = g.price ? (owned ? '<div class="gprice owned">✓ Owned</div>' : '<div class="gprice">🔒 ' + g.price + " 💎 to unlock</div>") : "";
-    var playLabel = g.price && !owned ? "🔒 " + g.price + " 💎" : "▶ Play";
+    var priceTag = g.product ? '<div class="gprice">🎫 ' + g.price.toLocaleString("en-US") + " 💎 · instant code</div>" : (g.price ? (owned ? '<div class="gprice owned">✓ Owned</div>' : '<div class="gprice">🔒 ' + g.price + " 💎 to unlock</div>") : "");
+    var playLabel = g.product ? "🛒 Buy Code" : (g.price && !owned ? "🔒 " + g.price + " 💎" : "▶ Play");
     return '<article class="gcard' + (fav ? " is-fav" : "") + '" data-id="' + g.id + '" tabindex="0" role="button" aria-label="' + esc(g.title) + '">' +
       '<div class="cover"><img src="' + g.cover + '" alt="' + esc(g.title) + ' cover" loading="lazy">' +
       '<span class="fav-flag" title="Favorite">★</span>' +
@@ -173,6 +188,7 @@
     if (playLink) {
       var pid = playLink.getAttribute("data-play");
       var pg = gameById(pid);
+      if (pg && pg.product) { e.preventDefault(); closeModals(); openMcModal(); return; } // store product -> code buy flow
       if (pg && pg.price && !isOwned(pid)) { e.preventDefault(); openBuyModal(pg); return; } // paywalled -> buy first
       recordRecent(pid); return; // then navigate normally
     }
@@ -205,6 +221,7 @@
     $("im-credits").textContent = g.credits;
     var pl = $("im-play");
     pl.href = g.route; pl.setAttribute("data-play", g.id);
+    if (g.product) pl.textContent = "🛒 Buy Code — " + g.price.toLocaleString("en-US") + " 💎";
     pl.textContent = g.price && !isOwned(g.id) ? "🔒 Buy — " + g.price + " 💎" : "▶  Play";
     openModal("info-modal");
   }
@@ -466,6 +483,9 @@
       "not admin": "Admin login required.",
       "daily claim not ready": "Daily Claim not ready yet — check the countdown.",
       "daily claim unavailable": "Daily Claim is still being set up — try again soon.",
+      "invalid email": "Enter a valid email address — it is saved with your order for support.",
+      "already have active code": "You already bought a code — save it first. You can buy another after its 24 hours end.",
+      "sold out": "Sold out — all Minecraft codes are gone.",
       "network": "Could not reach the server — check your connection."
     };
     return map[err] || "Something went wrong — please try again.";
@@ -588,6 +608,133 @@
   $("shop-fab").addEventListener("click", function () { setView("shop"); });
   $("topbar-diamonds").addEventListener("click", function () { setView("shop"); });
 
+  /* ---------------- minecraft redeem code ----------------
+     A store product, not a playable game: 1,220 Diamonds buys one
+     Minecraft Java & Bedrock redeem code from a small stock held
+     ONLY in Supabase (mc_codes — the site never sees the list).
+     buy_minecraft_code() deducts + assigns a code atomically and
+     returns it for the on-screen view (24h, enforced server-side
+     by get_my_minecraft_code). The buyer's email is stored with
+     the sale so the admin can contact them (admin panel list). */
+  var MC_PRICE = 1220;
+  var mcState = { stock: null, active: null, expiresAt: 0 };
+
+  function mcFriendly(err) {
+    if (err && err.indexOf("Could not find the function") !== -1) return "Minecraft codes are still being set up — try again soon.";
+    return friendlyShopError(err);
+  }
+  function mcFetchState() {
+    var jobs = [sbRpc("mc_stock", {})];
+    if (currentProfile) jobs.push(sbRpc("get_my_minecraft_code", { p_username: store.shopUser }));
+    return Promise.all(jobs).then(function (rs) {
+      if (rs[0] && rs[0].ok && rs[0].data) mcState.stock = rs[0].data.left;
+      if (rs[1] && rs[1].ok && rs[1].data && rs[1].data.active) {
+        mcState.active = rs[1].data;
+        mcState.expiresAt = Date.now() + (rs[1].data.seconds_left || 0) * 1000;
+      } else { mcState.active = null; mcState.expiresAt = 0; }
+      return mcState;
+    }).catch(function () { return mcState; });
+  }
+  function renderMcPanel() {
+    var stockEl = $("mc-stock"), btn = $("mc-open"), mine = $("mc-mine");
+    if (!stockEl || !btn || !mine) return;
+    if (mcState.active) {
+      mine.hidden = false;
+      mine.textContent = "🎫 You have an active code — tap View My Code to see it before its 24 hours end.";
+      btn.textContent = "🎫 View My Code";
+    } else {
+      mine.hidden = true;
+      btn.textContent = "Buy Code";
+    }
+    if (mcState.stock === null) stockEl.textContent = "";
+    else if (mcState.stock <= 0) stockEl.textContent = "😢 Sold out — no codes left";
+    else stockEl.textContent = "📦 Only " + mcState.stock + " left in stock";
+  }
+  function renderMcModal() {
+    var form = $("mc-form-view"), codeView = $("mc-code-view");
+    if (!form || !codeView) return;
+    if (mcState.active) {
+      form.hidden = true; codeView.hidden = false;
+      $("mc-code-text").textContent = mcState.active.code;
+      $("mc-email-note").textContent = "🧾 Order email: " + (mcState.active.email || "—") + " — the admin can contact you about this order if needed.";
+      mcTick();
+      return;
+    }
+    form.hidden = false; codeView.hidden = true;
+    var bal = currentProfile ? currentProfile.diamonds : 0;
+    var hasAccount = !!currentProfile;
+    $("mc-balance").textContent = bal.toLocaleString("en-US");
+    $("mc-username-row").hidden = hasAccount;
+    $("mc-account-note").hidden = !hasAccount;
+    $("mc-account-name").textContent = store.shopUser;
+    var soldOut = mcState.stock === 0;
+    var canBuy = hasAccount && bal >= MC_PRICE && !soldOut;
+    var needMore = hasAccount && bal < MC_PRICE;
+    $("mc-buy-confirm").hidden = !canBuy;
+    $("mc-buy-shop").hidden = !needMore;
+    var need = $("mc-need-note");
+    if (needMore) {
+      need.hidden = false;
+      need.textContent = "You need " + (MC_PRICE - bal).toLocaleString("en-US") + " more diamonds to buy a code.";
+    } else if (soldOut) {
+      need.hidden = false;
+      need.textContent = "Sold out — no codes left.";
+    } else need.hidden = true;
+    $("mc-stock-note").textContent = mcState.stock === null || mcState.stock <= 0 ? "" : "📦 " + mcState.stock + " code(s) left in stock";
+  }
+  function openMcModal() {
+    openModal("mc-modal");
+    renderMcModal();
+    mcFetchState().then(function () { renderMcModal(); renderMcPanel(); });
+  }
+  function mcTick() {
+    var el = $("mc-count"); if (!el) return;
+    if (!mcState.active) { el.textContent = ""; return; }
+    var left = mcState.expiresAt - Date.now();
+    if (left <= 0) {
+      mcState.active = null; mcState.expiresAt = 0;
+      renderMcModal(); renderMcPanel();
+      return;
+    }
+    el.textContent = "⏰ This code stays visible here for " + fmtCountdown(left) + " — save it now (copy it or take a screenshot).";
+  }
+  setInterval(mcTick, 1000);
+  $("mc-open").addEventListener("click", openMcModal);
+  $("mc-create").addEventListener("click", function () {
+    loadOrCreateAccount($("mc-username").value).then(function () { renderMcModal(); });
+  });
+  $("mc-buy-shop").addEventListener("click", function () { closeModals(); setView("shop"); });
+  $("mc-buy-confirm").addEventListener("click", function () {
+    var email = $("mc-email").value.trim();
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { toast("Enter a valid email address — it is saved with your order for support."); return; }
+    askConfirm("Buy Minecraft code?", "1,220 💎 will be deducted. Your code will be shown here right away — save it within 24 hours.", "Buy", function () {
+      sbRpc("buy_minecraft_code", { p_username: store.shopUser, p_email: email }).then(function (res) {
+        if (!res.ok) { toast(mcFriendly(res.error)); return; }
+        if (currentProfile) currentProfile.diamonds = res.data.diamonds;
+        syncDiamondDisplays();
+        mcState.active = { code: res.data.code, email: email };
+        mcState.expiresAt = Date.now() + 24 * 3600 * 1000;
+        if (mcState.stock !== null && mcState.stock > 0) mcState.stock -= 1;
+        renderMcModal(); renderMcPanel();
+        toast("🎉 Code bought — save it now!");
+      });
+    });
+  });
+  $("mc-copy").addEventListener("click", function () {
+    if (!mcState.active) return;
+    var code = mcState.active.code;
+    function done() { toast("Code copied: " + code); }
+    function fallbackCopy() {
+      var ta = document.createElement("textarea");
+      ta.value = code; document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); done(); } catch (e) { toast("Copy this code: " + code); }
+      document.body.removeChild(ta);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(code).then(done).catch(fallbackCopy);
+    } else fallbackCopy();
+  });
+
   /* ---------------- diamond shop ---------------- */
   /* Package prices shown here mirror the server-side packages
      table — the server re-checks prices on every order, so the
@@ -617,6 +764,7 @@
 
   function renderShop() {
     syncDiamondDisplays();
+    mcFetchState().then(renderMcPanel);
     $("shop-user-input").value = store.shopUser;
     $("shop-packs").innerHTML = PACKAGES.map(function (p) {
       return '<div class="pack-card"><div class="pack-diamonds">💎 ' + p.diamonds + "</div>" +

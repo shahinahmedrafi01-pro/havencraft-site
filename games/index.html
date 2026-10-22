@@ -157,6 +157,19 @@
               <button class="btn-play sm" id="daily-claim-btn" disabled>Claim +10 💎</button>
             </div>
           </div>
+          <div class="mc-panel">
+            <img class="mc-thumb" src="img/cover-minecraft.svg" alt="Minecraft Java &amp; Bedrock cover">
+            <div class="mc-info">
+              <div class="mc-title">🎮 Minecraft Java &amp; Bedrock Redeem Code</div>
+              <div class="dim sm">The full game for PC (official price $29.99). Pay with Diamonds — your code is shown instantly. Save it within 24 hours.</div>
+              <div class="mc-stock" id="mc-stock"></div>
+              <div class="mc-mine dim sm" id="mc-mine" hidden></div>
+            </div>
+            <div class="mc-side">
+              <div class="mc-price">1,220 💎</div>
+              <button class="btn-play" id="mc-open">Buy Code</button>
+            </div>
+          </div>
           <div id="shop-packs" class="shop-packs"></div>
           <div class="custom-card">
             <div class="custom-head"><span>🛠️ Custom Amount</span><span class="dim sm">1,000 – 100,000 💎 &bull; bigger amount = cheaper per diamond</span></div>
@@ -378,6 +391,45 @@
       <button class="btn-ghost" data-close>Cancel</button>
       <button class="btn-play" id="buy-confirm">Buy for 30 💎</button>
       <button class="btn-play" id="buy-shop" hidden>Go to Diamond Shop</button>
+    </div>
+  </div>
+</div>
+
+<!-- minecraft code modal -->
+<div id="mc-modal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="mc-title">
+  <div class="modal-card narrow">
+    <button class="icon-btn modal-x" data-close aria-label="Close">✕</button>
+    <h3 id="mc-title">🎮 Minecraft Java &amp; Bedrock Redeem Code</h3>
+    <div id="mc-form-view">
+      <p class="dim sm">Official redeem code for the full game (PC, Java &amp; Bedrock). After you buy, your code appears right here — copy it and save it within 24 hours.</p>
+      <p><strong>Price: 1,220 💎</strong> · Your balance: <strong id="mc-balance">0</strong> 💎</p>
+      <div id="mc-username-row">
+        <label class="dim sm" for="mc-username">Create your account to get 30 free diamonds</label>
+        <input id="mc-username" maxlength="24" placeholder="Choose a username" aria-label="Username">
+        <div class="im-actions">
+          <button class="btn-play sm" id="mc-create">Create Account (+30 💎)</button>
+        </div>
+      </div>
+      <p class="dim sm" id="mc-account-note" hidden>Account: <strong id="mc-account-name"></strong></p>
+      <label class="dim sm" for="mc-email">Your email — saved with the order so the admin can contact you if needed</label>
+      <input id="mc-email" type="email" placeholder="you@example.com" aria-label="Email for code delivery">
+      <p class="dim sm" id="mc-need-note" hidden></p>
+      <p class="dim sm" id="mc-stock-note"></p>
+      <div class="im-actions">
+        <button class="btn-ghost" data-close>Cancel</button>
+        <button class="btn-play" id="mc-buy-confirm">Buy for 1,220 💎</button>
+        <button class="btn-play" id="mc-buy-shop" hidden>Go to Diamond Shop</button>
+      </div>
+    </div>
+    <div id="mc-code-view" hidden>
+      <p>✅ <strong>Your redeem code</strong> — save it now:</p>
+      <div class="mc-code-box" id="mc-code-text"></div>
+      <div class="im-actions">
+        <button class="btn-play" id="mc-copy">📋 Copy Code</button>
+      </div>
+      <p class="dim sm" id="mc-email-note"></p>
+      <p class="dim sm" id="mc-count"></p>
+      <p class="dim sm">Redeem at <strong>minecraft.net/redeem</strong> with your Microsoft account. After 24 hours the code disappears from this site — so save it now. Lost it? Contact support with your order email.</p>
     </div>
   </div>
 </div>
