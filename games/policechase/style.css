@@ -1,6 +1,6 @@
 /* Police Chase — retro arcade theme (matches Rafi's Mini Arcade hub) */
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-html, body { height: 100%; overflow: hidden; background: #0b0b18; }
+html, body { height: 100%; overflow: hidden; background: #07040f; }
 body {
   font-family: "Courier New", ui-monospace, monospace;
   color: #e5e7eb; user-select: none; -webkit-user-select: none;
@@ -13,8 +13,8 @@ body {
 /* ---------- back link ---------- */
 .back-link {
   position: absolute; top: 10px; left: 10px; z-index: 40;
-  color: #22d3ee; text-decoration: none; font-weight: bold; font-size: 15px;
-  background: rgba(5,5,20,0.65); border: 1px solid #22d3ee; border-radius: 8px;
+  color: #a855f7; text-decoration: none; font-weight: bold; font-size: 15px;
+  background: rgba(14,7,30,0.66); border: 1px solid #a855f7; border-radius: 8px;
   padding: 6px 10px;
 }
 
@@ -38,7 +38,7 @@ body {
 #hud-walls { font-size: 12px; margin-top: 2px; color: #fbbf24; text-shadow: 1px 1px 0 #000; }
 #btn-pause {
   pointer-events: auto; margin-top: 6px;
-  background: rgba(5,5,20,0.65); border: 1px solid #22d3ee; color: #22d3ee;
+  background: rgba(14,7,30,0.66); border: 1px solid #a855f7; color: #a855f7;
   border-radius: 8px; font-size: 15px; padding: 6px 12px; cursor: pointer;
 }
 /* chase meter */
@@ -78,10 +78,10 @@ body {
 .tc-col { display: flex; flex-direction: column; gap: 10px; }
 #touch-controls button {
   pointer-events: auto; width: 74px; height: 74px; border-radius: 50%;
-  font-size: 28px; color: #22d3ee; background: rgba(5,5,20,0.55);
-  border: 2px solid #22d3ee; cursor: pointer;
+  font-size: 28px; color: #a855f7; background: rgba(14,7,30,0.55);
+  border: 2px solid #a855f7; cursor: pointer;
 }
-#touch-controls button:active { background: rgba(34,211,238,0.35); }
+#touch-controls button:active { background: rgba(168,85,247,0.35); }
 #btn-fire { border-color: #f87171; color: #f87171; width: 64px; height: 64px; font-size: 26px; }
 #btn-fire:active { background: rgba(248,113,113,0.35); }
 
@@ -103,7 +103,7 @@ body {
 .overlay {
   position: absolute; inset: 0; z-index: 35;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
-  background: rgba(4,4,14,0.88); text-align: center; padding: 20px;
+  background: rgba(6,3,14,0.9); text-align: center; padding: 20px;
 }
 .overlay h1.title {
   font-size: clamp(30px, 8vw, 54px); color: #fde047; letter-spacing: 2px;
@@ -115,10 +115,10 @@ body {
 button.big {
   font-family: inherit; font-size: 17px; font-weight: bold; letter-spacing: 1px;
   padding: 13px; border-radius: 10px; cursor: pointer;
-  background: #16213a; color: #22d3ee; border: 2px solid #22d3ee;
+  background: #1e1438; color: #a855f7; border: 2px solid #a855f7;
 }
 button.big:active { transform: scale(0.97); }
-button.big.primary { background: #22d3ee; color: #06202a; }
+button.big.primary { background: #a855f7; color: #ffffff; }
 button.big.danger { border-color: #ef4444; color: #ef4444; }
 #btn-sound { margin-top: 14px; background: none; border: 1px solid #4b5563; color: #9ca3af;
   border-radius: 8px; padding: 8px 14px; font-family: inherit; font-size: 13px; cursor: pointer; }
