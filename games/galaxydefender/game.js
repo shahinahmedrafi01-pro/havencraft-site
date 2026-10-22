@@ -269,7 +269,11 @@
   var DPR = 1;
   function resize() {
     DPR = Math.min(window.devicePixelRatio || 1, 2);
-    var scale = Math.min(window.innerWidth / W, window.innerHeight / H);
+    /* Full-screen play field: width is capped for desktop, and the world
+       height H grows to fill the screen — no empty space below the game. */
+    var vw = window.innerWidth, vh = window.innerHeight;
+    var scale = Math.min(Math.min(vw, 540) / W, vh / 600);
+    H = Math.min(1150, Math.round(vh / scale));
     var shell = $("game-shell");
     shell.style.width = Math.floor(W * scale) + "px";
     shell.style.height = Math.floor(H * scale) + "px";
@@ -344,14 +348,15 @@
     b.addEventListener("click", function () { useAbility(Number(b.getAttribute("data-ab"))); });
   });
   $("pause-btn").addEventListener("click", function () { if (state === "playing") pauseGame(); });
-  $("sound-toggle").addEventListener("click", toggleSound);
+  $("btn-pause-sound").addEventListener("click", toggleSound);
+  function soundBtnLabel() { return save.settings.soundOn ? "🔊 SOUND: ON" : "🔇 SOUND: OFF"; }
   function toggleSound() {
     save.settings.soundOn = !save.settings.soundOn;
     persist(); applyAudioSettings();
-    $("sound-toggle").textContent = save.settings.soundOn ? "🔊" : "🔇";
+    $("btn-pause-sound").textContent = soundBtnLabel();
     if (save.settings.soundOn) ensureAudio();
   }
-  $("sound-toggle").textContent = save.settings.soundOn ? "🔊" : "🔇";
+  $("btn-pause-sound").textContent = soundBtnLabel();
 
   /* ================= helpers ================= */
   function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
@@ -438,17 +443,21 @@
 
   function startWave(n) {
     G.wave = n; G.waveState = "spawning"; G.damageThisWave = 0;
+    var hell = hellLevel();
     var count = 6 + 2 * n;
+    if (hell > 0) count = Math.round(count * (1 + 0.25 * Math.min(hell, 4)));
+    var sniperCh = hell > 0 ? 0.30 : 0.18, tankCh = hell > 0 ? 0.55 : 0.42;
     G.spawnQueue = [];
     for (var i = 0; i < count; i++) {
       var r = Math.random(), type = "drone";
-      if (n >= 4 && r < 0.18) type = "sniper";
-      else if (n >= 3 && r < 0.42) type = "tank";
+      if (n >= 4 && r < sniperCh) type = "sniper";
+      else if (n >= 3 && r < tankCh) type = "tank";
       else if (n >= 2 && r < 0.65) type = "weaver";
       G.spawnQueue.push(type);
     }
     G.spawnTimer = 0;
-    banner("WAVE " + n);
+    if (hell > 0 && G.mode === "campaign" && n === (G.stage - 1) * 3 + 1) banner("⚠️ SUPER HARD ⚠️", true);
+    else banner("WAVE " + n);
     if (n > save.stats.wave) { save.stats.wave = n; persist(); }
     if (n >= 5) unlockAchievement("wave5");
     snapshotRun(null);
@@ -465,7 +474,7 @@
     else if (kind === "endless") { idx = (param - 1) % 3; cycle = param - 1; G.wave = param * 5; }
     else { idx = param % 3; cycle = Math.floor(param / 3); G.wave = param + 1; G.bossIndex = param; /* keep the rush chain in sync (Continue/resume) */ }
     var base = BOSSES[idx];
-    var hp = Math.round(base.hp * (1 + 0.5 * cycle));
+    var hp = Math.round(base.hp * (1 + 0.5 * cycle) * (1 + 0.15 * hellLevel()));
     G.boss = { kind: kind, param: param, type: base.id, name: base.name, hp: hp, maxHp: hp,
       x: W / 2, y: 110, age: 0, fireTimer: 2, radialTimer: 2.5, spawnTimer: 3, spiralAngle: 0, spiralTimer: 0,
       radius: 46, color: base.color };
@@ -547,20 +556,30 @@
   function restartRun() { if (G) startRun(G.mode); }
 
   /* ================= combat ================= */
+  /* SUPER HARD scaling: from stage 15 (campaign) the run turns brutal —
+     more enemies per wave, much tougher hulls, faster enemy fire and
+     faster, harder missiles. Endless / Time Attack use wave/3 as the
+     stage equivalent. hellLevel() is 0 before stage 15: game unchanged. */
+  function hellLevel() {
+    var s = G.mode === "campaign" ? G.stage : Math.ceil(G.wave / 3);
+    return Math.max(0, s - 14);
+  }
   function spawnEnemy(type, x, y) {
     var e = ENEMIES[type];
-    var hpMul = 1 + 0.05 * Math.max(0, G.wave - 1);
+    var hpMul = (1 + 0.05 * Math.max(0, G.wave - 1)) * (1 + 0.30 * hellLevel());
     var spdMul = Math.min(2, 1 + 0.05 * Math.max(0, G.wave - 1));
     var ex = x !== undefined ? x : 30 + Math.random() * (W - 60);
     G.enemies.push({ id: ++enemyId, type: type, x: ex, y: y !== undefined ? y : -30, baseX: ex,
       hp: Math.round(e.hp * hpMul), maxHp: Math.round(e.hp * hpMul), speed: e.speed * spdMul,
       radius: e.radius, age: 0, phase: Math.random() * Math.PI * 2,
-      shootTimer: 1 + Math.random(), flash: 0 });
+      shootTimer: (1 + Math.random()) / (1 + 0.12 * hellLevel()), flash: 0 });
   }
   function enemyShoot(e, speed) {
     var p = G.player;
+    var hell = hellLevel();
+    var spd = speed * (1 + 0.06 * hell);
     var a = Math.atan2(p.y - e.y, p.x - e.x);
-    G.ebullets.push({ x: e.x, y: e.y + 10, vx: Math.cos(a) * speed, vy: Math.sin(a) * speed, r: 5, dmg: 10 });
+    G.ebullets.push({ x: e.x, y: e.y + 10, vx: Math.cos(a) * spd, vy: Math.sin(a) * spd, r: 5, dmg: Math.min(20, 10 + 2 * hell) });
     SFX.shoot();
   }
   function radialBurst(x, y, n, speed) {
@@ -851,6 +870,7 @@
   }
   function updateEnemies(dt) {
     var speedMul = (G.timeTimer > 0 ? 0.5 : 1) * (G.empTimer > 0 ? 0 : 1);
+    var fireMul = 1 / (1 + 0.12 * hellLevel());
     for (var i = G.enemies.length - 1; i >= 0; i--) {
       var e = G.enemies[i];
       e.age += dt;
@@ -858,8 +878,8 @@
       if (speedMul > 0) {
         if (e.type === "drone") e.y += e.speed * speedMul * dt;
         else if (e.type === "weaver") { e.y += e.speed * speedMul * dt; e.x = e.baseX + Math.sin(e.age * 3 + e.phase) * 50; }
-        else if (e.type === "tank") { if (e.y < 120) e.y += e.speed * speedMul * dt; e.shootTimer -= dt; if (e.shootTimer <= 0) { enemyShoot(e, 180); e.shootTimer = 2; } }
-        else if (e.type === "sniper") { if (e.y < 90) e.y += e.speed * speedMul * dt; e.shootTimer -= dt; if (e.shootTimer <= 0) { enemyShoot(e, 300); e.shootTimer = 1.2; } }
+        else if (e.type === "tank") { if (e.y < 120) e.y += e.speed * speedMul * dt; e.shootTimer -= dt; if (e.shootTimer <= 0) { enemyShoot(e, 180); e.shootTimer = 2 * fireMul; } }
+        else if (e.type === "sniper") { if (e.y < 90) e.y += e.speed * speedMul * dt; e.shootTimer -= dt; if (e.shootTimer <= 0) { enemyShoot(e, 300); e.shootTimer = 1.2 * fireMul; } }
       }
       if (e.y > H + 50 || e.y < -80) G.enemies.splice(i, 1);
     }
