@@ -70,6 +70,11 @@
     { id: "time", name: "Time Dilation", icon: "⏳", cd: 50, desc: "Enemies 50% speed for 5s" },
     { id: "ally", name: "Ally Ships", icon: "🛩️", cd: 60, desc: "4 ally ships fight with you for 30s" }
   ];
+  /* Test mode (Settings): only the SHA-256 of the owner's special code
+     is stored here — never the code itself. Unlocking tops credits up
+     to TEST_CREDITS so every ship / weapon / upgrade can be tested. */
+  var TEST_CODE_HASH = "082800dc1f3e208140a8fa50c2059c5a48fe3ef46f34d592f1d1783f18a202ac";
+  var TEST_CREDITS = 999999999;
   var TUTORIAL = [
     "<p><strong>Welcome, Pilot!</strong> Your ship is at the bottom of the screen. Move with <strong>WASD / Arrow keys</strong> or drag anywhere on the screen on touch.</p><p>Destroy enemies to earn score and credits.</p>",
     "<p><strong>Shooting:</strong> Your ship fires automatically (<strong>Auto-fire</strong> is on by default). Hold <strong>Space</strong> to shoot if you turn Auto-fire off in Settings.</p><p>Different weapons and upgrades are available in the Hangar and Lab.</p>",
@@ -81,6 +86,7 @@
   function defaultSave() {
     return {
       credits: 0,
+      testMode: false,
       ships: ["interceptor"], ship: "interceptor",
       weapons: ["laser"], weapon: "laser",
       upgrades: { dmg: 0, rate: 0, hp: 0, shield: 0, speed: 0, cd: 0 },
@@ -99,6 +105,7 @@
       var d = JSON.parse(raw);
       if (!d || typeof d !== "object") return s;
       if (typeof d.credits === "number" && d.credits >= 0) s.credits = Math.floor(d.credits);
+      if (typeof d.testMode === "boolean") s.testMode = d.testMode;
       if (Array.isArray(d.ships)) s.ships = d.ships.filter(function (x) { return SHIPS[x]; });
       if (SHIPS[d.ship]) s.ship = d.ship;
       if (Array.isArray(d.weapons)) s.weapons = d.weapons.filter(function (x) { return WEAPONS[x]; });
@@ -1316,6 +1323,7 @@
     $("set-shake").textContent = save.settings.shake ? "ON" : "OFF";
     $("set-quality").textContent = save.settings.quality.toUpperCase();
     $("set-reduced").textContent = save.settings.reduced ? "ON" : "OFF";
+    $("set-test-state").textContent = save.testMode ? "ON" : "OFF";
   }
 
   /* ================= menu wiring ================= */
@@ -1413,6 +1421,22 @@
   $("set-shake").addEventListener("click", function () { save.settings.shake = !save.settings.shake; persist(); renderSettings(); });
   $("set-quality").addEventListener("click", function () { save.settings.quality = save.settings.quality === "high" ? "low" : "high"; persist(); renderSettings(); });
   $("set-reduced").addEventListener("click", function () { save.settings.reduced = !save.settings.reduced; persist(); renderSettings(); });
+  $("set-test-unlock").addEventListener("click", function () {
+    var code = $("set-test-code").value.trim();
+    if (!code) { toast("Enter the special code first."); return; }
+    if (!window.crypto || !crypto.subtle) { toast("Code check is not available in this browser."); return; }
+    crypto.subtle.digest("SHA-256", new TextEncoder().encode(code)).then(function (buf) {
+      var hex = Array.prototype.map.call(new Uint8Array(buf), function (b) { return ("0" + b.toString(16)).slice(-2); }).join("");
+      if (hex === TEST_CODE_HASH) {
+        var was = save.testMode;
+        save.testMode = true; save.credits = TEST_CREDITS; persist();
+        $("set-test-code").value = "";
+        renderSettings();
+        toast(was ? "🧪 Test mode already ON — credits topped up!" : "🧪 Test mode ON — unlimited credits!");
+      } else toast("❌ Wrong code.");
+    }).catch(function () { toast("Code check failed in this browser."); });
+  });
+  $("set-test-code").addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); $("set-test-unlock").click(); } });
 
   /* ================= tutorial ================= */
   var tutStep = 0;

@@ -57,6 +57,9 @@ html, body { margin: 0; padding: 0; background: #07040f; color: #f5f3fb; font-fa
 .settings-list { display: flex; flex-direction: column; gap: 10px; }
 .set-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: rgba(24, 16, 48, 0.9); border: 1px solid #2c1e54; border-radius: 10px; padding: 10px 12px; font-size: 14px; }
 .set-row input[type="range"] { flex: 1; max-width: 180px; accent-color: #a855f7; }
+.set-row .test-wrap { display: inline-flex; gap: 6px; align-items: center; }
+#set-test-code { background: rgba(10, 10, 16, 0.8); border: 1px solid #2c1e54; border-radius: 8px; color: #f5f3fb; padding: 7px 9px; width: 128px; font-size: 13px; }
+#set-test-code:focus { outline: none; border-color: #a855f7; }
 .howto { font-size: 14px; line-height: 1.6; color: #d9d2f2; }
 .howto p { margin: 0 0 10px; }
 .stats { text-align: center; font-size: 16px; line-height: 1.9; }
