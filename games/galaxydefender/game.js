@@ -39,6 +39,12 @@
     { id: "leviathan", name: "VOID LEVIATHAN", hp: 2500, color: "#22d3ee" }
   ];
   var STAGES = ["Asteroid Field", "Alien Territory", "Nebula Sector", "Enemy Base", "Final Assault"];
+  /* Stages past 5 reuse the five names with a cycle suffix:
+     6-10 are "+1", 11-15 are "+2", and so on — the campaign is endless. */
+  function stageName(n) {
+    if (n <= STAGES.length) return STAGES[n - 1];
+    return STAGES[(n - 1) % STAGES.length] + " +" + Math.floor((n - 1) / STAGES.length);
+  }
   var MISSIONS = [
     { id: "firstblood", name: "First Blood", desc: "Destroy 1 enemy", target: 1, reward: 50, metric: "kills" },
     { id: "wave5", name: "Wave 5", desc: "Reach wave 5", target: 5, reward: 150, metric: "wave" },
@@ -122,7 +128,7 @@
         ["soundVol", "musicVol"].forEach(function (k) { if (typeof d.settings[k] === "number") s.settings[k] = Math.max(0, Math.min(100, d.settings[k])); });
         if (d.settings.quality === "low" || d.settings.quality === "high") s.settings.quality = d.settings.quality;
       }
-      if (typeof d.campaignStage === "number") s.campaignStage = Math.max(1, Math.min(5, Math.floor(d.campaignStage)));
+      if (typeof d.campaignStage === "number") s.campaignStage = Math.max(1, Math.min(999, Math.floor(d.campaignStage)));
       if (typeof d.bestScore === "number") s.bestScore = Math.max(0, Math.floor(d.bestScore));
       if (typeof d.totalKills === "number") s.totalKills = Math.max(0, Math.floor(d.totalKills));
       if (typeof d.tutorialSeen === "boolean") s.tutorialSeen = d.tutorialSeen;
@@ -499,7 +505,7 @@
     state = "stageclear";
     save.campaignStage = Math.max(save.campaignStage, G.stage + 1);
     $("sc-title").textContent = "STAGE " + G.stage + " CLEAR!";
-    $("sc-stats").innerHTML = "Score: <strong>" + G.score + "</strong><br>Credits earned: <strong>" + G.runCredits + "</strong><br>Stage: <strong>" + esc(STAGES[G.stage - 1]) + "</strong>";
+    $("sc-stats").innerHTML = "Score: <strong>" + G.score + "</strong><br>Credits earned: <strong>" + G.runCredits + "</strong><br>Stage: <strong>" + esc(stageName(G.stage)) + "</strong>";
     save.runSnapshot = { mode: "campaign", stage: G.stage + 1, wave: G.stage * 3, score: G.score, runCredits: G.runCredits, lives: G.lives, time: G.time, boss: null };
     persist();
     showScreen("screen-stageclear");
@@ -541,9 +547,22 @@
   function victory() {
     state = "victory"; G.over = true;
     finishRun();
+    /* Campaign-complete milestone — but NOT the end: stage 6+ is
+       unlocked and the same run can continue (button below), and a
+       Continue snapshot is saved just like a stage clear, so closing
+       the game here does not lose the run. */
+    save.campaignStage = Math.max(save.campaignStage, G.stage + 1);
+    save.runSnapshot = { mode: "campaign", stage: G.stage + 1, wave: G.stage * 3, score: G.score, runCredits: G.runCredits, lives: G.lives, time: G.time, boss: null };
+    persist();
     $("vic-score").textContent = G.score;
     $("vic-credits").textContent = G.runCredits;
+    $("btn-vic-continue").textContent = "➡ CONTINUE — STAGE " + (G.stage + 1);
     showScreen("screen-victory");
+  }
+  function continueCampaign() {
+    G.recorded = false; /* the eventual game over records the full run */
+    G.over = false;
+    nextStage();
   }
   function pauseGame() { if (state !== "playing") return; state = "paused"; showScreen("screen-pause"); }
   function resumeGame() { if (state !== "paused") return; state = "playing"; showScreen(null); }
@@ -655,7 +674,7 @@
     unlockAchievement("bossslayer");
     persist();
     if (G.mode === "campaign") {
-      if (G.stage >= 5) victory();
+      if (G.stage === 5) victory();
       else stageClear();
     } else {
       /* Boss Rush: the chain must advance — defeating a boss spawns
@@ -1226,7 +1245,7 @@
     setText("lives", "♥".repeat(G.lives) + "♡".repeat(Math.max(0, 3 - G.lives)));
     setText("score", G.score);
     setText("credits-hud", save.credits);
-    setText("stage-label", G.mode === "campaign" ? STAGES[G.stage - 1].toUpperCase() : G.mode === "bossrush" ? "BOSS RUSH" : G.mode === "timeattack" ? "TIME ATTACK" : "ENDLESS");
+    setText("stage-label", G.mode === "campaign" ? stageName(G.stage).toUpperCase() : G.mode === "bossrush" ? "BOSS RUSH" : G.mode === "timeattack" ? "TIME ATTACK" : "ENDLESS");
     setText("wave-label", G.mode === "bossrush" ? "BOSS " + (G.bossIndex + 1) : "WAVE " + G.wave);
     if (G.mode === "timeattack") {
       $("timer").classList.remove("hidden");
@@ -1376,6 +1395,7 @@
   $("btn-sc-menu").addEventListener("click", quitToMenu);
   $("btn-go-restart").addEventListener("click", function () { if (G) startRun(G.mode); });
   $("btn-go-menu").addEventListener("click", quitToMenu);
+  $("btn-vic-continue").addEventListener("click", continueCampaign);
   $("btn-vic-again").addEventListener("click", function () { startRun("campaign"); });
   $("btn-vic-menu").addEventListener("click", quitToMenu);
   $("btn-reset-save").addEventListener("click", function () {
