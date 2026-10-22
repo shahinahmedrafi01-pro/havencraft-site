@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Police Chase — Rafi's Mini Arcade</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="game-wrap">
+  <canvas id="game"></canvas>
+  <a class="back-link" href="../">‹ ARCADE</a>
+
+  <div id="chase-wrap" class="hidden">
+    <div class="ctag">🚔 CHASE</div>
+    <div id="chase-track"><div id="chase-fill"></div></div>
+  </div>
+
+  <div id="hud" class="hidden">
+    <div class="hud-col">
+      <div class="hud-row"><span class="label">SCORE</span><span id="hud-score" class="val">0</span></div>
+      <div class="hud-row"><span class="label">BEST</span><span id="hud-best" class="val">0</span></div>
+    </div>
+    <div class="hud-col center">
+      <div id="hud-speed"><span id="hud-speed-num">0</span><small> km/h</small></div>
+      <div id="hud-dist">0 m</div>
+    </div>
+    <div class="hud-col right">
+      <div id="hud-lives" aria-label="Lives"></div>
+      <div id="hud-walls">WALL 0/3</div>
+      <div id="hud-ammo" aria-label="Bullets">🔫 3/12</div>
+      <button id="btn-pause" aria-label="Pause">❚❚</button>
+    </div>
+  </div>
+
+  <div id="power-row"></div>
+
+  <div id="touch-controls" class="hidden">
+    <div class="tc-col">
+      <button id="btn-back" aria-label="Move back">⬇</button>
+      <button id="btn-left" aria-label="Move left">◀</button>
+    </div>
+    <button id="btn-fire" aria-label="Fire">🔫</button>
+    <div class="tc-col">
+      <button id="btn-fwd" aria-label="Move forward">⬆</button>
+      <button id="btn-right" aria-label="Move right">▶</button>
+    </div>
+  </div>
+
+  <div id="banner" class="hidden"></div>
+
+  <div id="menu" class="overlay">
+    <h1 class="title">POLICE<span>CHASE</span></h1>
+    <p class="subtitle">Outrun the cops. Dodge the traffic. Don't get busted.</p>
+    <div class="menu-btns">
+      <button id="btn-start" class="big primary">▶ START ENGINE</button>
+      <button id="btn-howto" class="big">HOW TO PLAY</button>
+    </div>
+    <button id="btn-sound">🔇 SOUND OFF</button>
+  </div>
+
+  <div id="howto" class="overlay hidden">
+    <h1 class="title">HOW TO<span>PLAY</span></h1>
+    <div class="howto-list">
+      <div><b>← →</b> / <b>A D</b> or <b>swipe</b> — switch lanes</div>
+      <div><b>P</b> — pause · <b>M</b> — sound</div>
+      <div>🚔 Cops chase from behind — don't let them ram you</div>
+      <div>💥 3 hits and you're busted</div>
+      <div>🧱 Don't scrape the roadside walls — 3 hits and you're <b>ARRESTED</b></div>
+      <div>🚀 Nitro — speed + double score</div>
+      <div>🛡️ Shield — blocks one crash</div>
+      <div>👻 Phase — drive through traffic</div>
+      <div>❤️ Repair — restores 1 life</div>
+      <div>🔫 Bullet — +1 bullet (max 12)</div>
+      <div>Near misses earn bonus points!</div>
+      <div>🔫 FIRE button / Space — shoot (hold to keep firing): start with 3 bullets, max 12 — collect 🔫 bullet pickups on the road. NPC +50, police +100, UFO +150, heli +100</div>
+      <div>🛸 UFOs may try (and fail) to abduct you · 🚁 choppers drop slowing bombs</div>
+    </div>
+    <div class="menu-btns">
+      <button id="btn-howto-back" class="big">‹ BACK</button>
+    </div>
+  </div>
+
+  <div id="pause" class="overlay hidden">
+    <h1 class="title">PAUSED</h1>
+    <div class="menu-btns">
+      <button id="btn-resume" class="big primary">▶ RESUME</button>
+      <button id="btn-restart" class="big">↻ RESTART</button>
+      <button id="btn-quit" class="big danger">QUIT TO MENU</button>
+    </div>
+  </div>
+
+  <div id="over" class="overlay hidden">
+    <h1 class="title" id="over-title">BUSTED!</h1>
+    <p class="subtitle" id="over-sub">The cops finally caught you.</p>
+    <div id="newbest" class="hidden">★ NEW BEST! ★</div>
+    <div class="final-score">SCORE<b id="over-score">0</b></div>
+    <div class="stat-line">DISTANCE <b id="over-dist">0 m</b> · BEST <b id="over-best">0</b></div>
+    <div class="menu-btns">
+      <button id="btn-again" class="big primary">↻ DRIVE AGAIN</button>
+      <button id="btn-over-menu" class="big">‹ ARCADE MENU</button>
+    </div>
+  </div>
+
+  <div id="lock" class="overlay hidden">
+    <h1 class="title">POLICE<span>CHASE</span></h1>
+    <p class="subtitle">This game costs 30 💎 to unlock — buy once, play forever.</p>
+    <p class="subtitle">New account? You get 30 free diamonds when you create one.</p>
+    <div class="menu-btns">
+      <button class="big primary" onclick="window.location.href='../'">💎 Buy on the Hub</button>
+    </div>
+  </div>
+</div>
+<script>
+/* Ownership gate: the game only loads if the logged-in Supabase
+   account owns it (bought on the hub for 30 diamonds — one-time,
+   works on any device). The publishable key below is PUBLIC by
+   design (safe in browser code — Supabase docs). Not owned (or no
+   account / offline) -> the lock screen shows and game.js never
+   loads, so the game cannot start. */
+(function () {
+  var SUPABASE_URL = "https://wbnllmrosehgdwqqwfgd.supabase.co";
+  var SUPABASE_KEY = "sb_publishable_GdfRPeymhpIxb4M4bhbS6Q_mizvMA06";
+  function locked() {
+    document.getElementById("lock").classList.remove("hidden");
+    document.getElementById("menu").classList.add("hidden");
+  }
+  function loadGame() {
+    var s = document.createElement("script");
+    s.src = "game.js";
+    document.body.appendChild(s);
+  }
+  var u = "";
+  try { u = JSON.parse(localStorage.getItem("gg_shop_user") || '""') || ""; } catch (e) {}
+  if (!u) { locked(); return; }
+  fetch(SUPABASE_URL + "/rest/v1/profiles?username=eq." + encodeURIComponent(String(u).toLowerCase()) + "&select=owned", {
+    headers: { "apikey": SUPABASE_KEY, "Authorization": "Bearer " + SUPABASE_KEY }
+  }).then(function (r) { return r.json(); }).then(function (rows) {
+    var owned = Array.isArray(rows) && rows.length && Array.isArray(rows[0].owned) && rows[0].owned.indexOf("police-chase") !== -1;
+    if (owned) loadGame(); else locked();
+  }).catch(function () { locked(); });
+})();
+</script>
+</body>
+</html>

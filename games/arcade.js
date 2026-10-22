@@ -14,7 +14,7 @@
       controls: "← → or A / D to switch lanes · swipe on touch screens · P to pause",
       features: ["5-lane endless highway", "Police pursuits & surges", "Nitro, Shield, Phase & Repair pickups", "UFO & helicopter events", "Best score saved on this device"],
       credits: "Original game built for this site.",
-      route: "1/",
+      route: "policechase/",
       cover: "img/cover-police-chase.svg",
       price: 30, // one-time unlock price in diamonds (0 / absent = free)
       scoreKey: "policeChaseBest",
@@ -30,7 +30,7 @@
       controls: "WASD / arrows to move · Space to fire · 1 / 2 / 3 abilities · P pause · touch joystick + FIRE on mobile",
       features: ["Campaign, Endless, Boss Rush & Time Attack", "3 ships, 4 weapons & upgradeable stats", "Power-ups, EMP, Nova Bomb & time dilation", "Boss fights with health bars", "Missions, achievements & local leaderboard"],
       credits: "Original game built for this site.",
-      route: "2/",
+      route: "galaxydefender/",
       cover: "img/cover-galaxy-defender.svg",
       price: 30, // one-time unlock price in diamonds — same model as Police Chase
       scoreKey: "galaxyDefenderBest",
