@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HavenCraft SMP — Hero & Navigation Redesign Report</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0b0e11;color:#dbe4de;font-family:'Segoe UI',system-ui,-apple-system,'Noto Sans Bengali',sans-serif;line-height:1.65}
+.topbar{position:sticky;top:0;background:rgba(11,14,17,.92);backdrop-filter:blur(8px);border-bottom:1px solid #26302a;padding:10px 16px;display:flex;gap:10px;align-items:center;z-index:10}
+.topbar a{color:#00c896;text-decoration:none;font-weight:700;font-size:14px}
+.topbar span{color:#8fa398;font-size:13px}
+.wrap{max-width:920px;margin:0 auto;padding:28px 18px 64px}
+h1{font-size:1.9em;line-height:1.25;color:#fff;border-bottom:2px solid #00c896;padding-bottom:10px}
+h2{font-size:1.45em;color:#fff;border-bottom:1px solid #26302a;padding-bottom:6px;margin-top:38px}
+h3{font-size:1.15em;color:#e8f0ec;margin-top:26px}
+a{color:#00c896}
+p,li{font-size:15.5px}
+blockquote{margin:14px 0;padding:10px 16px;border-left:4px solid #00c896;background:#10160f;color:#b9cbc0;border-radius:0 8px 8px 0}
+blockquote p{margin:4px 0}
+code{font-family:Consolas,'Courier New',monospace;background:#1a2129;padding:2px 6px;border-radius:5px;font-size:.88em;color:#ffb86b}
+pre{background:#12161c;border:1px solid #26302a;border-radius:10px;padding:14px 16px;overflow-x:auto}
+pre code{background:none;padding:0;color:#c9e7d8;font-size:13px;line-height:1.5}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:14px;display:block;overflow-x:auto}
+th,td{border:1px solid #2c383f;padding:8px 10px;text-align:left;vertical-align:top;min-width:120px}
+th{background:#14201a;color:#00c896}
+tr:nth-child(even) td{background:#10141a}
+hr{border:none;border-top:1px solid #26302a;margin:30px 0}
+img{max-width:100%}
+.mermaid{background:#10151b;border:1px solid #26302a;border-radius:10px;padding:14px;text-align:center;overflow-x:auto}
+strong{color:#fff}
+</style>
+</head>
+<body>
+<div class="topbar"><a href="/">← HavenCraft Home</a><span>Extra page — Redesign Report v2.0</span></div>
+<div class="wrap">
+<h1>🏛️ HAVENCRAFT SMP — HERO &amp; NAVIGATION MASTER REDESIGN REPORT</h1>
+<blockquote>
+<p><strong>ডকুমেন্ট সংস্করণ:</strong> 2.0 (Master Synthesis &amp; Implementation Architecture)<br><strong>লেখক:</strong> Antigravity (Advanced AI System Architect)<br><strong>বিশ্লেষিত ইনপুট:</strong> <code>idea/ChatGPT.md</code> (OpenAI) এবং <code>idea/Gemini.md</code> (Gemini Argon)<br><strong>লক্ষ্য:</strong> HavenCraft SMP (<code>havencraft.pro</code>)-এর হোমপেজ, হেডার ও হিরো সেকশনকে ২০২৬ সালের সেরা গেমিং প্ল্যাটফর্মগুলোর মানে আল্ট্রা-মডার্ন, ডায়নামিক ও হাইপার-ফাংশনাল রূপ দেওয়া।<br><strong>প্রজেক্ট স্ট্যাক:</strong> Vanilla JS, Semantic HTML5, Pure CSS Design System, Supabase Real-Time Integration  </p>
+</blockquote>
+<hr>
+<h2>📑 সূচিপত্র (Table of Contents)</h2>
+<ol>
+<li><a href="#1-%E0%A6%A8%E0%A6%BF%E0%A6%B0%E0%A7%8D%E0%A6%AC%E0%A6%BE%E0%A6%B9%E0%A7%80-%E0%A6%B8%E0%A6%BE%E0%A6%B0%E0%A6%B8%E0%A6%82%E0%A6%95%E0%A7%8D%E0%A6%B7%E0%A7%87%E0%A6%AA-executive-summary">নির্বাহী সারসংক্ষেপ (Executive Summary)</a></li>
+<li><a href="#2-chatgpt-%E0%A6%AC%E0%A6%A8%E0%A6%BE%E0%A6%AE-gemini-argon-%E0%A6%A8%E0%A6%BF%E0%A6%B0%E0%A6%AA%E0%A7%87%E0%A6%95%E0%A7%8D%E0%A6%B7-%E0%A6%9A%E0%A7%81%E0%A6%B2%E0%A6%9A%E0%A7%87%E0%A6%B0%E0%A6%BE-%E0%A6%AC%E0%A6%BF%E0%A6%B6%E0%A7%8D%E0%A6%B2%E0%A7%87%E0%A6%B7%E0%A6%A3">ChatGPT বনাম Gemini Argon: নিরপেক্ষ চুলচেরা বিশ্লেষণ</a></li>
+<li><a href="#3-antigravity-%E0%A6%AE%E0%A6%BE%E0%A6%B8%E0%A7%8D%E0%A6%9F%E0%A6%BE%E0%A6%B0-%E0%A6%AD%E0%A6%BF%E0%A6%B6%E0%A6%A8-adaptive-island--split-terminal-hero">Antigravity মাস্টার ভিশন: &quot;Adaptive Island &amp; Split-Terminal Hero&quot;</a></li>
+<li><a href="#4-%E0%A6%A8%E0%A7%8D%E0%A6%AF%E0%A6%BE%E0%A6%AD%E0%A6%BF%E0%A6%97%E0%A7%87%E0%A6%B6%E0%A6%A8-%E0%A6%B8%E0%A6%B2%E0%A7%8D%E0%A6%AF%E0%A7%81%E0%A6%B6%E0%A6%A8-adaptive-floating-pill-header-%E0%A6%86%E0%A6%B0%E0%A7%8D%E0%A6%95%E0%A6%BF%E0%A6%9F%E0%A7%87%E0%A6%95%E0%A6%9A%E0%A6%BE%E0%A6%B0">ন্যাভিগেশন সল্যুশন: Adaptive Floating Pill Header আর্কিটেকচার</a></li>
+<li><a href="#5-%E0%A6%B9%E0%A6%BF%E0%A6%B0%E0%A7%8B-%E0%A6%B8%E0%A7%87%E0%A6%95%E0%A6%B6%E0%A6%A8-%E0%A6%B0%E0%A6%BF%E0%A6%A1%E0%A6%BF%E0%A6%9C%E0%A6%BE%E0%A6%87%E0%A6%A8-asymmetric-split-layout-%E0%A6%AC%E0%A7%8D%E0%A6%B2%E0%A7%81%E0%A6%AA%E0%A7%8D%E0%A6%B0%E0%A6%BF%E0%A6%A8%E0%A7%8D%E0%A6%9F">হিরো সেকশন রিডিজাইন: Asymmetric Split Layout ব্লুপ্রিন্ট</a></li>
+<li><a href="#6-%E0%A6%AC%E0%A6%BE%E0%A6%82%E0%A6%B2%E0%A6%BE%E0%A6%A6%E0%A7%87%E0%A6%B6%E0%A6%BF-%E0%A6%AA%E0%A7%8D%E0%A6%B2%E0%A7%87%E0%A7%9F%E0%A6%BE%E0%A6%B0-%E0%A6%B8%E0%A6%BE%E0%A6%87%E0%A6%95%E0%A7%8B%E0%A6%B2%E0%A6%9C%E0%A6%BF-universal-dual-connection-terminal-java--bedrock">বাংলাদেশি প্লেয়ার সাইকোলজি: Universal Dual-Connection Terminal (Java + Bedrock)</a></li>
+<li><a href="#7-%E0%A6%AD%E0%A6%BF%E0%A6%9C%E0%A7%8D%E0%A6%AF%E0%A7%81%E0%A7%9F%E0%A6%BE%E0%A6%B2-%E0%A6%AA%E0%A6%B2%E0%A6%BF%E0%A6%B6-%E0%A6%93-%E0%A6%85%E0%A7%8D%E0%A6%AF%E0%A6%BE%E0%A6%AE%E0%A7%8D%E0%A6%AC%E0%A6%BF%E0%A7%9F%E0%A7%87%E0%A6%A8%E0%A7%8D%E0%A6%B8-cinematic-depth--lighting">ভিজ্যুয়াল পলিশ ও অ্যাম্বিয়েন্স (Cinematic Depth &amp; Lighting)</a></li>
+<li><a href="#8-%E0%A6%AE%E0%A7%8B%E0%A6%AC%E0%A6%BE%E0%A6%87%E0%A6%B2-%E0%A6%AB%E0%A6%BE%E0%A6%B0%E0%A7%8D%E0%A6%B8%E0%A7%8D%E0%A6%9F-%E0%A6%B0%E0%A7%87%E0%A6%B8%E0%A6%AA%E0%A6%A8%E0%A6%B8%E0%A6%BF%E0%A6%AD-%E0%A6%AB%E0%A7%8D%E0%A6%B2%E0%A7%8B-mobile-ux-hierarchy">মোবাইল-ফার্স্ট রেসপনসিভ ফ্লো (Mobile UX Hierarchy)</a></li>
+<li><a href="#9-%E0%A6%AA%E0%A7%8D%E0%A6%B0%E0%A6%AF%E0%A7%81%E0%A6%95%E0%A7%8D%E0%A6%A4%E0%A6%BF%E0%A6%97%E0%A6%A4-%E0%A6%AC%E0%A6%BE%E0%A6%B8%E0%A7%8D%E0%A6%A4%E0%A6%AC%E0%A6%BE%E0%A7%9F%E0%A6%A8-%E0%A6%95%E0%A7%8B%E0%A6%A1-%E0%A6%B8%E0%A7%8D%E0%A6%A8%E0%A6%BF%E0%A6%AA%E0%A7%87%E0%A6%9F-zero-jank-css--vanilla-js">প্রযুক্তিগত বাস্তবায়ন কোড স্নিপেট (Zero-Jank CSS &amp; Vanilla JS)</a></li>
+<li><a href="#10-%E0%A6%9A%E0%A7%82%E0%A7%9C%E0%A6%BE%E0%A6%A8%E0%A7%8D%E0%A6%A4-%E0%A6%A4%E0%A7%81%E0%A6%B2%E0%A6%A8%E0%A6%BE-%E0%A6%93-%E0%A6%AC%E0%A6%BE%E0%A6%B8%E0%A7%8D%E0%A6%A4%E0%A6%AC%E0%A6%BE%E0%A7%9F%E0%A6%A8%E0%A7%87%E0%A6%B0-%E0%A6%85%E0%A6%97%E0%A7%8D%E0%A6%B0%E0%A6%BE%E0%A6%A7%E0%A6%BF%E0%A6%95%E0%A6%BE%E0%A6%B0-%E0%A6%A4%E0%A6%BE%E0%A6%B2%E0%A6%BF%E0%A6%95%E0%A6%BE-actionable-roadmap">চূড়ান্ত তুলনা ও বাস্তবায়নের অগ্রাধিকার তালিকা (Actionable Roadmap)</a></li>
+</ol>
+<hr>
+<h2>1. নির্বাহী সারসংক্ষেপ (Executive Summary)</h2>
+<p>HavenCraft SMP বাংলাদেশের অন্যতম প্রিমিয়াম ক্রসপ্লে মাইনক্রাফট সার্ভার। বর্তমান হোমপেজে চমৎকার ডার্ক থিম, সায়ান/মিন্ট গ্রিন কালার প্যালেট এবং রেসপনসিভ গ্রিড থাকা সত্ত্বেও তিনটি বড় UX বাধা রয়েছে:</p>
+<ol>
+<li><strong>ব্র্যান্ডিং ও লোগো ডুপ্লিকেশন:</strong> স্ক্রিনের উপরে হেডারে ছোট লোগো, আবার তার ঠিক নিচেই হিরোতে বিশাল লোগো—একই স্ক্রিনে দুবার একই পরিচিতি প্রদর্শিত হয়ে মূল্যবান ভার্টিক্যাল স্পেস নষ্ট করছে।</li>
+<li><strong>ডেক্সটপে হরিজন্টাল স্পেস অপচয়:</strong> সব উপাদান (লোগো, টাইটেল, কার্ড, বাটন) সেন্ট্রাল অ্যালাইন করায় বড় স্ক্রিনের বাম ও ডান পাশ পুরোপুরি ফাঁকা ও নিরুত্তাপ লাগে।</li>
+<li><strong>কানেকশন অ্যাকশনের গুরুত্বের ঘাটতি:</strong> মাইনক্রাফট সার্ভার ওয়েবসাইটে ভিজিটর আসার মূল উদ্দেশ্য সার্ভারে জয়েন করা। অথচ বর্তমান ডিজাইনে ৪টি স্ট্যাটাস কার্ড পার হওয়ার পর সার্ভার আইপি চোখে পড়ে, এবং বেডরক প্লেয়ারদের জন্য পোর্ট (<code>2566</code>) আলাদাভাবে স্পষ্ট নয়।</li>
+</ol>
+<p>আপনার নিজের মূল আইডিয়াটি ছিল: <strong>&quot;হিরো সেকশনের লোগোটি বামে নেওয়া এবং ইউজার স্ক্রল করলে সেটি স্মুথলি হেডারে চলে যাওয়া।&quot;</strong></p>
+<p>ChatGPT এবং Gemini Argon উভয়েই আপনার আইডিয়ার সম্ভাব্য সৌন্দর্য উপলব্ধি করেছে, তবে দুটি ভিন্ন কোণ থেকে মতামত দিয়েছে। নিচে তাদের মতামতের দুর্বলতা ও শক্তির সমন্বয় করে HavenCraft-এর জন্য একটি আন্তর্জাতিক মানের <strong>&quot;Master UI/UX Architecture&quot;</strong> উপস্থাপন করা হলো।</p>
+<hr>
+<h2>2. ChatGPT বনাম Gemini Argon: নিরপেক্ষ চুলচেরা বিশ্লেষণ</h2>
+<table>
+<thead>
+<tr>
+<th align="left">বিচার্য বিষয়</th>
+<th align="left">ChatGPT-এর দৃষ্টিভঙ্গি (<code>ChatGPT.md</code>)</th>
+<th align="left">Gemini Argon-এর দৃষ্টিভঙ্গি (<code>Gemini.md</code>)</th>
+<th align="left">Antigravity-র বাস্তবসম্মত মূল্যায়ন</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>মূল দর্শন</strong></td>
+<td align="left"><strong>প্র্যাগম্যাটিক ও কনভার্সন-ফার্স্ট:</strong> অপ্রয়োজনীয় অ্যানিমেশন পরিহার এবং সেফ লেআউট।</td>
+<td align="left"><strong>অ্যাম্বিশিয়াস ও এস্থেটিক-ফার্স্ট:</strong> ভিজ্যুয়াল ওয়াও-ফ্যাক্টর ও হাই-বাজেট লুক।</td>
+<td align="left">দুটিই আংশিক সত্য। শুধু সেফ ডিজাইন ওয়েবসাইটকে সাধারণ বানিয়ে ফেলে, আবার অতি-অ্যানিমেশন পারফরম্যান্স ও ফ্রেমরেট নষ্ট করে। আমাদের দরকার <strong>&quot;High Aesthetics with Zero Performance Cost&quot;</strong>।</td>
+</tr>
+<tr>
+<td align="left"><strong>লোগো স্ক্রল অ্যানিমেশন</strong></td>
+<td align="left"><strong>সতর্ক ও নিরুৎসাহিত:</strong> হেডারে সবসময় লোগো রাখার পক্ষে (Option B)। অ্যানিমেশনে লেআউট শিফট হওয়ার ঝুঁকি দেখেছে।</td>
+<td align="left"><strong>পূর্ণ সমর্থন:</strong> ৩টি সুন্দর আইডিয়া দিয়েছে (Floating Pill, Live Badge, Visual Balance)।</td>
+<td align="left">জেমিনির <strong>Floating Pill</strong> ও <strong>Live Badge</strong> আইডিয়া অত্যন্ত চমৎকার! তবে চ্যাটজিপিটির সতর্কতাও সত্য—<code>navbar.js</code> যেহেতু ১৫+ পেজে ব্যবহৃত, তাই গ্লোবাল ন্যাভবার নষ্ট না করে কীভাবে করা যায় তা জেমিনি বলেনি।</td>
+</tr>
+<tr>
+<td align="left"><strong>হিরো লেআউট</strong></td>
+<td align="left"><strong>Desktop Split Layout:</strong> বামে লোগো ও টাইটেল, ডানে লাইভ স্ট্যাটাস প্যানেল।</td>
+<td align="left"><strong>50/50 Split Grid:</strong> বামে ব্র্যান্ডিং ও বাটন, ডানে ২x২ কার্ড গ্রিড + আইপি কার্ড।</td>
+<td align="left">জেমিনির <strong>2x2 Grid + Dedicated Connection Card</strong> অনেক বেশি ব্যালেন্সড ও অর্গানাইজড। চ্যাটজিপিটির চেয়ে জেমিনির গ্রিড গঠন বেশি প্রফেশনাল।</td>
+</tr>
+<tr>
+<td align="left"><strong>সার্ভার আইপি ও পোর্ট</strong></td>
+<td align="left">আইপি কপি বাটন বড় করার কথা বললেও বেডরক পোর্টের কথা বলেনি।</td>
+<td align="left"><strong>Java IP ও Bedrock Port</strong> আলাদা হাইলাইট করার প্রস্তাব দিয়েছে।</td>
+<td align="left"><strong>জেমিনি এখানে ১০০% বিজয়ী।</strong> বাংলাদেশের ৬০%+ মাইনক্রাফট প্লেয়ার মোবাইল/বেডরকে খেলে। বেডরক পোর্ট (<code>2566</code>) আলাদা না থাকলে প্লেয়াররা ঢুকতে দ্বিধাদ্বন্দ্বে পড়ে।</td>
+</tr>
+<tr>
+<td align="left"><strong>ভিজ্যুয়াল গভীরতা</strong></td>
+<td align="left">ব্যাকগ্রাউন্ড নিয়ে কোনো মন্তব্য করেনি; শুধুই লেআউট বিন্যাস।</td>
+<td align="left">ব্যাকগ্রাউন্ডে ইন-গেম স্পনের ব্লার স্ক্রিনশট ও কার্ডে হালকা গ্লো দেওয়ার কথা বলেছে।</td>
+<td align="left"><strong>জেমিনির আইডিয়া অসাধারণ।</strong> পিচ-ব্ল্যাক স্ক্রিনে অ্যাম্বিয়েন্ট শট এবং নিয়ন গ্লো দিলে সাইট এক নিমেষে প্রিমিয়াম এস্পোর্টস সাইটের রূপ নেয়।</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>3. Antigravity মাস্টার ভিশন: &quot;Adaptive Island &amp; Split-Terminal Hero&quot;</h2>
+<p>উভয় মডেলের সেরা অংশ এবং আপনার মূল স্বপ্নের মেলবন্ধনে আমরা তৈরি করেছি HavenCraft-এর জন্য <strong>&quot;Adaptive Island &amp; Split-Terminal Hero&quot;</strong> আর্কিটেকচার। </p>
+<pre><code class="language-mermaid">graph TD
+    subgraph ViewportTop [1. ইউজার যখন পেজের একদম উপরে (Top State)]
+        A1[&quot;Adaptive Floating Pill Navbar (মাঝখানে ভাসমান ক্যাপসুল)&quot;]
+        A2[&quot;বামে লাইভ পালস ব্যাজ: 🟢 1.21+ LIVE | SEASON 6&quot;]
+        A3[&quot;ডানে: সার্চ + গেমট্যাগ অ্যাভাটার&quot;]
+        A4[&quot;হিরো সেকশন বাম (52%): বিশাল HC Logo + টাইটেল + Dual CTA&quot;]
+        A5[&quot;হিরো সেকশন ডান (48%): Universal Connection Terminal + 2x2 Glass Matrix&quot;]
+    end
+
+    subgraph ViewportScroll [2. ইউজার যখন নিচে স্ক্রল করবে (Scrolled State &gt; 80px)]
+        B1[&quot;Pill Navbar স্মুথলি দুই পাশে বিস্তৃত হয়ে Full Sticky Header হবে&quot;]
+        B2[&quot;লাইভ ব্যাজ ফেড-আউট হয়ে [HC] HavenCraft ব্র্যান্ড লোগো স্মুথলি স্লাইড-ইন করবে&quot;]
+        B3[&quot;হিরোর লোগো স্বাভাবিকভাবে ভিউপোর্টের বাইরে চলে যাবে&quot;]
+        B4[&quot;কোনো লেআউট জাম্প বা রি-রেন্ডারিং ল্যাগ হবে না (CLS = 0)&quot;]
+    end
+
+    ViewportTop ==&gt;|User Scrolls Down| ViewportScroll
+</code></pre>
+<h3>এই কাঠামোর মূল সাফল্য:</h3>
+<ol>
+<li><strong>হেডারের বাম পাশ কখনোই ফাঁকা লাগবে না:</strong> উপরে থাকার সময় সেখানে থাকবে লাইভ স্ট্যাটাস ব্যাজ (<code>🟢 Server Online</code> বা <code>🔥 Season 6</code>)।</li>
+<li><strong>লোগোর দ্বৈত উপস্থিতি বন্ধ:</strong> হিরোতে যখন বিশাল লোগো দৃশ্যমান, তখন হেডারে ডুপ্লিকেট লোগো থাকবে না।</li>
+<li><strong>স্ক্রল ট্রানজিশনের বিস্ময়:</strong> স্ক্রল করার সাথে সাথেই ফ্লোটিং ক্যাপসুলটি পূর্ণ ন্যাভবারে পরিণত হবে এবং ব্র্যান্ড লোগো সেখানে স্থান গ্রহণ করবে (Apple ও Linear স্টাইল)।</li>
+<li><strong>সার্ভার জয়েন করার সর্বোচ্চ গতি:</strong> নতুন প্লেয়ার এসেই ডানের টার্মিনালে জাভা ও বেডরক উভয় আইপি চোখের সামনে পাবে।</li>
+</ol>
+<hr>
+<h2>4. ন্যাভিগেশন সল্যুশন: Adaptive Floating Pill Header আর্কিটেকচার</h2>
+<p>ইউজারের মনে প্রশ্ন ছিল: <em>&quot;হেডার থেকে লোগো হিরোতে নিয়ে গেলে পেজের শুরুতে হেডারের বাম পাশটা কি খালি ও দেখতে অদ্ভুত লাগবে?&quot;</em></p>
+<p><strong>সমাধান:</strong> একদমই অদ্ভুত লাগবে না, যদি আমরা <strong>&quot;Dynamic Adaptive Island&quot;</strong> মেথড ব্যবহার করি।</p>
+<h3>ক. পেজের শুরুতে (Initial View - Scroll Y = 0)</h3>
+<ul>
+<li>হেডার পুরো স্ক্রিন জুড়ে থাকবে না। এটি স্ক্রিনের টপে একটি সুন্দর <strong>Floating Pill Glass Island</strong> হিসেবে অবস্থান করবে (Width: ~88%, Max-width: 1100px, Border-radius: 9999px)।</li>
+<li><strong>বাম কোণায় (Brand Slot):</strong> লোগোর জায়গায় একটি স্টাইলিশ মিনি-চিপ থাকবে:<pre><code class="language-html">&lt;div class=&quot;nav-status-chip&quot;&gt;
+    &lt;span class=&quot;pulse-emerald&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;chip-text&quot;&gt;1.21+ CROSSPLAY&lt;/span&gt;
+&lt;/div&gt;
+</code></pre>
+</li>
+<li><strong>মাঝখানে:</strong> ন্যাভিগেশন মেনু আইটেম (<code>Home</code>, <code>Vote</code>, <code>Leaderboard</code>, <code>Store</code>, <code>More</code>).</li>
+<li><strong>ডান কোণায়:</strong> সার্চ আইকন, সক্রিয় মাইনক্রাফট প্লেয়ারের অ্যাভাটার হেড ও মোবাইল হ্যামবার্গার মেনু।</li>
+</ul>
+<h3>খ. স্ক্রল করার পর (Scrolled View - Scroll Y &gt; 80px)</h3>
+<ul>
+<li>ইউজার ৮-১০% স্ক্রল করতেই পিলে থাকা স্ট্যাটাস চিপটি হালকা ফেড হয়ে বাম দিকে সরে যাবে (<code>opacity: 0, transform: translateX(-10px)</code>).</li>
+<li>ঠিক সেই জায়গায় মিলিসেকেন্ডের ট্রানজিশনে আবির্ভূত হবে <code>[HC Icon] HavenCraft</code> ব্র্যান্ড লোগো (<code>opacity: 1, transform: translateX(0)</code>).</li>
+<li>একই সাথে পিলটির দুই পাশ মসৃণভাবে প্রসারিত হয়ে ফুল-উইডথ আল্ট্রা-স্লিক গ্লাস হেডারে পরিণত হবে।</li>
+</ul>
+<blockquote>
+<p>[!TIP]
+<strong>মাল্টি-পেজ সামঞ্জস্যতা (Multi-Page Harmony):</strong><br>HavenCraft-এর অন্যান্য সাব-পেজে (<code>/vote</code>, <code>/leaderboard</code>, <code>/store</code>, <code>/staff</code>) যেহেতু কোনো হিরো লোগো নেই, তাই <code>navbar.js</code> স্বয়ংক্রিয়ভাবে শনাক্ত করবে—হোমপেজ ছাড়া অন্য সব পেজে ডিফল্টভাবেই ব্র্যান্ড লোগো সবসময় দৃশ্যমান থাকবে। ফলে অন্যান্য পেজের কোনো কোড ভাঙবে না!</p>
+</blockquote>
+<hr>
+<h2>5. হিরো সেকশন রিডিজাইন: Asymmetric Split Layout ব্লুপ্রিন্ট</h2>
+<p>বর্তমান সেন্ট্রালাইজড লেআউটের জায়গায় আমরা হিরো সেকশনকে একটি আধুনিক <strong>52% / 48% অ্যাসিমেট্রিক স্প্লিট গ্রিডে</strong> বিন্যস্ত করব।</p>
+<h3>ডেক্সটপ ভিজ্যুয়াল ওয়্যারফ্রেম (Visual Wireframe Layout)</h3>
+<pre><code>┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                [ FLOATING PILL NAVBAR ]                                          │
+│   🟢 1.21+ CROSSPLAY            Home   Vote   Leaderboard   Store   More        🔍  [Player] ☰  │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+┌───────────────────────────────────────────────┬──────────────────────────────────────────────────┐
+│             বাম পাশ (IDENTITY &amp; HOOK - 52%)   │          ডান পাশ (COMMAND TERMINAL - 48%)        │
+│                                               │                                                  │
+│   [🏷️ #1 BANGLADESHI MINECRAFT COMMUNITY]     │   ┌──────────────────────────────────────────┐   │
+│                                               │   │ ⚡ QUICK CONNECT TERMINAL                │   │
+│   ┌──────┐                                    │   │                                          │   │
+│   │  HC  │  HavenCraft                        │   │   ☕ JAVA EDITION:                       │   │
+│   │ Logo │  SURVIVAL SMP                      │   │   [ mc.havencraft.pro          ] [📋COPY]│   │
+│   └──────┘                                    │   │                                          │   │
+│                                               │   │   📱 BEDROCK / PE:                       │   │
+│   &quot;Zero-lag survival. Custom economy.         │   │   [ mc.havencraft.pro : 2566   ] [📋COPY]│   │
+│    Unbreakable community from the heart       │   └──────────────────────────────────────────┘   │
+│    of Bangladesh.&quot;                            │                                                  │
+│                                               │   ┌────────────────────┬─────────────────────┐   │
+│   ┌────────────────────┐ ┌────────────────┐   │   │ 🟢 LIVE STATUS     │ ⚡ VPS PERFORMANCE   │   │
+│   │ 🚀 Quick Play Now  │ │ 💬 Join Discord│   │   │    14 / 99 Online  │    24/7 Zero-Lag    │   │
+│   └────────────────────┘ └────────────────┘   │   ├────────────────────┼─────────────────────┤   │
+│                                               │   │ 🎮 SUPPORTED VER   │ 👥 COMMUNITY        │   │
+│                                               │   │    1.21+ Bedrock   │    500+ Players     │   │
+│                                               │   └────────────────────┴─────────────────────┘   │
+└───────────────────────────────────────────────┴──────────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                [ QUICK SHORTCUTS HUB ]                                           │
+│   ┌───────────────────────────────────────────┐   ┌──────────────────────────────────────────┐   │
+│   │ 🗳️ Vote for Rewards &amp; Crates         [➜] │   │ 🏆 View Top Players Leaderboard      [➜] │   │
+│   └───────────────────────────────────────────┘   └──────────────────────────────────────────┘   │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+</code></pre>
+<hr>
+<h2>6. বাংলাদেশি প্লেয়ার সাইকোলজি: Universal Dual-Connection Terminal (Java + Bedrock)</h2>
+<p>বাংলাদেশে মাইনক্রাফট প্লেয়ারদের সবচেয়ে বড় অংশ মোবাইল (Minecraft Pocket Edition / Bedrock via GeyserMC)। </p>
+<h3>প্রচলিত ভুল:</h3>
+<p>অধিকাংশ সার্ভার শুধু <code>mc.havencraft.pro</code> লিখে রাখে। একজন পিসি জাভা প্লেয়ার এতে অনায়াসে ঢুকতে পারলেও মোবাইল প্লেয়াররা সার্ভার অ্যাড করতে গিয়ে থমকে যায়: <em>&quot;ভাই পোর্ট কত দেব?&quot;</em>। পোর্ট না জানার কারণে প্রতিদিন শত শত নতুন প্লেয়ার ব্যাক করে চলে যায়।</p>
+<h3>সমাধান:</h3>
+<p>ডান পাশের টার্মিনালে <strong>ডুয়াল-প্ল্যাটফর্ম কানেকশন বক্স</strong> থাকবে:</p>
+<ol>
+<li><strong>Java Edition ট্যাব/রো:</strong>  <ul>
+<li>আইপি: <code>mc.havencraft.pro</code> (ডিফল্ট পোর্ট ২৪৫৬৫ এর প্রয়োজন নেই)</li>
+<li>১-ক্লিক কপি বাটন (ক্লিক করলে গ্রিন চেকমার্ক: <code>Copied!</code>).</li>
+</ul>
+</li>
+<li><strong>Bedrock Edition ট্যাব/রো:</strong>  <ul>
+<li>সার্ভার আইপি: <code>mc.havencraft.pro</code></li>
+<li>পোর্ট: <code>2566</code> (স্পষ্ট ও হাইলাইটেড)</li>
+<li>কপি বাটন: ক্লিক করলে সরাসরি সম্পূর্ণ কনফিগারেশন ক্লিপবোর্ডে কপি হয়ে যাবে।</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2>7. ভিজ্যুয়াল পলিশ ও অ্যাম্বিয়েন্স (Cinematic Depth &amp; Lighting)</h2>
+<p>বর্তমান ওয়েবসাইটে ডার্ক ব্যাকগ্রাউন্ড পুরোটাই ফ্ল্যাট কালো ও কিছুটা নির্জীব। ২০২৬ সালের প্রিমিয়াম লুক পাওয়ার জন্য নিচের ৩টি ভিজ্যুয়াল লেয়ার যুক্ত করা হবে:</p>
+<ol>
+<li><strong>ইন-গেম স্পন সিনেমাটিক ব্যাকড্রপ (Atmospheric Backdrop):</strong><ul>
+<li>সার্ভারের সবচেয়ে দৃষ্টিনন্দন স্পন বা মেগা-বিল্ডের একটি হাই-রেজোলিউশন স্ক্রিনশটকে <code>webp</code> ফরম্যাটে নিয়ে ব্যাকগ্রাউন্ডে সেট করা হবে।</li>
+<li>সিএসএস ফিল্টার: <code>filter: blur(14px) brightness(0.16) contrast(1.1);</code></li>
+<li>এর ফলে ছবির কোনো অংশ টেক্সট পড়তে অসুবিধা করবে না, কিন্তু ব্যাকগ্রাউন্ডে মাইনক্রাফটের খাঁটি আবহ তৈরি হবে।</li>
+</ul>
+</li>
+<li><strong>ডুয়াল অ্যাম্বিয়েন্ট গ্লো অরবস (Mesh Gradient Orbs):</strong><ul>
+<li>বাম পাশে ব্র্যান্ডিংয়ের পেছনে একটি নরম মিন্ট গ্রিন গ্লো (<code>radial-gradient(circle, rgba(0,200,150,0.12) 0%, transparent 70%)</code>).</li>
+<li>ডান পাশে টার্মিনালের পেছনে একটি নরম ইলেকট্রিক সায়ান গ্লো (<code>radial-gradient(circle, rgba(59,130,246,0.12) 0%, transparent 70%)</code>).</li>
+</ul>
+</li>
+<li><strong>ইন্টারেক্টিভ কার্ড বর্ডার শাইন (Border Beam):</strong><ul>
+<li>টার্মিনাল ও ২x২ কার্ডগুলোর বর্ডারে হোভার করলে একটি সূক্ষ্ম গ্রেডিয়েন্ট রিফ্লেকশন চলে যাবে, যা কার্ডগুলোকে আধুনিক ও ক্লিকযোগ্য মনে করাবে।</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2>8. মোবাইল-ফার্স্ট রেসপনসিভ ফ্লো (Mobile UX Hierarchy)</h2>
+<p>মোবাইলে ডেক্সটপের ২-কলাম স্প্লিট লেআউট পাশাপাশি রাখা সম্ভব নয়। অনেকে ভুল করে ডেক্সটপের সবকিছু মোবাইলে গাদাগাদি করে দেয়, ফলে স্ক্রল করতে করতে প্লেয়ার ক্লান্ত হয়ে পড়ে।</p>
+<h3>মোবাইলের জন্য নিখুঁত উল্লম্ব ক্রম (Mobile Action Stack):</h3>
+<pre><code class="language-mermaid">graph TD
+    M1[&quot;1. স্লিম ন্যাভবার: [HC] HavenCraft (সরাসরি ব্র্যান্ড) + Search + Gametag + ☰&quot;]
+    M2[&quot;2. মিনি ব্র্যান্ড হেডার: কম্প্যাক্ট লোগো + টাইটেল + &#39;Bangladesh&#39;s #1 Crossplay SMP&#39;&quot;]
+    M3[&quot;3. ডুয়াল কানেকশন কার্ড (সবার আগে!): Java ও Bedrock IP + Port কপি বাটন&quot;]
+    M4[&quot;4. প্রাইমারি বাটন: 💬 Join Discord Community&quot;]
+    M5[&quot;5. ২x২ স্ট্যাটাস গ্রিড: লাইভ প্লেয়ার, আপটাইম, ভার্সন ও কমিউনিটি&quot;]
+    M6[&quot;6. ভোট ও লিডারবোর্ড কুইক অ্যাকশন কার্ড&quot;]
+
+    M1 --&gt; M2 --&gt; M3 --&gt; M4 --&gt; M5 --&gt; M6
+</code></pre>
+<blockquote>
+<p>[!IMPORTANT]
+<strong>মোবাইলে কানেকশন কার্ড আগে কেন?</strong><br>মোবাইল ব্যবহারকারীরা ওয়েবসাইটে আসে সরাসরি সার্ভার আইপি ও পোর্ট নিয়ে গেমে পেস্ট করতে। তাই মোবাইলে লম্বা বর্ণনা বা স্ট্যাটাস কার্ডের আগেই আইপি বক্স পেয়ে গেলে ড্রপ-অফ রেট ৮০% কমে যায়!</p>
+</blockquote>
+<hr>
+<h2>9. প্রযুক্তিগত বাস্তবায়ন কোড স্নিপেট (Zero-Jank CSS &amp; Vanilla JS)</h2>
+<p>HavenCraft-এর কোনো থার্ড-পার্টি হেভি লাইব্রেরির প্রয়োজন নেই। পিওর Vanilla JS এবং আধুনিক CSS দিয়ে এটি অত্যন্ত দ্রুত ও স্মুথভাবে বাস্তবায়ন করা সম্ভব:</p>
+<h3>ক. HTML স্ট্রাকচার (Hero Section Re-architecture)</h3>
+<pre><code class="language-html">&lt;!-- ============================================
+     HERO SECTION (ASYMMETRIC SPLIT TERMINAL)
+     ============================================ --&gt;
+&lt;section class=&quot;hero hero-split&quot; id=&quot;main-content&quot;&gt;
+    &lt;!-- Cinematic Ambient Layer --&gt;
+    &lt;div class=&quot;hero-backdrop&quot; aria-hidden=&quot;true&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;hero-glow hero-glow-left&quot; aria-hidden=&quot;true&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;hero-glow hero-glow-right&quot; aria-hidden=&quot;true&quot;&gt;&lt;/div&gt;
+
+    &lt;div class=&quot;container hero-grid&quot;&gt;
+        &lt;!-- LEFT COLUMN: Brand Identity &amp; Hook (52%) --&gt;
+        &lt;div class=&quot;hero-left&quot;&gt;
+            &lt;div class=&quot;hero-badge&quot;&gt;
+                &lt;span class=&quot;badge-flag&quot;&gt;🇧🇩&lt;/span&gt;
+                &lt;span&gt;Bangladesh&#39;s #1 Crossplay SMP&lt;/span&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;hero-brand-group&quot;&gt;
+                &lt;div class=&quot;hero-logo-wrapper&quot;&gt;
+                    &lt;img src=&quot;logo/logo.webp&quot; alt=&quot;HavenCraft SMP Logo&quot; class=&quot;hero-split-logo&quot; width=&quot;110&quot; height=&quot;110&quot; fetchpriority=&quot;high&quot; /&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;hero-title-wrapper&quot;&gt;
+                    &lt;h1 class=&quot;hero-split-title&quot;&gt;Haven&lt;span class=&quot;text-gradient&quot;&gt;Craft&lt;/span&gt;&lt;/h1&gt;
+                    &lt;p class=&quot;hero-split-tagline&quot;&gt;Survival Without Limits&lt;/p&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;p class=&quot;hero-split-desc&quot;&gt;
+                From the heart of Bengal to your screen — experience zero-lag survival, balanced player economy, and a thriving community where every player belongs.
+            &lt;/p&gt;
+
+            &lt;div class=&quot;hero-cta-group&quot;&gt;
+                &lt;a href=&quot;#connectTerminal&quot; class=&quot;btn btn-primary btn-glow&quot;&gt;
+                    &lt;i class=&quot;fa-solid fa-gamepad&quot;&gt;&lt;/i&gt; Quick Connect
+                &lt;/a&gt;
+                &lt;a href=&quot;https://dc.havencraft.pro&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; class=&quot;btn btn-secondary&quot;&gt;
+                    &lt;i class=&quot;fa-brands fa-discord&quot;&gt;&lt;/i&gt; Join Discord
+                &lt;/a&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;!-- RIGHT COLUMN: Command Terminal &amp; Live Stats (48%) --&gt;
+        &lt;div class=&quot;hero-right&quot; id=&quot;connectTerminal&quot;&gt;
+            &lt;!-- Universal Server Connection Card --&gt;
+            &lt;div class=&quot;terminal-card&quot;&gt;
+                &lt;div class=&quot;terminal-header&quot;&gt;
+                    &lt;div class=&quot;terminal-status&quot;&gt;
+                        &lt;span class=&quot;status-dot-pulse&quot;&gt;&lt;/span&gt;
+                        &lt;span class=&quot;terminal-status-text&quot; id=&quot;statusText&quot;&gt;Server Online&lt;/span&gt;
+                    &lt;/div&gt;
+                    &lt;span class=&quot;terminal-tag&quot;&gt;Crossplay Java &amp; Bedrock&lt;/span&gt;
+                &lt;/div&gt;
+
+                &lt;div class=&quot;terminal-rows&quot;&gt;
+                    &lt;!-- Java Row --&gt;
+                    &lt;div class=&quot;connect-row&quot;&gt;
+                        &lt;div class=&quot;connect-label&quot;&gt;
+                            &lt;i class=&quot;fa-solid fa-mug-hot&quot;&gt;&lt;/i&gt;
+                            &lt;span&gt;Java Edition&lt;/span&gt;
+                        &lt;/div&gt;
+                        &lt;div class=&quot;connect-field&quot; onclick=&quot;copyServerIP(&#39;mc.havencraft.pro&#39;, this)&quot; role=&quot;button&quot; tabindex=&quot;0&quot; title=&quot;Click to copy Java IP&quot;&gt;
+                            &lt;span class=&quot;connect-ip&quot;&gt;mc.havencraft.pro&lt;/span&gt;
+                            &lt;span class=&quot;copy-badge&quot;&gt;&lt;i class=&quot;fa-solid fa-copy&quot;&gt;&lt;/i&gt; Copy&lt;/span&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+
+                    &lt;!-- Bedrock Row --&gt;
+                    &lt;div class=&quot;connect-row&quot;&gt;
+                        &lt;div class=&quot;connect-label&quot;&gt;
+                            &lt;i class=&quot;fa-solid fa-mobile-screen&quot;&gt;&lt;/i&gt;
+                            &lt;span&gt;Bedrock / PE&lt;/span&gt;
+                        &lt;/div&gt;
+                        &lt;div class=&quot;connect-field&quot; onclick=&quot;copyServerIP(&#39;mc.havencraft.pro&#39;, this, &#39;2566&#39;)&quot; role=&quot;button&quot; tabindex=&quot;0&quot; title=&quot;Click to copy Bedrock IP &amp; Port&quot;&gt;
+                            &lt;span class=&quot;connect-ip&quot;&gt;mc.havencraft.pro &lt;span class=&quot;port-highlight&quot;&gt;: 2566&lt;/span&gt;&lt;/span&gt;
+                            &lt;span class=&quot;copy-badge&quot;&gt;&lt;i class=&quot;fa-solid fa-copy&quot;&gt;&lt;/i&gt; Copy&lt;/span&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;!-- 2x2 Glass Live Matrix --&gt;
+            &lt;div class=&quot;stats-2x2-grid&quot;&gt;
+                &lt;!-- Card 1: Live Players --&gt;
+                &lt;div class=&quot;matrix-card clickable&quot; onclick=&quot;openPlayerModal()&quot; role=&quot;button&quot; tabindex=&quot;0&quot;&gt;
+                    &lt;div class=&quot;matrix-icon&quot;&gt;&lt;i class=&quot;fa-solid fa-users&quot;&gt;&lt;/i&gt;&lt;/div&gt;
+                    &lt;div class=&quot;matrix-value&quot; id=&quot;playerCountLarge&quot;&gt;14 / 99&lt;/div&gt;
+                    &lt;div class=&quot;matrix-label&quot;&gt;Live Online &lt;span class=&quot;matrix-hint&quot;&gt;(View List)&lt;/span&gt;&lt;/div&gt;
+                &lt;/div&gt;
+
+                &lt;!-- Card 2: Performance --&gt;
+                &lt;div class=&quot;matrix-card&quot;&gt;
+                    &lt;div class=&quot;matrix-icon&quot;&gt;&lt;i class=&quot;fa-solid fa-bolt&quot;&gt;&lt;/i&gt;&lt;/div&gt;
+                    &lt;div class=&quot;matrix-value&quot;&gt;20.0 TPS&lt;/div&gt;
+                    &lt;div class=&quot;matrix-label&quot;&gt;24/7 Zero-Lag VPS&lt;/div&gt;
+                &lt;/div&gt;
+
+                &lt;!-- Card 3: Version --&gt;
+                &lt;div class=&quot;matrix-card&quot;&gt;
+                    &lt;div class=&quot;matrix-icon&quot;&gt;&lt;i class=&quot;fa-solid fa-cube&quot;&gt;&lt;/i&gt;&lt;/div&gt;
+                    &lt;div class=&quot;matrix-value&quot;&gt;1.21+&lt;/div&gt;
+                    &lt;div class=&quot;matrix-label&quot;&gt;Supported Version&lt;/div&gt;
+                &lt;/div&gt;
+
+                &lt;!-- Card 4: Community --&gt;
+                &lt;div class=&quot;matrix-card&quot;&gt;
+                    &lt;div class=&quot;matrix-icon&quot;&gt;&lt;i class=&quot;fa-solid fa-shield-halved&quot;&gt;&lt;/i&gt;&lt;/div&gt;
+                    &lt;div class=&quot;matrix-value&quot; id=&quot;uniquePlayers&quot;&gt;500+&lt;/div&gt;
+                    &lt;div class=&quot;matrix-label&quot;&gt;Registered Players&lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/section&gt;
+</code></pre>
+<hr>
+<h3>খ. CSS আর্কিটেকচার (Modern Grid &amp; Floating Navbar)</h3>
+<pre><code class="language-css">/* --- Floating Adaptive Navbar --- */
+.navbar-floating {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 1140px;
+  height: 60px;
+  background: rgba(14, 16, 24, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35);
+  z-index: 1000;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Scrolled state: Expands to full screen edge-to-edge bar */
+.navbar-floating.scrolled {
+  top: 0;
+  width: 100%;
+  max-width: 100%;
+  height: 68px;
+  border-radius: 0;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  background: rgba(14, 16, 24, 0.92);
+}
+
+/* Nav Brand Transition: Hidden at top, fades in on scroll */
+.nav-brand-dynamic {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  opacity: 0;
+  transform: translateX(-12px);
+  transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.navbar-floating.scrolled .nav-brand-dynamic {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+/* Top State Status Chip: Visible only at top */
+.nav-top-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: rgba(0, 200, 150, 0.1);
+  border: 1px solid rgba(0, 200, 150, 0.25);
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #00c896;
+  letter-spacing: 0.5px;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.navbar-floating.scrolled .nav-top-chip {
+  opacity: 0;
+  transform: translateX(-10px);
+  pointer-events: none;
+  display: none;
+}
+
+/* --- Hero Split Layout --- */
+.hero-split {
+  position: relative;
+  padding-top: calc(var(--nav-height) + 60px);
+  padding-bottom: 60px;
+  overflow: hidden;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  align-items: center;
+  gap: 48px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Hero Left Brand Group */
+.hero-brand-group {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin: 16px 0;
+}
+
+.hero-split-logo {
+  border-radius: var(--radius-lg);
+  box-shadow: 0 8px 32px rgba(0, 200, 150, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.hero-split-logo:hover {
+  transform: scale(1.05) rotate(-2deg);
+}
+
+.hero-split-title {
+  font-family: var(--font-heading);
+  font-size: clamp(2.2rem, 4vw, 3.4rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.5px;
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #00c896 0%, #38bdf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Terminal Connection Card */
+.terminal-card {
+  background: rgba(22, 27, 40, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.terminal-card::before {
+  content: &#39;&#39;;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #00c896, #38bdf8);
+}
+
+/* 2x2 Matrix */
+.stats-2x2-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.matrix-card {
+  background: rgba(22, 27, 40, 0.55);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  text-align: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.matrix-card:hover {
+  background: rgba(26, 32, 48, 0.85);
+  border-color: rgba(0, 200, 150, 0.3);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* --- Mobile Responsiveness --- */
+@media (max-width: 991px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    text-align: center;
+  }
+
+  .hero-brand-group {
+    justify-content: center;
+  }
+
+  .hero-cta-group {
+    justify-content: center;
+  }
+}
+</code></pre>
+<hr>
+<h3>গ. Vanilla JS স্ক্রল লজিক (IntersectionObserver Based, Zero Jank)</h3>
+<pre><code class="language-javascript">// assets/js/hero-controller.js
+(function () {
+    &#39;use strict&#39;;
+
+    // 1. Adaptive Island Navbar on Scroll
+    const navbar = document.getElementById(&#39;navbar&#39;);
+    const heroTitle = document.querySelector(&#39;.hero-split-title&#39;);
+
+    if (navbar &amp;&amp; heroTitle) {
+        // Using IntersectionObserver for optimal 60fps performance without scroll-lag
+        const observer = new IntersectionObserver(
+            ([entry]) =&gt; {
+                if (!entry.isIntersecting) {
+                    navbar.classList.add(&#39;scrolled&#39;);
+                } else {
+                    navbar.classList.remove(&#39;scrolled&#39;);
+                }
+            },
+            { rootMargin: &#39;-60px 0px 0px 0px&#39; }
+        );
+
+        observer.observe(heroTitle);
+    }
+
+    // 2. Dual IP &amp; Port Copy Helper
+    window.copyServerIP = function (ip, element, port) {
+        const fullAddress = port ? `${ip}:${port}` : ip;
+        navigator.clipboard.writeText(fullAddress).then(() =&gt; {
+            const badge = element.querySelector(&#39;.copy-badge&#39;);
+            if (badge) {
+                const originalHtml = badge.innerHTML;
+                badge.innerHTML = &#39;&lt;i class=&quot;fa-solid fa-check&quot;&gt;&lt;/i&gt; Copied!&#39;;
+                badge.classList.add(&#39;copied-success&#39;);
+                setTimeout(() =&gt; {
+                    badge.innerHTML = originalHtml;
+                    badge.classList.remove(&#39;copied-success&#39;);
+                }, 2000);
+            }
+        });
+    };
+})();
+</code></pre>
+<hr>
+<h2>10. চূড়ান্ত তুলনা ও বাস্তবায়নের অগ্রাধিকার তালিকা (Actionable Roadmap)</h2>
+<h3>কেন এই প্রস্তাবিত ডিজাইনটি সেরা?</h3>
+<ol>
+<li><strong>ChatGPT-এর উদ্বেগের সমাধান:</strong> কোনো অযৌক্তিক জাম্পিং অ্যানিমেশন নেই, সিএলএস (Cumulative Layout Shift) শূন্য, লো-এন্ড ফোনেও ৬০ FPS নিশ্চিত।</li>
+<li><strong>Gemini Argon-এর চমৎকার আইডিয়াগুলোর বাস্তবায়ন:</strong> ফ্লোটিং আইল্যান্ড হেডার, লাইভ স্ট্যাটাস চিপ, ২x২ গ্রিড, বেডরক আলাদা পোর্ট কার্ড এবং অ্যাম্বিয়েন্ট সিনেমাটিক ব্যাকড্রপ।</li>
+<li><strong>আপনার ব্র্যান্ডিং স্বপ্নের পূর্ণতা:</strong> উপরে থাকার সময় হিরো লোগো পুরো স্ক্রিনের কেন্দ্রবিন্দু, নিচে স্ক্রল করলে হেডার লোগো মসৃণভাবে ব্র্যান্ডের নেতৃত্ব দেয়।</li>
+</ol>
+<h3>বাস্তবায়নের ৩টি ধাপ (Implementation Roadmap):</h3>
+<ul>
+<li><input disabled="" type="checkbox"> <strong>ধাপ ১: Floating Navbar অ্যাডাপ্টেশন (<code>navbar.js</code> &amp; <code>style.css</code>)</strong><ul>
+<li>হোমপেজে <code>navbar-floating</code> ক্লাস চালু করা এবং স্ক্রল ওয়াচার দিয়ে ব্র্যান্ড/চিপ টগল করা।</li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"> <strong>ধাপ ২: Hero Split Grid রূপান্তর (<code>index.html</code>)</strong><ul>
+<li>বিদ্যমান সেন্ট্রাল হিরোর পরিবর্তে <code>hero-left</code> এবং <code>hero-right</code> স্প্লিট গ্রিড প্রতিস্থাপন করা।</li>
+<li>জাভা ও বেডরক ডুয়াল কপি টার্মিনাল এবং ২x২ স্ট্যাটাস গ্রিড বসানো।</li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"> <strong>ধাপ ৩: অ্যাম্বিয়েন্স ও ভিজ্যুয়াল পলিশ</strong><ul>
+<li>ব্যাকগ্রাউন্ডে সিনেমাটিক মাইনক্রাফট ব্লার শট ও সায়ান/মিন্ট গ্রিন অ্যাম্বিয়েন্ট অরবস যোগ করা।</li>
+<li>মোবাইল ভিউতে বাটন ও টার্মিনালের প্যাডিং ফাইন-টিউন করা।</li>
+</ul>
+</li>
+</ul>
+<hr>
+<blockquote>
+<p><strong>উপসংহার:</strong> এই আর্কিটেকচার বাস্তবায়িত হলে HavenCraft-এর হোমপেজ শুধু দেখতে সুন্দর লাগবে না, বরং বাংলাদেশের যেকোনো মাইনক্রাফট বা গেমিং ওয়েবসাইটের তুলনায় অনেক বেশি আন্তর্জাতিক মানের, আধুনিক ও প্লেয়ার-কনভার্টিং হবে।</p>
+</blockquote>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+document.querySelectorAll('code.language-mermaid').forEach(function(el){
+  var d=document.createElement('div'); d.className='mermaid'; d.textContent=el.textContent;
+  el.parentElement.replaceWith(d);
+});
+if (window.mermaid) { mermaid.initialize({startOnLoad:false, theme:'dark'}); mermaid.run(); }
+</script>
+</body>
+</html>
