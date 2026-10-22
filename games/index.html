@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>GitHub Games — Discover. Play. Repeat.</title>
+<meta name="description" content="GitHub Games — a personal browser gaming platform. Discover. Play. Repeat.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="arcade.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- ============ SIDEBAR (desktop) / DRAWER (mobile) ============ -->
+  <aside id="sidebar" aria-label="Main navigation">
+    <div class="side-brand">
+      <span class="logo-mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22d3ee"/><stop offset="1" stop-color="#818cf8"/></linearGradient><mask id="gp-mask-side"><path d="M8.5 10 h15 c2.2 0 3.5 1.6 3.5 4 c0 3-1.6 5.2-3.6 5.2 c-1.2 0-2-.7-2.6-1.8 l-1-1.6 H12.2 l-1 1.6 c-.6 1.1-1.4 1.8-2.6 1.8 C6.6 19.2 5 17 5 14 c0-2.4 1.3-4 3.5-4 z" fill="#fff"/><path d="M10.2 11.4 h1.6 v1.3 h1.6 v1.6 h-1.6 v1.3 h-1.6 v-1.3 H8.6 v-1.6 h1.6 z" fill="#000"/><circle cx="21" cy="11.7" r="0.9" fill="#000"/><circle cx="22.8" cy="13.5" r="0.9" fill="#000"/><circle cx="21" cy="15.3" r="0.9" fill="#000"/><circle cx="19.2" cy="13.5" r="0.9" fill="#000"/></mask></defs><rect x="2" y="2" width="28" height="28" rx="8" fill="url(#lg)"/><rect x="2" y="2" width="28" height="28" rx="8" fill="#0b0e14" mask="url(#gp-mask-side)"/></svg>
+      </span>
+      <span class="logo-text"><strong>GitHub Games</strong><small>Discover. Play. Repeat.</small></span>
+      <button id="drawer-close" class="icon-btn only-mobile" aria-label="Close menu">✕</button>
+    </div>
+    <nav class="side-nav">
+      <button class="nav-item is-active" data-view="home"><span class="ni">⌂</span><span class="nl">Home</span></button>
+      <button class="nav-item" data-view="library"><span class="ni">▦</span><span class="nl">Game Library</span></button>
+      <button class="nav-item" data-view="categories"><span class="ni">◫</span><span class="nl">Categories</span></button>
+      <button class="nav-item" data-view="favorites"><span class="ni">★</span><span class="nl">Favorites</span><span class="nbadge" id="fav-count" hidden></span></button>
+      <button class="nav-item" data-view="recent"><span class="ni">◷</span><span class="nl">Recently Played</span></button>
+      <button class="nav-item" data-view="shop"><span class="ni">💎</span><span class="nl">Diamond Shop</span></button>
+    </nav>
+    <div class="side-foot">
+      <button class="nav-item" data-view="profile"><span class="ni">◯</span><span class="nl">Profile</span></button>
+      <button class="nav-item" data-view="settings"><span class="ni">⚙</span><span class="nl">Settings</span></button>
+      <button id="side-collapse" class="nav-item only-desktop" aria-label="Collapse sidebar"><span class="ni">«</span><span class="nl">Collapse</span></button>
+    </div>
+  </aside>
+  <div id="backdrop" hidden></div>
+
+  <!-- ============ MAIN COLUMN ============ -->
+  <div class="main-col">
+    <header id="topbar">
+      <button id="hamburger" class="icon-btn only-mobile" aria-label="Open menu">☰</button>
+      <span class="logo-mark tb-logo only-mobile" aria-hidden="true">
+        <svg viewBox="0 0 32 32"><defs><mask id="gp-mask-top"><path d="M8.5 10 h15 c2.2 0 3.5 1.6 3.5 4 c0 3-1.6 5.2-3.6 5.2 c-1.2 0-2-.7-2.6-1.8 l-1-1.6 H12.2 l-1 1.6 c-.6 1.1-1.4 1.8-2.6 1.8 C6.6 19.2 5 17 5 14 c0-2.4 1.3-4 3.5-4 z" fill="#fff"/><path d="M10.2 11.4 h1.6 v1.3 h1.6 v1.6 h-1.6 v1.3 h-1.6 v-1.3 H8.6 v-1.6 h1.6 z" fill="#000"/><circle cx="21" cy="11.7" r="0.9" fill="#000"/><circle cx="22.8" cy="13.5" r="0.9" fill="#000"/><circle cx="21" cy="15.3" r="0.9" fill="#000"/><circle cx="19.2" cy="13.5" r="0.9" fill="#000"/></mask></defs><rect x="2" y="2" width="28" height="28" rx="8" fill="#22d3ee"/><rect x="2" y="2" width="28" height="28" rx="8" fill="#0b0e14" mask="url(#gp-mask-top)"/></svg>
+      </span>
+      <div class="search-wrap">
+        <span class="search-ic" aria-hidden="true">⌕</span>
+        <input id="search" type="search" placeholder="Search games…" autocomplete="off" aria-label="Search games">
+      </div>
+      <div class="top-actions">
+        <button id="topbar-diamonds" class="diamond-pill" aria-label="Open Diamond Shop">💎 <span id="topbar-diamonds-n">0</span></button>
+        <button id="avatar-btn" class="avatar-btn" aria-haspopup="menu" aria-expanded="false" aria-label="Account menu">
+          <span id="avatar-initial">P</span>
+        </button>
+        <div id="avatar-menu" class="menu" role="menu" hidden>
+          <div class="menu-head"><strong id="menu-username">Player</strong><small>GitHub Games</small></div>
+          <button role="menuitem" data-goto="profile">◯&nbsp; Profile</button>
+          <button role="menuitem" data-goto="shop">💎&nbsp; Diamond Shop</button>
+          <button role="menuitem" data-goto="settings">⚙&nbsp; Settings</button>
+          <button role="menuitem" id="menu-about">ⓘ&nbsp; About</button>
+          <button role="menuitem" id="menu-support">✉️&nbsp; Support</button>
+        </div>
+      </div>
+    </header>
+
+    <main id="views">
+      <!-- HOME -->
+      <section class="view is-active" id="view-home" aria-label="Home">
+        <div id="featured" class="featured">
+          <img class="featured-bg" src="img/cover-police-chase.svg" alt="" aria-hidden="true">
+          <div class="featured-shade"></div>
+          <div class="featured-body">
+            <span class="kicker">★ Featured</span>
+            <h2>Police Chase</h2>
+            <p>Outrun the cops, dodge the traffic. How long can you survive?</p>
+            <div class="featured-row">
+              <a class="btn-play big" href="1/" data-play="police-chase">▶&nbsp; Play Now</a>
+              <button class="btn-ghost" data-info="police-chase">ⓘ Details</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="sec-head"><h3>Recently Played</h3><button class="link" data-goto="recent">View all →</button></div>
+        <div id="home-recent" class="hrow"></div>
+
+        <div class="sec-head"><h3>Game Library</h3><button class="link" data-goto="library">View all →</button></div>
+        <div id="home-grid" class="grid"></div>
+      </section>
+
+      <!-- LIBRARY -->
+      <section class="view" id="view-library" aria-label="Game Library">
+        <div class="sec-head"><h3>Game Library</h3>
+          <label class="sort-wrap">Sort
+            <select id="sort" aria-label="Sort games">
+              <option value="name">Name A–Z</option>
+              <option value="recent">Recently played</option>
+            </select>
+          </label>
+        </div>
+        <div id="lib-grid" class="grid"></div>
+        <div id="lib-empty" class="empty" hidden>
+          <div class="empty-ic">🎮</div>
+          <p>No games match your search.</p>
+          <button class="btn-ghost" id="lib-clear">Clear search</button>
+        </div>
+      </section>
+
+      <!-- CATEGORIES -->
+      <section class="view" id="view-categories" aria-label="Categories">
+        <div class="sec-head"><h3>Browse by Category</h3></div>
+        <div id="cat-chips" class="chips"></div>
+        <div id="cat-grid" class="grid"></div>
+      </section>
+
+      <!-- FAVORITES -->
+      <section class="view" id="view-favorites" aria-label="Favorites">
+        <div class="sec-head"><h3>Favorites</h3></div>
+        <div id="fav-grid" class="grid"></div>
+        <div id="fav-empty" class="empty" hidden>
+          <div class="empty-ic">★</div>
+          <p>No favorites yet.</p>
+          <p class="dim">Tap the ☆ on any game to pin it here.</p>
+          <button class="btn-ghost" data-goto="library">Browse games</button>
+        </div>
+      </section>
+
+      <!-- RECENTLY PLAYED -->
+      <section class="view" id="view-recent" aria-label="Recently Played">
+        <div class="sec-head"><h3>Recently Played</h3></div>
+        <div id="recent-list" class="recent-list"></div>
+        <div id="recent-empty" class="empty" hidden>
+          <div class="empty-ic">◷</div>
+          <p>Nothing here yet.</p>
+          <p class="dim">Games you play will show up here.</p>
+          <button class="btn-ghost" data-goto="library">Browse games</button>
+        </div>
+      </section>
+
+      <!-- DIAMOND SHOP -->
+      <section class="view" id="view-shop" aria-label="Diamond Shop">
+        <div class="sec-head"><h3>💎 Diamond Shop</h3></div>
+        <div class="panel shop-panel">
+          <div class="shop-balance-row">
+            <div><span class="dim sm">Your Diamonds&nbsp;</span><strong id="shop-balance">0</strong> 💎</div>
+            <div class="shop-user-row">
+              <input id="shop-user-input" maxlength="24" placeholder="Your username" aria-label="Your username">
+              <button class="btn-play sm" id="shop-claim">Create / Load Account</button>
+            </div>
+          </div>
+          <div id="daily-claim-panel" class="daily-claim">
+            <div class="dc-left">
+              <div class="dc-title">🎁 Daily Claim</div>
+              <div class="dc-sub">Claim <strong>+10 💎</strong> free every 12 hours — use them to unlock games.</div>
+            </div>
+            <div class="dc-right">
+              <div id="daily-countdown" class="dc-count">Create or load an account to claim.</div>
+              <button class="btn-play sm" id="daily-claim-btn" disabled>Claim +10 💎</button>
+            </div>
+          </div>
+          <div id="shop-packs" class="shop-packs"></div>
+          <div class="custom-card">
+            <div class="custom-head"><span>🛠️ Custom Amount</span><span class="dim sm">1,000 – 100,000 💎 &bull; bigger amount = cheaper per diamond</span></div>
+            <div class="custom-row">
+              <input id="custom-slider" type="range" min="1000" max="100000" step="100" value="1000" aria-label="Custom diamond amount (slider)">
+              <input id="custom-amount" type="number" min="1000" max="100000" step="100" value="1000" aria-label="Custom diamond amount">
+            </div>
+            <div class="custom-chips">
+              <button class="chip" data-custom="1000">1,000</button>
+              <button class="chip" data-custom="5000">5,000</button>
+              <button class="chip" data-custom="10000">10,000</button>
+              <button class="chip" data-custom="25000">25,000</button>
+              <button class="chip" data-custom="50000">50,000</button>
+              <button class="chip" data-custom="100000">100,000</button>
+            </div>
+            <div class="custom-buy-row">
+              <div>
+                <div id="custom-price" class="custom-price">৳910</div>
+                <div id="custom-rate" class="dim sm">৳0.91 per diamond — the packages' average rate</div>
+              </div>
+              <button class="btn-play" id="custom-buy">Buy Custom</button>
+            </div>
+          </div>
+          <p class="dim sm">Pay with bKash Send Money (app or *247#), then enter your TrxID + phone number. Orders stay Pending until the payment is verified — then your Diamonds are added automatically.</p>
+        </div>
+      </section>
+
+      <!-- PROFILE -->
+      <section class="view" id="view-profile" aria-label="Profile">
+        <div class="sec-head"><h3>Profile</h3></div>
+        <div class="panel profile-panel">
+          <div class="prof-top">
+            <div class="prof-avatar" id="prof-avatar">P</div>
+            <div class="prof-id">
+              <div class="prof-name-row">
+                <strong id="prof-name">Player</strong>
+                <button class="icon-btn" id="name-edit" aria-label="Edit display name">✎</button>
+              </div>
+              <small class="dim">GitHub Games player</small>
+            </div>
+          </div>
+          <div class="avatar-pick">
+            <h4>Profile picture</h4>
+            <div id="avatar-presets" class="avatar-presets"></div>
+          </div>
+          <div id="name-editor" class="name-editor" hidden>
+            <input id="name-input" maxlength="24" aria-label="Display name">
+            <button class="btn-play sm" id="name-save">Save</button>
+            <button class="btn-ghost sm" id="name-cancel">Cancel</button>
+          </div>
+          <div class="prof-cols">
+            <div>
+              <h4>Favorite Games</h4>
+              <div id="prof-favs" class="mini-list"></div>
+            </div>
+            <div>
+              <h4>Recently Played</h4>
+              <div id="prof-recent" class="mini-list"></div>
+            </div>
+          </div>
+          <h4>Best Scores</h4>
+          <div id="prof-scores" class="score-list"></div>
+        </div>
+      </section>
+
+      <!-- SETTINGS -->
+      <section class="view" id="view-settings" aria-label="Settings">
+        <div class="sec-head"><h3>Settings</h3></div>
+        <div class="panel settings-panel">
+          <div class="set-group">
+            <h4>Appearance</h4>
+            <div class="set-row"><span>Accent color</span>
+              <div class="swatches" role="radiogroup" aria-label="Accent color">
+                <button class="sw cyan" data-accent="cyan" aria-label="Cyan"></button>
+                <button class="sw blue" data-accent="blue" aria-label="Blue"></button>
+                <button class="sw violet" data-accent="violet" aria-label="Violet"></button>
+              </div>
+            </div>
+            <div class="set-row"><span>Compact sidebar</span>
+              <button class="toggle" id="tgl-sidebar" role="switch" aria-checked="false" aria-label="Compact sidebar"><span class="knob"></span></button>
+            </div>
+          </div>
+          <div class="set-group">
+            <h4>Motion</h4>
+            <div class="set-row"><span>Animations</span>
+              <button class="toggle" id="tgl-anim" role="switch" aria-checked="true" aria-label="Animations"><span class="knob"></span></button>
+            </div>
+            <p class="dim sm">Turn off to reduce motion across the interface.</p>
+          </div>
+          <div class="set-group danger-zone">
+            <h4>Data &amp; Privacy</h4>
+            <p class="dim sm">Profile, favorites and best scores stay in this browser. Shop accounts, Diamonds and orders live in the secure database, so the same username works on any device.</p>
+            <div class="set-row"><span>Reset best scores</span><button class="btn-ghost sm danger" id="btn-reset-scores">Reset</button></div>
+            <div class="set-row"><span>Clear recently played</span><button class="btn-ghost sm danger" id="btn-clear-recent">Clear</button></div>
+            <div class="set-row"><span>Clear favorites</span><button class="btn-ghost sm danger" id="btn-clear-favs">Clear</button></div>
+          </div>
+          <div class="set-group">
+            <h4>Shop Admin</h4>
+            <p class="dim sm">View diamond orders and mark them Complete after verifying the payment in your bKash app. Admin login required.</p>
+            <div class="set-row"><span>Admin page</span><a class="btn-play sm" href="admin.html">Open Admin Page</a></div>
+          </div>
+          <div class="set-group">
+            <h4>About</h4>
+            <p><strong>GitHub Games</strong> — Discover. Play. Repeat.</p>
+            <p class="dim">This is made for everyone.</p>
+            <p class="dim sm">Hub v3.0 · Games launch in their own pages and keep their own saved data.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<!-- game details modal -->
+<div id="info-modal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="im-title">
+  <div class="modal-card">
+    <button class="icon-btn modal-x" data-close aria-label="Close">✕</button>
+    <div class="im-head">
+      <img id="im-cover" src="" alt="">
+      <div><h3 id="im-title"></h3><div id="im-genre" class="chips sm"></div></div>
+    </div>
+    <p id="im-desc"></p>
+    <h4>Controls</h4><p id="im-controls" class="dim"></p>
+    <h4>Features</h4><ul id="im-features" class="feat"></ul>
+    <h4>Credits</h4><p id="im-credits" class="dim sm"></p>
+    <div class="im-actions">
+      <a class="btn-play big" id="im-play" href="#" data-play="">▶&nbsp; Play</a>
+    </div>
+  </div>
+</div>
+
+<!-- about modal -->
+<div id="about-modal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="ab-title">
+  <div class="modal-card narrow">
+    <button class="icon-btn modal-x" data-close aria-label="Close">✕</button>
+    <h3 id="ab-title">About GitHub Games</h3>
+    <p><strong>GitHub Games</strong> — Discover. Play. Repeat.</p>
+    <p class="dim">This is made for everyone.</p>
+    <p class="dim sm">A personal browser gaming platform. Your favorites, recent games and settings live only in this browser.</p>
+  </div>
+</div>
+
+<!-- support modal -->
+<div id="support-modal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="sup-title">
+  <div class="modal-card narrow">
+    <button class="icon-btn modal-x" data-close aria-label="Close">✕</button>
+    <h3 id="sup-title">Support</h3>
+    <p>Need help with a Diamond order, a game, or anything else? Email me directly — I usually reply within a day.</p>
+    <p class="support-email"><strong>princerafi5801@gmail.com</strong></p>
+    <div class="support-actions">
+      <a class="btn-play" href="mailto:princerafi5801@gmail.com?subject=GitHub%20Games%20Support">✉️ Send Email</a>
+      <button class="btn-play" id="support-copy">📋 Copy Email</button>
+    </div>
+    <p class="dim sm">For Diamond orders, include your username and TrxID in the email so I can find your order fast.</p>
+  </div>
+</div>
+
+<!-- shop checkout modal -->
+<div id="shop-modal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="sh-title">
+  <div class="modal-card narrow">
+    <button class="icon-btn modal-x" data-close aria-label="Close">✕</button>
+    <h3 id="sh-title">Buy Diamonds</h3>
+    <div id="sh-step1">
+      <p><strong id="sh-pack-name"></strong> — <span id="sh-pack-price"></span></p>
+      <label class="dim sm" for="sh-username">Your username (diamonds go to this name)</label>
+      <input id="sh-username" maxlength="24" placeholder="Username" aria-label="Username">
+      <div class="im-actions">
+        <button class="btn-ghost" data-close>Cancel</button>
+        <button class="btn-play" id="sh-continue">Continue</button>
+      </div>
+    </div>
+    <div id="sh-step2" hidden>
+      <p><strong id="sh-pack-name2"></strong></p>
+      <div class="bkash-box">
+        <p>Send <strong id="sh-amount"></strong> via bKash <strong>Send Money</strong> to:</p>
+        <p class="bkash-num" id="sh-bkash-num"></p>
+        <p><button class="btn-ghost sm" id="sh-copy" type="button">📋 Copy number</button></p>
+        <p class="dim sm">Send the exact amount from your bKash account (bKash app or *247#), then enter the TrxID + your phone number below.</p>
+      </div>
+      <label class="dim sm" for="sh-trxid">bKash Transaction ID (TrxID)</label>
+      <input id="sh-trxid" maxlength="24" placeholder="e.g. 9H8K2J4F1X" aria-label="Transaction ID">
+      <label class="dim sm" for="sh-phone">Your bKash phone number (the one you sent money from)</label>
+      <input id="sh-phone" maxlength="14" placeholder="e.g. 01712345678" aria-label="Your bKash phone number" inputmode="tel">
+      <div class="im-actions">
+        <button class="btn-ghost" id="sh-back">Back</button>
+        <button class="btn-play" id="sh-place">Place Order</button>
+      </div>
+    </div>
+    <div id="sh-done" hidden>
+      <p>✅ <strong>Order placed!</strong></p>
+      <p class="dim">Order <strong id="sh-order-id"></strong> is <strong>Pending</strong>. Diamonds will be added to <strong id="sh-done-user"></strong> very soon, once payment verification is complete.</p>
+      <div class="im-actions">
+        <button class="btn-play" data-close>Done</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- floating shop button -->
+<button id="shop-fab" aria-label="Open Diamond Shop">💎 Shop</button>
+
+<!-- buy game modal -->
+<div id="buy-modal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="buy-title">
+  <div class="modal-card narrow">
+    <button class="icon-btn modal-x" data-close aria-label="Close">✕</button>
+    <h3 id="buy-title">Unlock Police Chase</h3>
+    <p class="dim sm">One-time purchase — buy once, play forever.</p>
+    <p><strong>Price: 30 💎</strong> · Your balance: <strong id="buy-balance">0</strong> 💎</p>
+    <div id="buy-username-row">
+      <label class="dim sm" for="buy-username">Create your account to get 30 free diamonds</label>
+      <input id="buy-username" maxlength="24" placeholder="Choose a username" aria-label="Username">
+      <div class="im-actions">
+        <button class="btn-play sm" id="buy-create">Create Account (+30 💎)</button>
+      </div>
+    </div>
+    <p class="dim sm" id="buy-account-note" hidden>Account: <strong id="buy-account-name"></strong></p>
+    <p class="dim sm" id="buy-need-note" hidden></p>
+    <div class="im-actions">
+      <button class="btn-ghost" data-close>Cancel</button>
+      <button class="btn-play" id="buy-confirm">Buy for 30 💎</button>
+      <button class="btn-play" id="buy-shop" hidden>Go to Diamond Shop</button>
+    </div>
+  </div>
+</div>
+
+<!-- confirm modal -->
+<div id="confirm-modal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="cf-title">
+  <div class="modal-card narrow">
+    <h3 id="cf-title"></h3>
+    <p id="cf-msg" class="dim"></p>
+    <div class="im-actions">
+      <button class="btn-ghost" data-close>Cancel</button>
+      <button class="btn-play danger" id="cf-ok">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast" hidden></div>
+
+<script src="arcade.js"></script>
+</body>
+</html>
