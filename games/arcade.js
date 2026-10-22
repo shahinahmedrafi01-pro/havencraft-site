@@ -5,6 +5,22 @@
   /* ---------------- game catalog (real, installed games only) ---------------- */
   var GAMES = [
     {
+      id: "minecraft-code",
+      pin: true,
+      product: true,
+      title: "Minecraft Java & Bedrock Redeem Code",
+      genre: "Game Code",
+      categories: ["Sandbox", "Survival"],
+      tagline: "The full Minecraft game — one redeem code, shown instantly when you buy.",
+      description: "Official Minecraft Java & Bedrock redeem code for PC — the full game that normally costs $29.99. Buy it here with Diamonds and your code is shown on screen instantly. Copy it and save it within 24 hours — after that it disappears from the site. Limited stock!",
+      controls: "Redeem at minecraft.net/redeem — sign in with your Microsoft account and enter the code.",
+      features: ["Full game: Java & Bedrock editions", "Code shown instantly after purchase", "Copy it — save within 24 hours", "Works with your Microsoft account"],
+      credits: "Your email is saved with the order so the admin can contact you if support is needed.",
+      route: "#",
+      cover: "img/cover-minecraft.svg",
+      price: 1220
+    },
+    {
       id: "police-chase",
       title: "Police Chase",
       genre: "Arcade Racing",
@@ -36,21 +52,6 @@
       scoreKey: "galaxyDefenderBest",
       scoreLabel: "Best score"
     },
-    {
-      id: "minecraft-code",
-      product: true,
-      title: "Minecraft Java & Bedrock Redeem Code",
-      genre: "Game Code",
-      categories: ["Sandbox", "Survival"],
-      tagline: "The full Minecraft game — one redeem code, shown instantly when you buy.",
-      description: "Official Minecraft Java & Bedrock redeem code for PC — the full game that normally costs $29.99. Buy it here with Diamonds and your code is shown on screen instantly. Copy it and save it within 24 hours — after that it disappears from the site. Limited stock!",
-      controls: "Redeem at minecraft.net/redeem — sign in with your Microsoft account and enter the code.",
-      features: ["Full game: Java & Bedrock editions", "Code shown instantly after purchase", "Copy it — save within 24 hours", "Works with your Microsoft account"],
-      credits: "Your email is saved with the order so the admin can contact you if support is needed.",
-      route: "#",
-      cover: "img/cover-minecraft.svg",
-      price: 1220
-    }
   ];
   var AVATARS = [
     { id: "racer", src: "img/avatars/avatar-racer.svg", label: "Racer" },
@@ -92,6 +93,8 @@
   };
 
   function gameById(id) { for (var i = 0; i < GAMES.length; i++) if (GAMES[i].id === id) return GAMES[i]; return null; }
+  /* Pinned entries (Sir's featured product) always sort first. Sort is stable. */
+  function pinFirst(list) { return list.slice().sort(function (a, b) { return (b.pin ? 1 : 0) - (a.pin ? 1 : 0); }); }
   function bestScore(g) {
     if (!g.scoreKey) return null;
     try { var v = parseInt(localStorage.getItem(g.scoreKey) || "0", 10); return isNaN(v) ? 0 : v; }
@@ -274,7 +277,7 @@
         return ai - bi || a.title.localeCompare(b.title);
       });
     } else list.sort(function (a, b) { return a.title.localeCompare(b.title); });
-    return list;
+    return pinFirst(list);
   }
 
   function renderHome() {
@@ -299,7 +302,7 @@
       b.addEventListener("click", function () { currentCat = b.getAttribute("data-cat"); renderCategories(); });
     });
     var list = GAMES.filter(function (g) { return currentCat === "All" || g.categories.indexOf(currentCat) !== -1; });
-    renderGrid($("cat-grid"), list);
+    renderGrid($("cat-grid"), pinFirst(list));
   }
   function renderFavorites() {
     var favs = store.favs.map(gameById).filter(Boolean);
