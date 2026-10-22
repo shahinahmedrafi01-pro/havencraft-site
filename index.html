@@ -84,7 +84,6 @@
   .skin-viewer canvas{width:100%;height:100%;display:block;cursor:grab;border-radius:18px}
   .skin-viewer canvas:active{cursor:grabbing}
   .skin-note{color:var(--muted);font-size:.9rem;padding:24px 10px}
-  .drag-hint{margin-top:8px;font-size:.78rem;letter-spacing:.04em;color:var(--muted)}
 
   h1{font-size:clamp(1.35rem,4.6vw,1.9rem);font-weight:700;line-height:1.3;letter-spacing:-.01em;margin:26px 0 30px}
 
@@ -183,7 +182,6 @@
         <canvas id="skinCanvas" role="img" aria-label="Interactive 3D Minecraft avatar for alxxq. The character looks toward your cursor or tap. Drag to rotate the character."></canvas>
         <p id="skinNote" class="skin-note" hidden>3D avatar could not load. Minecraft username: <strong>alxxq</strong></p>
       </div>
-      <p class="drag-hint" id="dragHint" hidden>Move your cursor &mdash; I&rsquo;ll look at it &middot; Drag to rotate</p>
     </div>
 
     <h1 class="rv">Life is short focus on what truly matters, grow daily, and leave a positive impact.</h1>
@@ -350,11 +348,9 @@
   var canvas = document.getElementById('skinCanvas');
   var wrap = document.getElementById('skinViewer');
   var skinNote = document.getElementById('skinNote');
-  var dragHint = document.getElementById('dragHint');
 
   function showFallback(){
     canvas.hidden = true;
-    dragHint.hidden = true;
     skinNote.hidden = false;
   }
 
@@ -385,7 +381,6 @@
 
     viewer.loadSkin(SKIN_URL, { model: 'auto-detect' })
       .catch(function(){ return viewer.loadSkin(SKIN_FALLBACK_DATA, { model: 'auto-detect' }); })
-      .then(function(){ dragHint.hidden = false; })
       .catch(function(){ showFallback(); });
 
     /* ---- Head tracking (Minecraft inventory style) ----
