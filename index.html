@@ -180,10 +180,10 @@
   <main class="card">
     <div class="avatar-wrap rv">
       <div class="skin-viewer" id="skinViewer">
-        <canvas id="skinCanvas" role="img" aria-label="Interactive 3D Minecraft avatar for alxxq. Drag to rotate the character."></canvas>
+        <canvas id="skinCanvas" role="img" aria-label="Interactive 3D Minecraft avatar for alxxq. The character looks toward your cursor or tap. Drag to rotate the character."></canvas>
         <p id="skinNote" class="skin-note" hidden>3D avatar could not load. Minecraft username: <strong>alxxq</strong></p>
       </div>
-      <p class="drag-hint" id="dragHint" hidden>Drag to rotate</p>
+      <p class="drag-hint" id="dragHint" hidden>Move your cursor &mdash; I&rsquo;ll look at it &middot; Drag to rotate</p>
     </div>
 
     <h1 class="rv">Life is short focus on what truly matters, grow daily, and leave a positive impact.</h1>
@@ -387,6 +387,58 @@
       .catch(function(){ return viewer.loadSkin(SKIN_FALLBACK_DATA, { model: 'auto-detect' }); })
       .then(function(){ dragHint.hidden = false; })
       .catch(function(){ showFallback(); });
+
+    /* ---- Head tracking (Minecraft inventory style) ----
+       The character's head turns toward the pointer: on desktop it follows
+       the mouse live; on touch screens it looks at the last tap/click point
+       and holds it — tapping a link, the menu, or anywhere makes him look
+       there. Listeners are passive and never block or delay clicks.
+       Dragging still rotates the camera; the head math compensates for the
+       camera's orbit angle so he keeps looking at the screen point. */
+    (function setupHeadTracking(){
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      var MAX_YAW = 0.62;    /* head turn from pointer position, radians */
+      var MAX_PITCH = 0.36;  /* head tilt up/down */
+      var MAX_HEAD = 0.85;   /* absolute clamp so the neck never over-turns */
+      var tYaw = 0, tPitch = 0;  /* target (screen space) */
+      var cYaw = 0, cPitch = 0;  /* smoothed current values */
+      function setTarget(clientX, clientY){
+        var r = canvas.getBoundingClientRect();
+        if (!r.width || !window.innerWidth) return;
+        var hx = r.left + r.width / 2;
+        var hy = r.top + r.height * 0.25; /* approx. head position on screen */
+        /* normalise against the distance to each screen edge, so the head
+           reaches its full turn exactly at the edges in every direction */
+        var nx = clientX < hx ? (clientX - hx) / Math.max(hx, 1)
+                              : (clientX - hx) / Math.max(window.innerWidth - hx, 1);
+        var ny = clientY < hy ? (clientY - hy) / Math.max(hy, 1)
+                              : (clientY - hy) / Math.max(window.innerHeight - hy, 1);
+        nx = Math.max(-1, Math.min(1, nx));
+        ny = Math.max(-1, Math.min(1, ny));
+        tYaw = nx * MAX_YAW;
+        tPitch = ny * MAX_PITCH;
+      }
+      window.addEventListener('pointermove', function(e){ setTarget(e.clientX, e.clientY); }, { passive: true });
+      window.addEventListener('pointerdown', function(e){ setTarget(e.clientX, e.clientY); }, { passive: true });
+      (function tick(){
+        requestAnimationFrame(tick);
+        if (document.hidden) return;
+        cYaw += (tYaw - cYaw) * 0.10;
+        cPitch += (tPitch - cPitch) * 0.10;
+        var player = viewer.playerObject;
+        var head = player && player.skin && player.skin.head;
+        if (!player || !head) return;
+        /* a hint of body turn toward the pointer, like the inventory model */
+        player.rotation.y = cYaw * 0.18;
+        var az = 0;
+        try { if (viewer.controls && viewer.controls.getAzimuthalAngle) az = viewer.controls.getAzimuthalAngle(); } catch (e) {}
+        var yaw = cYaw + az - player.rotation.y;
+        while (yaw > Math.PI) yaw -= Math.PI * 2;
+        while (yaw < -Math.PI) yaw += Math.PI * 2;
+        head.rotation.y = Math.max(-MAX_HEAD, Math.min(MAX_HEAD, yaw));
+        head.rotation.x = cPitch;
+      })();
+    })();
 
     function fit(){
       if (wrap.clientWidth > 0) { viewer.width = wrap.clientWidth; viewer.height = wrap.clientHeight; }
