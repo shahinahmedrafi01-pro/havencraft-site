@@ -67,13 +67,14 @@
   var ABILITIES = [
     { id: "emp", name: "EMP", icon: "⚡", cd: 45, desc: "Stun all enemies 3s" },
     { id: "nova", name: "Nova Bomb", icon: "💥", cd: 60, desc: "300 damage to all on screen" },
-    { id: "time", name: "Time Dilation", icon: "⏳", cd: 50, desc: "Enemies 50% speed for 5s" }
+    { id: "time", name: "Time Dilation", icon: "⏳", cd: 50, desc: "Enemies 50% speed for 5s" },
+    { id: "ally", name: "Ally Ships", icon: "🛩️", cd: 60, desc: "4 ally ships fight with you for 30s" }
   ];
   var TUTORIAL = [
-    "<p><strong>Welcome, Pilot!</strong> Your ship is at the bottom of the screen. Move with <strong>WASD / Arrow keys</strong> or the left joystick on touch.</p><p>Destroy enemies to earn score and credits.</p>",
+    "<p><strong>Welcome, Pilot!</strong> Your ship is at the bottom of the screen. Move with <strong>WASD / Arrow keys</strong> or drag anywhere on the screen on touch.</p><p>Destroy enemies to earn score and credits.</p>",
     "<p><strong>Shooting:</strong> Your ship fires automatically (<strong>Auto-fire</strong> is on by default). Hold <strong>Space</strong> to shoot if you turn Auto-fire off in Settings.</p><p>Different weapons and upgrades are available in the Hangar and Lab.</p>",
     "<p><strong>Stay alive:</strong> Dodge red enemy bullets. Your <strong>shield</strong> absorbs damage first. You have <strong>3 lives</strong> per run.</p><p>Grab falling power-ups for Rapid Fire, Damage ×2, Repair, Shield and Speed.</p>",
-    "<p><strong>Abilities:</strong> Press <strong>1 / 2 / 3</strong> — EMP stuns, Nova Bomb nukes the screen, Time Dilation slows enemies.</p><p>Beat bosses for +500 credits. Good luck, Defender!</p>"
+    "<p><strong>Abilities:</strong> Press <strong>1 / 2 / 3 / 4</strong> — EMP stuns, Nova Bomb nukes the screen, Time Dilation slows enemies, Ally Ships call 4 helpers that fight with you for 30 seconds (1-minute cooldown).</p><p>Beat bosses for +500 credits. Good luck, Defender!</p>"
   ];
 
   /* ================= save ================= */
@@ -291,7 +292,7 @@
 
   /* ================= input ================= */
   var keys = {};
-  var touch = { active: false, dx: 0, dy: 0, fire: false, joyId: null };
+  var touch = { active: false, dx: 0, dy: 0, fire: false, dragX: 0, dragY: 0 };
   var isTouch = window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
   window.addEventListener("keydown", function (e) {
     var k = e.key.toLowerCase();
@@ -299,7 +300,7 @@
     keys[k] = true;
     if (k === "p" || k === "escape") { if (state === "playing") pauseGame(); else if (state === "paused") resumeGame(); }
     if (k === "m") toggleSound();
-    if (state === "playing" && ["1", "2", "3"].includes(k)) useAbility(Number(k) - 1);
+    if (state === "playing" && ["1", "2", "3", "4"].includes(k)) useAbility(Number(k) - 1);
   });
   window.addEventListener("keyup", function (e) { keys[e.key.toLowerCase()] = false; });
   document.addEventListener("visibilitychange", function () { if (document.hidden && state === "playing") pauseGame(); });
@@ -309,21 +310,29 @@
     if (!isTouch) { isTouch = true; if (state === "playing") $("touch-controls").classList.remove("hidden"); }
   }, { passive: true });
 
-  var joy = $("joystick"), knob = $("joy-knob");
-  function joyMove(e) {
-    var r = joy.getBoundingClientRect();
-    var cx = r.left + r.width / 2, cy = r.top + r.height / 2;
-    var dx = (e.clientX - cx) / (r.width / 2), dy = (e.clientY - cy) / (r.height / 2);
-    var len = Math.hypot(dx, dy);
-    if (len > 1) { dx /= len; dy /= len; }
-    touch.dx = dx; touch.dy = dy;
-    knob.style.transform = "translate(" + (dx * 28) + "px," + (dy * 28) + "px)";
+  /* Drag-to-steer (replaces the old virtual joystick): touch or hold
+     anywhere on the game canvas and drag — the ship follows your
+     finger's movement 1:1 (relative drag, ship never jumps). */
+  var drag = { id: null, lx: 0, ly: 0 };
+  function dragPoint(e) {
+    var r = canvas.getBoundingClientRect();
+    return { x: (e.clientX - r.left) * (W / r.width), y: (e.clientY - r.top) * (H / r.height) };
   }
-  joy.addEventListener("pointerdown", function (e) { touch.joyId = e.pointerId; joy.setPointerCapture(e.pointerId); joyMove(e); });
-  joy.addEventListener("pointermove", function (e) { if (touch.joyId === e.pointerId) joyMove(e); });
-  function joyEnd(e) { if (touch.joyId === e.pointerId) { touch.joyId = null; touch.dx = 0; touch.dy = 0; knob.style.transform = ""; } }
-  joy.addEventListener("pointerup", joyEnd);
-  joy.addEventListener("pointercancel", joyEnd);
+  canvas.addEventListener("pointerdown", function (e) {
+    if (state !== "playing" || drag.id !== null) return;
+    var pt = dragPoint(e);
+    drag.id = e.pointerId; drag.lx = pt.x; drag.ly = pt.y;
+    try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
+  });
+  canvas.addEventListener("pointermove", function (e) {
+    if (drag.id !== e.pointerId) return;
+    var pt = dragPoint(e);
+    touch.dragX += pt.x - drag.lx; touch.dragY += pt.y - drag.ly;
+    drag.lx = pt.x; drag.ly = pt.y;
+  });
+  function dragEnd(e) { if (drag.id === e.pointerId) drag.id = null; }
+  canvas.addEventListener("pointerup", dragEnd);
+  canvas.addEventListener("pointercancel", dragEnd);
   document.querySelectorAll(".ab").forEach(function (b) {
     b.addEventListener("click", function () { useAbility(Number(b.getAttribute("data-ab"))); });
   });
@@ -371,18 +380,18 @@
     G = {
       mode: mode, stage: 1, wave: 0, score: 0, runCredits: 0, lives: 3,
       time: 0, kills: 0, bosses: 0, powerupsGot: 0, bossIndex: 0,
-      bullets: [], ebullets: [], enemies: [], particles: [], powerups: [],
+      bullets: [], ebullets: [], enemies: [], particles: [], powerups: [], allies: [],
       spawnQueue: [], spawnTimer: 0, interTimer: 0, waveState: "intro",
       boss: null, combo: 0, comboTimer: 0, damageThisWave: 0,
       empTimer: 0, timeTimer: 0, shake: 0, flash: 0,
       pu: { rapid: 0, damage: 0, speed: 0 },
-      charges: [], recharge: [0, 0, 0], recorded: false, over: false
+      charges: [], recharge: [0, 0, 0, 0], recorded: false, over: false
     };
     var st = computeStats();
     G.player = { x: W / 2, y: H - 90, hp: st.maxHp, maxHp: st.maxHp, shield: st.maxShield, maxShield: st.maxShield,
       speed: st.speed, dmgMul: st.dmgMul, fireMul: st.fireMul, cdMul: st.cdMul, radius: 14,
       invuln: 0, fireCd: 0, maxCharges: st.charges };
-    G.charges = [st.charges, st.charges, st.charges];
+    G.charges = [st.charges, st.charges, st.charges, 1];
     if (snap) {
       G.stage = snap.stage || 1; G.score = snap.score || 0; G.runCredits = snap.runCredits || 0;
       G.lives = snap.lives || 3; G.time = snap.time || 0; G.wave = snap.wave || 0;
@@ -653,11 +662,14 @@
     G.ebullets = [];
     banner("SHIP DESTROYED — " + G.lives + (G.lives === 1 ? " LIFE" : " LIVES") + " LEFT", true);
   }
+  /* Ally Ships is capped at 1 charge on every ship: one squadron per
+     60s cooldown, exactly as designed — never two groups banked. */
+  function abilityMax(i) { return i === 3 ? 1 : G.player.maxCharges; }
   function useAbility(i) {
     if (state !== "playing" || !G) return;
     if (G.charges[i] <= 0) { toast(ABILITIES[i].name + " recharging…"); return; }
     G.charges[i]--;
-    if (G.charges[i] < G.player.maxCharges && G.recharge[i] <= 0) G.recharge[i] = ABILITIES[i].cd * G.player.cdMul;
+    if (G.charges[i] < abilityMax(i) && G.recharge[i] <= 0) G.recharge[i] = ABILITIES[i].cd * G.player.cdMul;
     SFX.ability();
     if (i === 0) { G.empTimer = 3; toast("⚡ EMP! Enemies stunned"); }
     else if (i === 1) {
@@ -668,6 +680,7 @@
       toast("💥 NOVA BOMB!");
     }
     else if (i === 2) { G.timeTimer = 5; toast("⏳ Time Dilation!"); }
+    else if (i === 3) { spawnAllies(); toast("🛩️ Ally ships inbound — fighting with you for 30s!"); }
   }
   function maybeDrop(x, y) {
     if (Math.random() < 0.12 && G.powerups.length < 8) {
@@ -710,12 +723,12 @@
     if (G.empTimer > 0) G.empTimer -= dt;
     if (G.timeTimer > 0) G.timeTimer -= dt;
     if (G.comboTimer > 0) { G.comboTimer -= dt; if (G.comboTimer <= 0) G.combo = 0; }
-    for (var i = 0; i < 3; i++) {
-      if (G.charges[i] < G.player.maxCharges) {
+    for (var i = 0; i < 4; i++) {
+      if (G.charges[i] < abilityMax(i)) {
         G.recharge[i] -= dt;
         if (G.recharge[i] <= 0) {
           G.charges[i]++;
-          G.recharge[i] = G.charges[i] < G.player.maxCharges ? ABILITIES[i].cd * G.player.cdMul : 0;
+          G.recharge[i] = G.charges[i] < abilityMax(i) ? ABILITIES[i].cd * G.player.cdMul : 0;
         }
       }
     }
@@ -727,6 +740,7 @@
     updateSpawning(dt);
     updateEnemies(dt);
     updateBullets(dt);
+    updateAllies(dt);
     updatePowerups(dt);
     updateParticles(dt);
     if (G.shake > 0) G.shake = Math.max(0, G.shake - dt * 30);
@@ -743,6 +757,11 @@
     var len = Math.hypot(mx, my);
     if (len > 0) { mx /= len; my /= len; }
     var spd = p.speed * (G.pu.speed > 0 ? 1.5 : 1);
+    if (touch.dragX || touch.dragY) {
+      p.x = clamp(p.x + touch.dragX, 20, W - 20);
+      p.y = clamp(p.y + touch.dragY, 60, H - 20);
+      touch.dragX = 0; touch.dragY = 0;
+    }
     p.x = clamp(p.x + mx * spd * dt, 20, W - 20);
     p.y = clamp(p.y + my * spd * dt, 60, H - 20);
     p.fireCd -= dt;
@@ -750,6 +769,61 @@
     if (wantFire && p.fireCd <= 0) {
       shoot();
       p.fireCd = 1 / (WEAPONS[save.weapon].rate * p.fireMul * (G.pu.rapid > 0 ? 1.8 : 1));
+    }
+  }
+  /* ============ ally ships (Wingmen ability) ============ */
+  var ALLY_SLOTS = [[-48, 10], [48, 10], [-88, 30], [88, 30]];
+  function spawnAllies() {
+    for (var i = 0; i < 4; i++) {
+      G.allies.push({ x: clamp(G.player.x + ALLY_SLOTS[i][0], 16, W - 16), y: H + 26 + i * 10,
+        hp: 40, maxHp: 40, r: 11, fireCd: 0.15 + i * 0.09, t: 30, flash: 0, slot: i, leaving: false });
+    }
+  }
+  function damageAlly(a, dmg) {
+    a.hp -= dmg; a.flash = 0.08;
+    if (a.hp <= 0) {
+      var idx = G.allies.indexOf(a);
+      if (idx !== -1) G.allies.splice(idx, 1);
+      explode(a.x, a.y, "#4ade80", 16);
+      SFX.explosion(false);
+    }
+  }
+  function updateAllies(dt) {
+    var p = G.player;
+    for (var i = G.allies.length - 1; i >= 0; i--) {
+      var a = G.allies[i];
+      if (a.flash > 0) a.flash -= dt;
+      if (!a.leaving) {
+        a.t -= dt;
+        if (a.t <= 0) a.leaving = true;
+      }
+      if (a.leaving) {
+        a.y -= 340 * dt; a.x += (a.slot < 2 ? -26 : 26) * dt;
+        if (a.y < -30) G.allies.splice(i, 1);
+        continue;
+      }
+      var tx = p.x + ALLY_SLOTS[a.slot][0], ty = p.y + ALLY_SLOTS[a.slot][1];
+      var k = Math.min(1, 7 * dt);
+      a.x += (tx - a.x) * k; a.y += (ty - a.y) * k;
+      a.x = clamp(a.x, 16, W - 16); a.y = clamp(a.y, 40, H - 16);
+      a.fireCd -= dt;
+      if (a.fireCd <= 0) {
+        a.fireCd = 0.34;
+        var tgt = nearestEnemy(a.x, a.y, 560), ang;
+        if (tgt) ang = Math.atan2(tgt.y - a.y, tgt.x - a.x);
+        else if (G.boss) ang = Math.atan2(G.boss.y - a.y, G.boss.x - a.x);
+        else ang = -Math.PI / 2;
+        G.bullets.push({ x: a.x, y: a.y - 10, vx: Math.cos(ang) * 540, vy: Math.sin(ang) * 540, dmg: 8, r: 4, pierce: false, homing: false, ally: true });
+      }
+      for (var j = G.ebullets.length - 1; j >= 0; j--) {
+        var eb = G.ebullets[j];
+        if (dist(a.x, a.y, eb.x, eb.y) < a.r + eb.r) { G.ebullets.splice(j, 1); damageAlly(a, eb.dmg); if (a.hp <= 0) break; }
+      }
+      if (a.hp <= 0 || G.allies.indexOf(a) === -1) continue;
+      for (var m = G.enemies.length - 1; m >= 0; m--) {
+        var en = G.enemies[m];
+        if (dist(a.x, a.y, en.x, en.y) < a.r + en.radius) { damageEnemy(en, 25, m); damageAlly(a, 25); break; }
+      }
     }
   }
   function updateSpawning(dt) {
@@ -921,9 +995,28 @@
     if (!G) return;
     ctx.save();
     if (G.shake > 0 && !save.settings.reduced) ctx.translate((Math.random() - 0.5) * G.shake, (Math.random() - 0.5) * G.shake);
-    drawPowerups(); drawEnemies(); drawBoss(); drawPlayer(); drawBullets(); drawParticles();
+    drawPowerups(); drawEnemies(); drawBoss(); drawPlayer(); drawAllies(); drawBullets(); drawParticles();
     ctx.restore();
     if (G.flash > 0) { ctx.fillStyle = "rgba(239,68,68," + Math.min(0.35, G.flash * 1.2).toFixed(2) + ")"; ctx.fillRect(0, 0, W, H); }
+  }
+  function drawAllies() {
+    G.allies.forEach(function (a) {
+      if (!a.leaving && a.t < 5 && Math.floor(a.t * 6) % 2 === 0) return; // blink: about to leave
+      var col = a.flash > 0 ? "#ffffff" : "#4ade80";
+      ctx.fillStyle = "#f97316";
+      ctx.beginPath(); ctx.moveTo(a.x - 4, a.y + 9); ctx.lineTo(a.x + 4, a.y + 9); ctx.lineTo(a.x, a.y + 9 + 7 + Math.random() * 5); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = col;
+      ctx.beginPath(); ctx.moveTo(a.x, a.y - 12); ctx.lineTo(a.x + 8, a.y + 9); ctx.lineTo(a.x - 8, a.y + 9); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = "#ffffff";
+      ctx.beginPath(); ctx.moveTo(a.x, a.y - 6); ctx.lineTo(a.x + 3, a.y + 4); ctx.lineTo(a.x - 3, a.y + 4); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = col;
+      ctx.beginPath(); ctx.moveTo(a.x - 8, a.y + 9); ctx.lineTo(a.x - 13, a.y + 13); ctx.lineTo(a.x - 5, a.y + 12); ctx.closePath(); ctx.fill();
+      ctx.beginPath(); ctx.moveTo(a.x + 8, a.y + 9); ctx.lineTo(a.x + 13, a.y + 13); ctx.lineTo(a.x + 5, a.y + 12); ctx.closePath(); ctx.fill();
+      if (a.hp < a.maxHp) {
+        ctx.fillStyle = "rgba(10,16,34,0.8)"; ctx.fillRect(a.x - 11, a.y - 21, 22, 3);
+        ctx.fillStyle = "#4ade80"; ctx.fillRect(a.x - 11, a.y - 21, 22 * Math.max(0, a.hp / a.maxHp), 3);
+      }
+    });
   }
   function drawPlayer() {
     var p = G.player;
@@ -1025,7 +1118,8 @@
   }
   function drawBullets() {
     G.bullets.forEach(function (b) {
-      if (save.weapon === "plasma") { ctx.fillStyle = "#fb923c"; }
+      if (b.ally) { ctx.fillStyle = "#4ade80"; }
+      else if (save.weapon === "plasma") { ctx.fillStyle = "#fb923c"; }
       else if (save.weapon === "homing") { ctx.fillStyle = "#f472b6"; }
       else { ctx.fillStyle = "#a5f3fc"; }
       ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2); ctx.fill();
@@ -1120,7 +1214,7 @@
     ["rapid", "damage", "speed"].forEach(function (k) { if (G.pu[k] > 0) puHtml += '<span class="pu-tag">' + POWERUPS[k].icon + " " + POWERUPS[k].name + " " + Math.ceil(G.pu[k]) + "s</span>"; });
     if (hudCache.pu !== puHtml) { hudCache.pu = puHtml; $("powerup-timers").innerHTML = puHtml; }
     if (G.boss) $("boss-bar").style.width = Math.max(0, G.boss.hp / G.boss.maxHp * 100) + "%";
-    for (var i = 0; i < 3; i++) {
+    for (var i = 0; i < 4; i++) {
       var btn = $("ab-" + i);
       var cdEl = btn.querySelector(".ab-cd");
       var chEl = btn.querySelector(".ab-charges");
