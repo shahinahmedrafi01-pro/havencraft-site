@@ -9,9 +9,14 @@
 /* Apply saved theme before first paint (default: dark) */
 (function(){try{var t=localStorage.getItem('rafiprx-theme');document.documentElement.setAttribute('data-theme',t==='light'?'light':'dark');}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();
 </script>
+<script>
+/* Entry gate state before first paint: visitors who already entered in this
+   tab session skip the Entry Page; everyone else sees it first. */
+(function(){try{if(sessionStorage.getItem('rafiprx-entered')==='1'){document.documentElement.classList.add('entered');}else{document.documentElement.classList.add('gated');}}catch(e){document.documentElement.classList.add('gated');}})();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root, :root[data-theme="dark"]{
     color-scheme:dark;
@@ -146,9 +151,138 @@
     .rv{opacity:1;transform:none;transition:none}
     html{scroll-behavior:auto}
   }
+
+  /* ================= Entry Page (mobile-first) =================
+     A framed cinematic panel floating with margins on a near-black field —
+     the artwork lives inside the frame, never edge-to-edge. Shown once per
+     tab session; BEGIN THE JOURNEY closes it and starts the site music. */
+  html.gated body{overflow:hidden}
+  .entry{display:none}
+  html.gated .entry{
+    display:flex;align-items:center;justify-content:center;
+    position:fixed;inset:0;z-index:200;
+    padding:max(18px,env(safe-area-inset-top)) 16px max(18px,env(safe-area-inset-bottom));
+    background:
+      radial-gradient(420px 300px at 88% -4%, rgba(147,51,234,.14), transparent 62%),
+      radial-gradient(480px 340px at -10% 104%, rgba(147,51,234,.10), transparent 60%),
+      #040409;
+    opacity:1;transition:opacity .5s ease;
+  }
+  .entry.leaving{opacity:0;pointer-events:none}
+  .entry-frame{
+    position:relative;width:min(100%,400px);height:min(100%,720px);
+    border-radius:24px;overflow:hidden;isolation:isolate;
+    border:1px solid rgba(192,132,252,.38);
+    background:linear-gradient(165deg,#0d0718 0%,#050409 52%,#0a0514 100%);
+    box-shadow:0 0 0 1px rgba(0,0,0,.6),0 24px 60px rgba(0,0,0,.65),0 0 44px rgba(147,51,234,.20),inset 0 0 90px rgba(0,0,0,.55);
+    display:flex;align-items:center;justify-content:center;
+  }
+  /* --- original artwork: layered gradients + geometry, drawn in CSS --- */
+  .entry-art{position:absolute;inset:0;z-index:0;overflow:hidden}
+  .entry-art .nebula{
+    position:absolute;left:-32%;top:9%;width:165%;height:36%;
+    transform:rotate(-31deg);
+    background:radial-gradient(ellipse 50% 50% at 50% 50%, rgba(217,180,255,.34) 0%, rgba(168,85,247,.34) 34%, rgba(109,40,217,.16) 58%, transparent 74%);
+    filter:blur(14px);
+  }
+  .entry-art .nebula.core{
+    top:16.5%;height:13%;
+    background:radial-gradient(ellipse 50% 50% at 50% 50%, rgba(240,220,255,.5) 0%, rgba(192,132,252,.38) 42%, transparent 72%);
+    filter:blur(7px);
+  }
+  .entry-art .nebula.low{
+    top:auto;bottom:-4%;left:-20%;height:26%;opacity:.55;
+    transform:rotate(-24deg);
+  }
+  .entry-art .dust{
+    position:absolute;inset:0;
+    background-image:
+      radial-gradient(1.6px 1.6px at 22% 30%, rgba(233,213,255,.75) 50%, transparent 51%),
+      radial-gradient(1.2px 1.2px at 71% 18%, rgba(233,213,255,.55) 50%, transparent 51%),
+      radial-gradient(1.3px 1.3px at 84% 57%, rgba(216,180,254,.6) 50%, transparent 51%),
+      radial-gradient(1.1px 1.1px at 14% 68%, rgba(216,180,254,.5) 50%, transparent 51%),
+      radial-gradient(1.5px 1.5px at 57% 84%, rgba(233,213,255,.45) 50%, transparent 51%),
+      radial-gradient(1px 1px at 40% 12%, rgba(233,213,255,.5) 50%, transparent 51%);
+  }
+  .entry-art .geo{position:absolute;border:1px solid rgba(192,132,252,.30)}
+  .entry-art .geo.sq1{width:118px;height:118px;top:11%;right:-34px;transform:rotate(24deg)}
+  .entry-art .geo.sq2{width:64px;height:64px;bottom:15%;left:-20px;transform:rotate(-14deg);border-color:rgba(192,132,252,.22)}
+  .entry-art .geo.ring{width:150px;height:150px;border-radius:50%;bottom:-52px;right:-38px;border-color:rgba(192,132,252,.16)}
+  .entry-art .geo.line{width:150%;height:0;border:none;border-top:1px solid rgba(192,132,252,.13);top:64%;left:-25%;transform:rotate(-31deg)}
+  .entry-art .geo.dia{width:9px;height:9px;top:26%;left:16%;transform:rotate(45deg);background:rgba(192,132,252,.55);border:none;box-shadow:0 0 10px rgba(168,85,247,.8)}
+  .entry-art .geo.dia.d2{top:auto;left:auto;bottom:24%;right:15%;width:7px;height:7px;opacity:.8}
+  /* --- content --- */
+  .entry-inner{position:relative;z-index:1;text-align:center;padding:34px 30px;max-width:340px}
+  .entry-quote{
+    font-family:'Cormorant Garamond',Georgia,'Times New Roman',serif;
+    font-weight:500;font-size:clamp(1.78rem,7.4vw,2.25rem);line-height:1.38;
+    letter-spacing:.015em;color:#f1eafd;text-wrap:balance;
+    text-shadow:0 2px 26px rgba(147,51,234,.4);
+    animation:entryRise .9s ease both .1s;
+  }
+  .entry-rule{
+    width:44px;height:1px;margin:26px auto 30px;
+    background:linear-gradient(90deg,transparent,rgba(216,180,254,.9),transparent);
+    box-shadow:0 0 8px rgba(168,85,247,.7);
+    animation:entryRise .9s ease both .25s;
+  }
+  .entry-btn-wrap{display:inline-block;filter:drop-shadow(0 0 16px rgba(147,51,234,.45));animation:entryRise .9s ease both .4s}
+  .entry-btn{
+    position:relative;display:inline-block;cursor:pointer;
+    font-family:'Inter',system-ui,sans-serif;font-weight:600;font-size:.82rem;
+    letter-spacing:.30em;text-indent:.30em;text-transform:uppercase;color:#ecd9ff;
+    padding:17px 30px;border:none;
+    background:linear-gradient(120deg,#7e22ce,#a855f7 55%,#7e22ce);
+    clip-path:polygon(16px 0,100% 0,100% calc(100% - 16px),calc(100% - 16px) 100%,0 100%,0 16px);
+    transition:filter .2s ease;
+  }
+  .entry-btn::before{
+    content:"";position:absolute;inset:1.5px;background:linear-gradient(180deg,#150a26,#0a0514);
+    clip-path:polygon(15px 0,100% 0,100% calc(100% - 15px),calc(100% - 15px) 100%,0 100%,0 15px);
+    transition:background .2s ease;
+  }
+  .entry-btn span{position:relative;z-index:1}
+  .entry-btn:hover::before,.entry-btn:active::before{background:linear-gradient(180deg,#241040,#120826)}
+  .entry-btn:active{filter:brightness(1.25)}
+  @keyframes entryRise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  @keyframes nebulaDrift{from{margin-left:0}to{margin-left:-14px}}
+  .entry-art .nebula{animation:nebulaDrift 11s ease-in-out infinite alternate}
+  @media (max-height:560px){
+    .entry-frame{height:100%}
+    .entry-quote{font-size:1.55rem}
+    .entry-inner{padding:22px 24px}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .entry-quote,.entry-rule,.entry-btn-wrap{animation:none}
+    .entry-art .nebula{animation:none}
+  }
 </style>
 </head>
 <body>
+  <!-- Entry Page: shown once per tab session. BEGIN THE JOURNEY closes it
+       and starts the background music from that click. -->
+  <div id="entryGate" class="entry" role="dialog" aria-modal="true" aria-labelledby="entryQuote">
+    <div class="entry-frame">
+      <div class="entry-art" aria-hidden="true">
+        <div class="nebula"></div>
+        <div class="nebula core"></div>
+        <div class="nebula low"></div>
+        <div class="dust"></div>
+        <div class="geo sq1"></div>
+        <div class="geo sq2"></div>
+        <div class="geo ring"></div>
+        <div class="geo line"></div>
+        <div class="geo dia"></div>
+        <div class="geo dia d2"></div>
+      </div>
+      <div class="entry-inner">
+        <p class="entry-quote" id="entryQuote">&ldquo;Not everyone knows the story behind the silence.&rdquo;</p>
+        <div class="entry-rule" aria-hidden="true"></div>
+        <span class="entry-btn-wrap"><button id="entryBtn" class="entry-btn" type="button"><span>BEGIN THE JOURNEY</span></button></span>
+      </div>
+    </div>
+  </div>
+
   <div class="bg" aria-hidden="true"><div class="cube c1"></div><div class="cube c2"></div><div class="cube c3"></div><div class="cube c4"></div><div class="cube c5"></div></div>
 
   <!-- Settings menu (button at top-left) -->
@@ -240,6 +374,8 @@
 
   function store(k, v){ try{ localStorage.setItem(k, v); }catch(e){} }
   function read(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+  function sStore(k, v){ try{ sessionStorage.setItem(k, v); }catch(e){} }
+  function sRead(k){ try{ return sessionStorage.getItem(k); }catch(e){ return null; } }
 
   /* ================= scroll reveal (original behaviour) ================= */
   var els = document.querySelectorAll('.rv');
@@ -322,6 +458,7 @@
   function setMusic(on){
     musicWanted = on;
     store('rafiprx-music', on ? 'on' : 'off');
+    sStore('rafiprx-mwant', on ? '1' : '0');
     if (on) { tryPlay(); }
     else { audio.pause(); reflectMusic(); }
   }
@@ -333,16 +470,68 @@
   }, true);
   audio.addEventListener('play', reflectMusic);
   audio.addEventListener('pause', reflectMusic);
-  /* If the visitor previously chose On, browsers still block autoplay:
-     start on their first interaction with the page instead. */
-  if (musicWanted) {
-    var kick = function(){
-      document.removeEventListener('pointerdown', kick);
-      if (musicWanted && audio.paused) tryPlay();
-    };
-    document.addEventListener('pointerdown', kick);
-  }
   reflectMusic();
+
+  /* ================= entry page + session music =================
+     The Entry Page is the audio unlock: nothing plays before its button is
+     clicked. Within the same tab session the gate is skipped and, if music
+     was on, playback resumes from the saved position instead of restarting —
+     so moving between pages of this site keeps one continuous track. A new
+     tab/session always starts at the Entry Page again. If the browser still
+     blocks a resume, the next tap anywhere starts it (graceful fallback). */
+  var entryGate = document.getElementById('entryGate');
+  var entryBtn = document.getElementById('entryBtn');
+  var sessionEntered = sRead('rafiprx-entered') === '1';
+
+  function saveMusicPos(){
+    try {
+      if (!audio.paused && isFinite(audio.currentTime)) sStore('rafiprx-mpos', String(Math.floor(audio.currentTime)));
+    } catch (e) {}
+  }
+  setInterval(saveMusicPos, 1000);
+  window.addEventListener('pagehide', saveMusicPos);
+
+  function resumeSessionMusic(){
+    if (sRead('rafiprx-mwant') !== '1' || musicBroken) return;
+    musicWanted = true;
+    var pos = parseFloat(sRead('rafiprx-mpos') || '0');
+    var begin = function(){
+      if (isFinite(pos) && pos > 0 && isFinite(audio.duration) && pos < audio.duration) {
+        try { audio.currentTime = pos; } catch (e) {}
+      }
+      tryPlay();
+      setTimeout(function(){
+        if (musicWanted && audio.paused && !musicBroken) {
+          document.addEventListener('pointerdown', function kick(){
+            document.removeEventListener('pointerdown', kick);
+            if (musicWanted && audio.paused) tryPlay();
+          });
+        }
+      }, 600);
+    };
+    if (audio.readyState >= 1) { begin(); }
+    else {
+      audio.addEventListener('loadedmetadata', begin, { once: true });
+      try { audio.load(); } catch (e) { begin(); }
+    }
+  }
+
+  if (sessionEntered) {
+    if (entryGate) entryGate.style.display = 'none';
+    resumeSessionMusic();
+  } else if (entryBtn) {
+    try { entryBtn.focus({ preventScroll: true }); } catch (e) {}
+    entryBtn.addEventListener('click', function(){
+      sStore('rafiprx-entered', '1');
+      document.documentElement.classList.remove('gated');
+      document.documentElement.classList.add('entered');
+      if (entryGate) {
+        entryGate.classList.add('leaving');
+        setTimeout(function(){ if (entryGate) entryGate.style.display = 'none'; }, 520);
+      }
+      setMusic(true); /* this click is the user gesture audio playback needs */
+    });
+  }
 
   /* ================= 3D Minecraft avatar (skinview3d) ================= */
   var canvas = document.getElementById('skinCanvas');
