@@ -119,16 +119,21 @@
 
   /* ---------- glass contact shortcuts ---------- */
   .icon-row{display:flex;justify-content:center;gap:20px}
-  .icon-btn{width:52px;height:52px;border-radius:50%;background:var(--glass);border:1px solid var(--glass-brd);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow);color:var(--accent2);transition:transform .18s ease,background .18s ease}
-  .icon-btn:hover{transform:translateY(-3px) scale(1.05);background:var(--glass-hi)}
+  .icon-btn{position:relative;width:52px;height:52px;display:flex;align-items:center;justify-content:center;color:var(--accent2);background:linear-gradient(135deg,rgba(192,132,252,.9),rgba(147,51,234,.5) 55%,rgba(192,132,252,.9));clip-path:polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px);filter:drop-shadow(0 8px 18px rgba(0,0,0,.45)) drop-shadow(0 0 8px rgba(147,51,234,.25));transition:transform .18s ease}
+  .icon-btn::before{content:"";position:absolute;inset:1.5px;background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);clip-path:polygon(10.5px 0,100% 0,100% calc(100% - 10.5px),calc(100% - 10.5px) 100%,0 100%,0 10.5px);transition:background .18s ease}
+  .icon-btn:hover{transform:translateY(-3px) scale(1.05)}
+  .icon-btn:hover::before{background:var(--glass-hi)}
   .icon-btn:active{transform:scale(.96)}
-  .icon-btn svg{width:23px;height:23px;fill:currentColor}
+  .icon-btn svg{position:relative;z-index:1;width:23px;height:23px;fill:currentColor}
   .icon-btn svg[fill="none"]{fill:none}
 
   /* ---------- glass social pills ---------- */
   .pills{display:flex;flex-direction:column;gap:14px;margin-top:38px}
-  .pill{display:flex;align-items:center;justify-content:space-between;background:var(--glass);border:1px solid var(--glass-brd);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-radius:999px;padding:15px 22px;text-decoration:none;color:var(--ink);font-weight:600;font-size:1.05rem;box-shadow:var(--shadow);transition:transform .18s ease,background .18s ease,box-shadow .18s ease}
-  .pill:hover{transform:translateY(-2px);background:var(--glass-hi)}
+  .pill{position:relative;display:flex;align-items:center;justify-content:space-between;padding:16px 24px;text-decoration:none;color:var(--ink);font-weight:600;font-size:1.05rem;background:linear-gradient(120deg,rgba(192,132,252,.9),rgba(147,51,234,.5) 50%,rgba(192,132,252,.9));clip-path:polygon(18px 0,100% 0,100% calc(100% - 18px),calc(100% - 18px) 100%,0 100%,0 18px);filter:drop-shadow(0 10px 22px rgba(0,0,0,.45)) drop-shadow(0 0 10px rgba(147,51,234,.25));transition:transform .18s ease}
+  .pill::before{content:"";position:absolute;inset:1.5px;background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);clip-path:polygon(16.5px 0,100% 0,100% calc(100% - 16.5px),calc(100% - 16.5px) 100%,0 100%,0 16.5px);transition:background .18s ease}
+  .pill>*{position:relative;z-index:1}
+  .pill:hover{transform:translateY(-2px)}
+  .pill:hover::before{background:var(--glass-hi)}
   .pill:active{transform:scale(.985)}
   .pill svg{width:26px;height:26px;fill:var(--accent2);flex:0 0 26px}
 
@@ -186,20 +191,17 @@
   html.gated .entry{
     display:flex;align-items:center;justify-content:center;
     position:fixed;inset:0;z-index:200;
-    padding:max(18px,env(safe-area-inset-top)) 16px max(18px,env(safe-area-inset-bottom));
-    background:
-      radial-gradient(420px 300px at 88% -4%, rgba(147,51,234,.14), transparent 62%),
-      radial-gradient(480px 340px at -10% 104%, rgba(147,51,234,.10), transparent 60%),
-      #040409;
+    padding:0;
+    background:#040409;
     opacity:1;transition:opacity .5s ease;
   }
   .entry.leaving{opacity:0;pointer-events:none}
   .entry-frame{
-    position:relative;width:min(100%,400px);height:min(100%,720px);
-    border-radius:24px;overflow:hidden;isolation:isolate;
-    border:1px solid rgba(192,132,252,.38);
+    position:relative;width:100%;height:100%;
+    border-radius:0;overflow:hidden;isolation:isolate;
+    border:none;
     background:linear-gradient(165deg,#0d0718 0%,#050409 52%,#0a0514 100%);
-    box-shadow:0 0 0 1px rgba(0,0,0,.6),0 24px 60px rgba(0,0,0,.65),0 0 44px rgba(147,51,234,.20),inset 0 0 90px rgba(0,0,0,.55);
+    box-shadow:inset 0 0 120px rgba(0,0,0,.5);
     display:flex;align-items:center;justify-content:center;
   }
   /* --- original artwork: layered gradients + geometry, drawn in CSS --- */
@@ -213,6 +215,10 @@
   .entry-art::after{
     content:"";position:absolute;inset:0;
     background:linear-gradient(180deg, rgba(5,3,12,.14) 0%, rgba(5,3,12,.34) 40%, rgba(5,3,12,.55) 60%, rgba(5,3,12,.34) 100%);
+  }
+  /* on large PC screens the entry uses the wide scene, same as the page */
+  @media (min-width:1100px) and (pointer:fine), (min-width:1100px) and (min-aspect-ratio:13/10){
+    .entry-art::before{background-image:url('./bg-desktop.webp');background-position:center}
   }
   .entry-art .nebula{
     position:absolute;left:-32%;top:9%;width:165%;height:36%;
