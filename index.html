@@ -129,8 +129,8 @@
 
   /* ---------- glass contact shortcuts ---------- */
   .icon-row{display:flex;justify-content:center;gap:20px}
-  .icon-btn{position:relative;width:52px;height:52px;display:flex;align-items:center;justify-content:center;color:var(--accent2);background:var(--glassbox);backdrop-filter:blur(14px) saturate(1.35);-webkit-backdrop-filter:blur(14px) saturate(1.35);border-radius:14px;filter:drop-shadow(0 8px 18px rgba(0,0,0,.45)) drop-shadow(0 0 8px rgba(147,51,234,.25));transition:transform .18s ease,background .18s ease}
-  .icon-btn::before{content:"";position:absolute;inset:0;padding:1.5px;background:linear-gradient(135deg,rgba(192,132,252,.95),rgba(147,51,234,.55) 55%,rgba(192,132,252,.95));border-radius:inherit;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;pointer-events:none}
+  .icon-btn{position:relative;width:52px;height:52px;display:flex;align-items:center;justify-content:center;color:var(--accent2);background:var(--glassbox);backdrop-filter:blur(8px) saturate(1.25);-webkit-backdrop-filter:blur(8px) saturate(1.25);border-radius:14px;filter:drop-shadow(0 8px 18px rgba(0,0,0,.45)) drop-shadow(0 0 8px rgba(147,51,234,.25));transition:transform .18s ease,background .18s ease}
+  .icon-btn::before{content:"";position:absolute;inset:0;padding:1px;background:linear-gradient(135deg,rgba(192,132,252,.95),rgba(147,51,234,.55) 55%,rgba(192,132,252,.95));border-radius:inherit;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;pointer-events:none}
   .icon-btn:hover{transform:translateY(-3px) scale(1.05);background:var(--glassbox-hi)}
   .icon-btn:active{transform:scale(.96)}
   .icon-btn svg{position:relative;z-index:1;width:23px;height:23px;fill:currentColor}
@@ -138,8 +138,8 @@
 
   /* ---------- glass social pills ---------- */
   .pills{display:flex;flex-direction:column;gap:14px;margin-top:38px}
-  .pill{position:relative;display:flex;align-items:center;justify-content:space-between;padding:16px 24px;text-decoration:none;color:var(--ink);font-weight:600;font-size:1.05rem;background:var(--glassbox);backdrop-filter:blur(14px) saturate(1.35);-webkit-backdrop-filter:blur(14px) saturate(1.35);border-radius:16px;filter:drop-shadow(0 10px 22px rgba(0,0,0,.45)) drop-shadow(0 0 10px rgba(147,51,234,.25));transition:transform .18s ease,background .18s ease}
-  .pill::before{content:"";position:absolute;inset:0;padding:1.5px;background:linear-gradient(120deg,rgba(192,132,252,.95),rgba(147,51,234,.55) 50%,rgba(192,132,252,.95));border-radius:inherit;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;pointer-events:none}
+  .pill{position:relative;display:flex;align-items:center;justify-content:space-between;padding:16px 24px;text-decoration:none;color:var(--ink);font-weight:600;font-size:1.05rem;background:var(--glassbox);backdrop-filter:blur(8px) saturate(1.25);-webkit-backdrop-filter:blur(8px) saturate(1.25);border-radius:16px;filter:drop-shadow(0 10px 22px rgba(0,0,0,.45)) drop-shadow(0 0 10px rgba(147,51,234,.25));transition:transform .18s ease,background .18s ease}
+  .pill::before{content:"";position:absolute;inset:0;padding:1px;background:linear-gradient(120deg,rgba(192,132,252,.95),rgba(147,51,234,.55) 50%,rgba(192,132,252,.95));border-radius:inherit;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;pointer-events:none}
   .pill>*{position:relative;z-index:1}
   .pill:hover{transform:translateY(-2px);background:var(--glassbox-hi)}
   .pill:active{transform:scale(.985)}
@@ -287,7 +287,7 @@
     transition:filter .2s ease,background .2s ease;
   }
   .entry-btn::before{
-    content:"";position:absolute;inset:0;padding:1.5px;
+    content:"";position:absolute;inset:0;padding:1px;
     background:linear-gradient(120deg,#a855f7,#7e22ce 55%,#a855f7);
     border-radius:inherit;
     -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;
