@@ -87,11 +87,11 @@
      never stretched or distorted. A theme wash above it keeps the glass
      UI readable in both dark and light themes. */
   body::before{
-    content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+    content:"";position:fixed;top:0;left:0;right:0;height:100vh;height:100lvh;z-index:0;pointer-events:none;
     background:url('./bg-mobile.webp') center 30%/cover no-repeat;
   }
   body::after{
-    content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+    content:"";position:fixed;top:0;left:0;right:0;height:100vh;height:100lvh;z-index:0;pointer-events:none;
     background:var(--bgwash);
   }
   @media (orientation:landscape) and (max-width:1099px){
@@ -105,7 +105,7 @@
   }
 
   /* decorative glass cubes — light, mostly static */
-  .bg{position:fixed;inset:0;overflow:hidden;z-index:0;pointer-events:none}
+  .bg{position:fixed;top:0;left:0;right:0;height:100vh;height:100lvh;overflow:hidden;z-index:0;pointer-events:none}
   .cube{position:absolute;border-radius:16px;background:var(--cube-bg);border:1px solid var(--cube-brd);box-shadow:var(--shadow);opacity:.5}
   .cube::after{content:"";position:absolute;inset:0;border-radius:16px;background:linear-gradient(115deg,rgba(255,255,255,.14),transparent 45%)}
   .cube.c1{width:110px;height:110px;top:9%;left:5%;transform:rotate(14deg)}
