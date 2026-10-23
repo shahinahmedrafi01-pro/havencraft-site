@@ -164,7 +164,7 @@
         </button>
       </div>
       <p id="musicNote" class="set-note" hidden>Music unavailable right now.</p>
-      <p class="set-note">Track: Kevin MacLeod (CC BY 3.0)</p>
+      <p class="set-note">Track: Love Story</p>
       <div class="set-sep" aria-hidden="true"></div>
       <div class="set-row" style="flex-direction:column;align-items:stretch">
         <span class="set-label">Theme</span>
@@ -222,8 +222,8 @@
     </div>
   </main>
 
-  <!-- Background music: "Touching Moments Two - Higher" by Kevin MacLeod, CC BY 3.0
-       (via Wikimedia Commons). To use your own track later, change MUSIC_SRC in the script below. -->
+  <!-- Background music: the site owner's own uploaded track (love-story.m4a, kept in this repo).
+       To change it later, change MUSIC_SRC in the script below. -->
   <audio id="bgMusic" loop preload="none"></audio>
 
 <script src="https://cdn.jsdelivr.net/npm/skinview3d@3.4.1/bundles/skinview3d.bundle.js"></script>
@@ -235,8 +235,8 @@
   var MC_USERNAME = 'alxxq';
   var SKIN_URL = 'https://mc-heads.net/skin/' + MC_USERNAME;
   var SKIN_FALLBACK_DATA = 'data:image/png;base64,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';
-  /* Royalty-free (CC BY 3.0): "Touching Moments Two - Higher" by Kevin MacLeod — replace this one line to use your own track */
-  var MUSIC_SRC = 'https://upload.wikimedia.org/wikipedia/commons/f/f9/Touching_Moments_Two_-_Higher_%28ISRC_USUAN1100037%29.mp3';
+  /* Site music: the owner's uploaded track, stored in this same repo — replace this one line to use another track */
+  var MUSIC_SRC = './love-story.m4a';
 
   function store(k, v){ try{ localStorage.setItem(k, v); }catch(e){} }
   function read(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
