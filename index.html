@@ -35,6 +35,7 @@
     --cube-brd:rgba(168,85,247,.28);
     --cube-bg:linear-gradient(145deg,rgba(168,85,247,.16),rgba(168,85,247,.03));
     --focus:#d8b4fe;
+    --bgwash:linear-gradient(180deg, rgba(7,4,16,.50), rgba(7,4,16,.64));
   }
   :root[data-theme="light"]{
     color-scheme:light;
@@ -53,6 +54,7 @@
     --cube-brd:rgba(147,51,234,.25);
     --cube-bg:linear-gradient(145deg,rgba(147,51,234,.12),rgba(147,51,234,.03));
     --focus:#7e22ce;
+    --bgwash:linear-gradient(180deg, rgba(250,246,238,.87), rgba(250,246,238,.91));
   }
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
@@ -69,9 +71,32 @@
     transition:background .35s ease, color .35s ease;
   }
 
+  /* ---------- scenic background (the owner's two artworks) ----------
+     Phones — including phone desktop mode — get the portrait scene;
+     large PC screens get the wide scene. cover-fit only: the artwork is
+     never stretched or distorted. A theme wash above it keeps the glass
+     UI readable in both dark and light themes. */
+  body::before{
+    content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:url('./bg-mobile.webp') center 30%/cover no-repeat;
+  }
+  body::after{
+    content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:var(--bgwash);
+  }
+  @media (orientation:landscape) and (max-width:1099px){
+    body::before{background-position:center 32%}
+  }
+  /* large screens get the wide scene: real PCs match pointer:fine; the
+     aspect-ratio arm covers pointer-less environments. Phones in desktop
+     mode report a <1100px viewport, so they keep the portrait scene. */
+  @media (min-width:1100px) and (pointer:fine), (min-width:1100px) and (min-aspect-ratio:13/10){
+    body::before{background-image:url('./bg-desktop.webp');background-position:center}
+  }
+
   /* decorative glass cubes — light, mostly static */
   .bg{position:fixed;inset:0;overflow:hidden;z-index:0;pointer-events:none}
-  .cube{position:absolute;border-radius:16px;background:var(--cube-bg);border:1px solid var(--cube-brd);box-shadow:var(--shadow)}
+  .cube{position:absolute;border-radius:16px;background:var(--cube-bg);border:1px solid var(--cube-brd);box-shadow:var(--shadow);opacity:.5}
   .cube::after{content:"";position:absolute;inset:0;border-radius:16px;background:linear-gradient(115deg,rgba(255,255,255,.14),transparent 45%)}
   .cube.c1{width:110px;height:110px;top:9%;left:5%;transform:rotate(14deg)}
   .cube.c2{width:64px;height:64px;top:63%;left:8%;transform:rotate(-10deg)}
@@ -179,9 +204,19 @@
   }
   /* --- original artwork: layered gradients + geometry, drawn in CSS --- */
   .entry-art{position:absolute;inset:0;z-index:0;overflow:hidden}
+  /* the portrait scene fills the frame; a contrast wash keeps the quote
+     and button perfectly readable over it */
+  .entry-art::before{
+    content:"";position:absolute;inset:0;
+    background:url('./bg-mobile.webp') center 24%/cover no-repeat;
+  }
+  .entry-art::after{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(180deg, rgba(5,3,12,.14) 0%, rgba(5,3,12,.34) 40%, rgba(5,3,12,.55) 60%, rgba(5,3,12,.34) 100%);
+  }
   .entry-art .nebula{
     position:absolute;left:-32%;top:9%;width:165%;height:36%;
-    transform:rotate(-31deg);
+    transform:rotate(-31deg);opacity:.45;
     background:radial-gradient(ellipse 50% 50% at 50% 50%, rgba(217,180,255,.34) 0%, rgba(168,85,247,.34) 34%, rgba(109,40,217,.16) 58%, transparent 74%);
     filter:blur(14px);
   }
