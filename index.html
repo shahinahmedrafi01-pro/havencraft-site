@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>About Me</title>
 <meta name="description" content="Life is short focus on what truly matters, grow daily, and leave a positive impact.">
+<link rel="icon" href="./favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="./favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="./icon-512.png">
+<link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
+<meta name="theme-color" content="#0a0a10">
 <script>
 /* Apply saved theme before first paint (default: dark) */
 (function(){try{var t=localStorage.getItem('rafiprx-theme');document.documentElement.setAttribute('data-theme',t==='light'?'light':'dark');}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();
@@ -123,8 +129,8 @@
 
   /* ---------- glass contact shortcuts ---------- */
   .icon-row{display:flex;justify-content:center;gap:20px}
-  .icon-btn{position:relative;width:52px;height:52px;display:flex;align-items:center;justify-content:center;color:var(--accent2);background:var(--glassbox);backdrop-filter:blur(14px) saturate(1.35);-webkit-backdrop-filter:blur(14px) saturate(1.35);clip-path:polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px);filter:drop-shadow(0 8px 18px rgba(0,0,0,.45)) drop-shadow(0 0 8px rgba(147,51,234,.25));transition:transform .18s ease,background .18s ease}
-  .icon-btn::before{content:"";position:absolute;inset:0;padding:1.5px;background:linear-gradient(135deg,rgba(192,132,252,.95),rgba(147,51,234,.55) 55%,rgba(192,132,252,.95));clip-path:polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;pointer-events:none}
+  .icon-btn{position:relative;width:52px;height:52px;display:flex;align-items:center;justify-content:center;color:var(--accent2);background:var(--glassbox);backdrop-filter:blur(14px) saturate(1.35);-webkit-backdrop-filter:blur(14px) saturate(1.35);border-radius:14px;filter:drop-shadow(0 8px 18px rgba(0,0,0,.45)) drop-shadow(0 0 8px rgba(147,51,234,.25));transition:transform .18s ease,background .18s ease}
+  .icon-btn::before{content:"";position:absolute;inset:0;padding:1.5px;background:linear-gradient(135deg,rgba(192,132,252,.95),rgba(147,51,234,.55) 55%,rgba(192,132,252,.95));border-radius:inherit;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;pointer-events:none}
   .icon-btn:hover{transform:translateY(-3px) scale(1.05);background:var(--glassbox-hi)}
   .icon-btn:active{transform:scale(.96)}
   .icon-btn svg{position:relative;z-index:1;width:23px;height:23px;fill:currentColor}
@@ -132,8 +138,8 @@
 
   /* ---------- glass social pills ---------- */
   .pills{display:flex;flex-direction:column;gap:14px;margin-top:38px}
-  .pill{position:relative;display:flex;align-items:center;justify-content:space-between;padding:16px 24px;text-decoration:none;color:var(--ink);font-weight:600;font-size:1.05rem;background:var(--glassbox);backdrop-filter:blur(14px) saturate(1.35);-webkit-backdrop-filter:blur(14px) saturate(1.35);clip-path:polygon(18px 0,100% 0,100% calc(100% - 18px),calc(100% - 18px) 100%,0 100%,0 18px);filter:drop-shadow(0 10px 22px rgba(0,0,0,.45)) drop-shadow(0 0 10px rgba(147,51,234,.25));transition:transform .18s ease,background .18s ease}
-  .pill::before{content:"";position:absolute;inset:0;padding:1.5px;background:linear-gradient(120deg,rgba(192,132,252,.95),rgba(147,51,234,.55) 50%,rgba(192,132,252,.95));clip-path:polygon(18px 0,100% 0,100% calc(100% - 18px),calc(100% - 18px) 100%,0 100%,0 18px);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;pointer-events:none}
+  .pill{position:relative;display:flex;align-items:center;justify-content:space-between;padding:16px 24px;text-decoration:none;color:var(--ink);font-weight:600;font-size:1.05rem;background:var(--glassbox);backdrop-filter:blur(14px) saturate(1.35);-webkit-backdrop-filter:blur(14px) saturate(1.35);border-radius:16px;filter:drop-shadow(0 10px 22px rgba(0,0,0,.45)) drop-shadow(0 0 10px rgba(147,51,234,.25));transition:transform .18s ease,background .18s ease}
+  .pill::before{content:"";position:absolute;inset:0;padding:1.5px;background:linear-gradient(120deg,rgba(192,132,252,.95),rgba(147,51,234,.55) 50%,rgba(192,132,252,.95));border-radius:inherit;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;pointer-events:none}
   .pill>*{position:relative;z-index:1}
   .pill:hover{transform:translateY(-2px);background:var(--glassbox-hi)}
   .pill:active{transform:scale(.985)}
@@ -277,18 +283,19 @@
     padding:17px 30px;border:none;
     background:var(--glassbox);
     backdrop-filter:blur(14px) saturate(1.35);-webkit-backdrop-filter:blur(14px) saturate(1.35);
-    clip-path:polygon(16px 0,100% 0,100% calc(100% - 16px),calc(100% - 16px) 100%,0 100%,0 16px);
+    border-radius:16px;
     transition:filter .2s ease,background .2s ease;
   }
   .entry-btn::before{
     content:"";position:absolute;inset:0;padding:1.5px;
     background:linear-gradient(120deg,#a855f7,#7e22ce 55%,#a855f7);
-    clip-path:polygon(16px 0,100% 0,100% calc(100% - 16px),calc(100% - 16px) 100%,0 100%,0 16px);
+    border-radius:inherit;
     -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;
     mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;
     pointer-events:none;
   }
   .entry-btn span{position:relative;z-index:1}
+  .entry-btn:focus-visible{outline:none;box-shadow:0 0 0 2px rgba(192,132,252,.9),0 0 24px rgba(168,85,247,.45)}
   .entry-btn:hover,.entry-btn:active{background:var(--glassbox-hi)}
   .entry-btn:active{filter:brightness(1.25)}
   @keyframes entryRise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
