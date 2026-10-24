@@ -345,6 +345,91 @@
     .entry-quote,.entry-rule,.entry-btn-wrap{animation:none}
     .entry-art .nebula{animation:none}
   }
+
+  /* ================= navigation drawer (preview) ================= */
+  .drawer-backdrop{position:fixed;inset:0;z-index:75;background:rgba(4,2,12,.6)}
+  .drawer-backdrop[hidden]{display:none}
+  .drawer{
+    position:fixed;top:0;left:0;bottom:0;height:100vh;height:100dvh;width:min(320px,88vw);
+    z-index:80;background:rgba(20,12,38,.94);border-right:1px solid rgba(168,85,247,.35);
+    box-shadow:var(--shadow);overflow-y:auto;overscroll-behavior:contain;
+    transform:translateX(-105%);visibility:hidden;
+    transition:transform .28s ease,visibility 0s linear .28s;
+  }
+  .drawer.open{transform:translateX(0);visibility:visible;transition:transform .28s ease}
+  .drawer-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px;border-bottom:1px solid rgba(168,85,247,.28)}
+  .drawer-brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:#f5f3fb;min-width:0}
+  .drawer-brand img{width:48px;height:48px;border-radius:14px;flex:0 0 48px}
+  .drawer-brand-text{display:flex;flex-direction:column;line-height:1.25;min-width:0}
+  .drawer-brand-text strong{font-size:1rem;letter-spacing:.02em}
+  .drawer-brand-text small{font-size:.8rem;color:#c4b5fd;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .drawer-cats{padding:10px 12px 20px}
+  .drawer-cat{margin-bottom:6px}
+  .drawer-cat-btn{
+    width:100%;display:flex;align-items:center;gap:12px;background:transparent;border:0;
+    color:#f5f3fb;font:inherit;font-weight:700;font-size:.98rem;text-align:left;
+    padding:11px 10px;border-radius:12px;cursor:pointer;transition:background .18s ease;
+  }
+  .drawer-cat-btn:hover{background:rgba(168,85,247,.14)}
+  .drawer-cat-btn svg{width:22px;height:22px;flex:0 0 22px;color:#c084fc}
+  .drawer-cat-btn .chev{width:18px;height:18px;flex:0 0 18px;margin-left:auto;color:#a49ec0;transition:transform .25s ease}
+  .drawer-cat-btn[aria-expanded="true"] .chev{transform:rotate(180deg)}
+  .drawer-items{display:grid;grid-template-rows:0fr;transition:grid-template-rows .28s ease}
+  .drawer-items.open{grid-template-rows:1fr}
+  .drawer-items ul{overflow:hidden;min-height:0;list-style:none;margin:0;padding:0}
+  .drawer-link{
+    display:block;margin:2px 0 2px 34px;padding:10px 12px;border-radius:10px;
+    color:#e9e4fb;text-decoration:none;font-size:.94rem;font-weight:600;
+    transition:background .18s ease;
+  }
+  .drawer-link:hover{background:rgba(168,85,247,.14)}
+  .drawer-link[aria-current="page"]{background:rgba(168,85,247,.28);font-weight:800}
+  .drawer-foot{border-top:1px solid rgba(168,85,247,.28);padding:12px 16px}
+  .drawer-foot .drawer-link{margin:2px 0}
+
+  /* ================= destination views (preview) ================= */
+  #destViews{position:relative;z-index:1;width:100%;max-width:620px;margin:0 auto;padding:clamp(72px,8vh,76px) 22px 72px}
+  .dest{text-align:left}
+  .dest h2{font-size:clamp(1.4rem,5vw,1.9rem);font-weight:700;line-height:1.3;text-align:center;margin:10px 0}
+  .dest-intro{color:var(--muted);text-align:center;margin-bottom:22px;line-height:1.6}
+  .dest-note{color:var(--muted);font-size:.9rem;text-align:center;margin-top:14px;line-height:1.6}
+  .dest-muted{color:var(--muted)}
+  .back-home{display:inline-flex;text-decoration:none;color:var(--accent2);font-weight:700;font-size:.92rem;padding:6px 2px}
+  .dest-card{
+    position:relative;background:var(--glassbox);backdrop-filter:blur(8px) saturate(1.25);
+    -webkit-backdrop-filter:blur(8px) saturate(1.25);border-radius:16px;padding:18px 20px;margin-bottom:14px;
+    filter:drop-shadow(0 10px 22px rgba(0,0,0,.35));
+  }
+  .dest-card::before{content:"";position:absolute;inset:0;padding:1px;background:linear-gradient(120deg,rgba(192,132,252,.95),rgba(147,51,234,.55) 50%,rgba(192,132,252,.95));border-radius:inherit;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;pointer-events:none}
+  .dest-card>*{position:relative;z-index:1}
+  .dest-card h3{font-size:1.05rem;margin-bottom:6px}
+  .dest-card p{color:var(--muted);line-height:1.6;font-size:.95rem}
+  .dest-card p strong{color:var(--ink)}
+  .dest-card-link{display:block;color:var(--ink);text-decoration:none;transition:filter .18s ease}
+  .dest-card-link:hover{filter:drop-shadow(0 14px 26px rgba(0,0,0,.45)) brightness(1.08)}
+  .dest-card-link:focus-visible{outline:2px solid var(--accent2);outline-offset:2px}
+  .dest-card a{color:var(--accent2)}
+  .dest-quote{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.35rem;line-height:1.4;color:var(--ink);text-align:center}
+  /* About page only: smaller intro text, as requested */
+  #view-about .dest-intro{font-size:.88rem}
+  .ph-note{border:1px dashed var(--glass-brd);border-radius:12px;padding:13px 15px;color:var(--muted);font-size:.9rem;line-height:1.55;margin-bottom:14px}
+  .dest-social{display:flex;flex-direction:column;gap:14px;margin-top:6px}
+  .dest-btn{
+    display:inline-block;background:linear-gradient(120deg,#a855f7,#7e22ce);color:#fff !important;
+    border:0;border-radius:12px;padding:12px 20px;font:inherit;font-weight:700;font-size:.95rem;
+    cursor:pointer;text-decoration:none;transition:filter .18s ease;
+  }
+  .dest-btn:hover{filter:brightness(1.15)}
+  .dest-form{display:flex;flex-direction:column;gap:10px}
+  .field-label{font-weight:600;font-size:.92rem}
+  .field{
+    width:100%;background:var(--glassbox);border:1px solid var(--glass-brd);border-radius:12px;
+    padding:12px 14px;color:var(--ink);font:inherit;font-size:.95rem;resize:vertical;
+  }
+  .field::placeholder{color:var(--muted)}
+  @media (prefers-reduced-motion: reduce){
+    .drawer,.drawer-items,.drawer-cat-btn .chev{transition:none}
+  }
 </style>
 </head>
 <body>
@@ -374,9 +459,9 @@
 
   <div class="bg" aria-hidden="true"><div class="cube c1"></div><div class="cube c2"></div><div class="cube c3"></div><div class="cube c4"></div><div class="cube c5"></div></div>
 
-  <!-- Top bar: hamburger (empty menu for now) on the left; music, theme quick-toggle and settings on the right -->
+  <!-- Top bar: hamburger (navigation drawer) on the left; music, theme quick-toggle and settings on the right -->
   <header class="topbar">
-    <button id="navBtn" class="topbar-btn" type="button" aria-label="Menu" aria-haspopup="true" aria-expanded="false" aria-controls="navMenu">
+    <button id="navBtn" class="topbar-btn" type="button" aria-label="Menu" aria-haspopup="true" aria-expanded="false" aria-controls="navDrawer">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" fill="none"/></svg>
     </button>
     <div class="topbar-right">
@@ -393,8 +478,87 @@
       </button>
     </div>
   </header>
-  <!-- Empty menu for now — items will be added later -->
-  <div id="navMenu" class="nav-panel" role="menu" aria-label="Menu" hidden></div>
+  <div id="drawerBackdrop" class="drawer-backdrop" hidden></div>
+  <nav id="navDrawer" class="drawer" aria-label="Site navigation">
+    <div class="drawer-head">
+      <a class="drawer-brand" href="#home">
+        <img src="https://mc-heads.net/avatar/alxxq/100" alt="" width="48" height="48">
+        <span class="drawer-brand-text"><strong>Shahin Ahmed Rafi</strong><small>rafiprx.bond</small></span>
+      </a>
+      <button id="drawerClose" class="topbar-btn" type="button" aria-label="Close menu">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" fill="none"/></svg>
+      </button>
+    </div>
+    <div class="drawer-cats">
+      <div class="drawer-cat">
+        <button class="drawer-cat-btn" type="button" aria-expanded="false" aria-controls="drawer-items-personal">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 20c0-3.3 3.6-5 8-5s8 1.7 8 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <span>Personal &amp; Projects</span>
+          <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="drawer-items" id="drawer-items-personal"><ul>
+          <li><a class="drawer-link" data-route="about" href="#about">About Me</a></li>
+          <li><a class="drawer-link" data-route="projects" href="#projects">My Projects</a></li>
+          <li><a class="drawer-link" data-route="apps-tools" href="#apps-tools">Apps &amp; Tools</a></li>
+          <li><a class="drawer-link" data-route="experiments" href="#experiments">Experiments</a></li>
+        </ul></div>
+      </div>
+      <div class="drawer-cat">
+        <button class="drawer-cat-btn" type="button" aria-expanded="false" aria-controls="drawer-items-gaming">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="11" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M7 11v4M5 13h4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="17" cy="12" r="1.1" fill="currentColor"/><circle cx="19" cy="14.5" r="1.1" fill="currentColor"/></svg>
+          <span>Gaming Zone</span>
+          <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="drawer-items" id="drawer-items-gaming"><ul>
+          <li><a class="drawer-link" data-route="minecraft-world" href="#minecraft-world">Minecraft World</a></li>
+          <li><a class="drawer-link" data-route="servers" href="#servers">Servers I Play</a></li>
+          <li><a class="drawer-link" data-route="gaming-hub" href="#gaming-hub">Gaming Hub</a></li>
+          <li><a class="drawer-link" data-route="gaming-setup" href="#gaming-setup">My Gaming Setup</a></li>
+        </ul></div>
+      </div>
+      <div class="drawer-cat">
+        <button class="drawer-cat-btn" type="button" aria-expanded="false" aria-controls="drawer-items-creative">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18c1.5 0 2-.9 2-2 0-1.4-1.2-1.6-1.2-2.6 0-1 1-1.4 2.2-1.4H17a4 4 0 0 0 4-4c0-3.6-4-6-9-6z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="7.5" cy="11" r="1.2" fill="currentColor"/><circle cx="11" cy="7.5" r="1.2" fill="currentColor"/><circle cx="15.5" cy="8.5" r="1.2" fill="currentColor"/></svg>
+          <span>Creative Corner</span>
+          <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="drawer-items" id="drawer-items-creative"><ul>
+          <li><a class="drawer-link" data-route="youtube" href="#youtube">YouTube Channel</a></li>
+          <li><a class="drawer-link" data-route="designs" href="#designs">My Designs</a></li>
+          <li><a class="drawer-link" data-route="music" href="#music">Music Corner</a></li>
+        </ul></div>
+      </div>
+      <div class="drawer-cat">
+        <button class="drawer-cat-btn" type="button" aria-expanded="false" aria-controls="drawer-items-community">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M2.5 19c.8-3 3.4-4.5 6.5-4.5S14.7 16 15.5 19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="17" cy="9" r="2.6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15.5 14.6c2.6.3 4.4 1.7 5 4.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <span>Community &amp; Contact</span>
+          <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="drawer-items" id="drawer-items-community"><ul>
+          <li><a class="drawer-link" data-route="achievements" href="#achievements">Achievements</a></li>
+          <li><a class="drawer-link" data-route="discord" href="#discord">Discord Space</a></li>
+          <li><a class="drawer-link" data-route="social" href="#social">Social Links</a></li>
+          <li><a class="drawer-link" data-route="email" href="#email">Email Me</a></li>
+          <li><a class="drawer-link" data-route="suggestions" href="#suggestions">Suggestions</a></li>
+        </ul></div>
+      </div>
+      <div class="drawer-cat">
+        <button class="drawer-cat-btn" type="button" aria-expanded="false" aria-controls="drawer-items-prefs">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="16" cy="7" r="2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="10" cy="17" r="2" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+          <span>Preferences</span>
+          <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="drawer-items" id="drawer-items-prefs"><ul>
+          <li><a class="drawer-link" data-route="settings" href="#settings">Settings</a></li>
+          <li><a class="drawer-link" data-route="appearance" href="#appearance">Appearance / Theme</a></li>
+        </ul></div>
+      </div>
+      <div class="drawer-foot">
+        <a class="drawer-link" data-route="contact" href="#contact">Contact Me</a>
+      </div>
+    </div>
+  </nav>
+
   <div id="settingsMenu" class="settings" role="menu" aria-label="Settings" hidden>
     <div class="set-row">
       <span class="set-label" id="musicLabel">Music</span>
@@ -414,7 +578,7 @@
     </div>
   </div>
 
-  <main class="card">
+  <main class="card" id="homeView">
     <div class="avatar-wrap" id="avatarWrap">
       <div class="skin-viewer" id="skinViewer">
         <img id="skinPlaceholder" class="skin-ph" src="https://mc-heads.net/avatar/alxxq/100" alt="" aria-hidden="true" onerror="this.style.display='none'">
@@ -456,6 +620,301 @@
     </div>
   </main>
 
+  <!-- Destination views: single-file hash routing. Each section is shown
+       only when its hash route is active; otherwise the homepage (main.card) shows. -->
+  <div id="destViews">
+    <section class="dest" id="view-about" data-route="about" hidden>
+      <a class="back-home" href="#home">&larr; Back to home</a>
+      <h2>About Me</h2>
+      <p class="dest-intro">A short introduction to who I am and what I do.</p>
+      <div class="dest-card">
+        <h3>Shahin Ahmed Rafi</h3>
+        <p>From Narayanganj, Bangladesh. Minecraft username <strong>Madara_1ea</strong>. Admin of the HavenCraft community, working on website development and Minecraft server development. Interests: anime and gaming. Languages: Bangla, English, Hindi.</p>
+      </div>
+      <div class="dest-card">
+        <h3>What I focus on</h3>
+        <p>Life is short focus on what truly matters, grow daily, and leave a positive impact.</p>
+      </div>
+    </section>
+
+    <section class="dest" id="view-projects" data-route="projects" hidden>
+      <a class="back-home" href="#home">&larr; Back to home</a>
+      <h2>My Projects</h2>
+      <p class="dest-intro">Things I have built or help run.</p>
+      <a class="dest-card dest-card-link" href="https://havencraft.pro" target="_blank" rel="noopener">
+        <h3>HavenCraft server community site</h3>
+        <p>The website for the HavenCraft Minecraft community.</p>
+      </a>
+      <a class="dest-card dest-card-link" href="#home">
+        <h3>rafiprx.bond — personal site</h3>
+        <p>This website: profile, social links, and the Minecraft character.</p>
+      </a>
+      <a class="dest-card dest-card-link" href="#minecraft-world">
+        <h3>Minecraft 24/7 bot</h3>
+        <p>A bot that keeps a Minecraft world presence running around the clock.</p>
+      </a>
+      <div class="ph-note">More projects will be added over time.</div>
+    </section>
+
+    <section class="dest" id="view-apps-tools" data-route="apps-tools" hidden>
+      <a class="back-home" href="#home">&larr; Back to home</a>
+      <h2>Apps &amp; Tools</h2>
+      <p class="dest-intro">Applications, online tools, and useful resources.</p>
+      <div class="dest-card">
+        <h3>HavenCraft Android app</h3>
+        <p>The HavenCraft site as an Android app — with server status and community links.</p>
+        <p class="dest-muted">No download link is listed for this app.</p>
+      </div>
+      <div class="ph-note">More apps and tools will be added over time.</div>
+    </section>
+
+    <section class="dest" id="view-experiments" data-route="experiments" hidden>
+      <a class="back-home" href="#home">&larr; Back to home</a>
+      <h2>Experiments</h2>
+      <p class="dest-intro">Experimental features, prototypes, and new ideas.</p>
+      <div class="ph-note">This section is reserved for experimental pages and new ideas.</div>
+    </section>
+
+    <section class="dest" id="view-minecraft-world" data-route="minecraft-world" hidden>
+      <a class="back-home" href="#home">&larr; Back to home</a>
+      <h2>Minecraft World</h2>
+      <p class="dest-intro">Minecraft content, activities, and showcases.</p>
+      <div class="dest-card">
+        <h3>Madara_1ea</h3>
+        <p>My Minecraft Java username. The 3D character on the homepage wears this skin — it runs toward your cursor or tap, and you can drag it around.</p>
+      </div>
+      <div class="dest-card">
+        <h3>HavenCraft</h3>
+        <p>The Minecraft community I help run as admin. See <a href="#servers">Servers I Play</a> for how to join.</p>
+      </div>
+      <div class="dest-card">
+        <h3>24/7 bot</h3>
+        <p>A bot keeps a Minecraft world presence running around the clock.</p>
+      </div>
+      <div class="ph-note">More Minecraft content, builds, and showcases will be added over time.</div>
+    </section>
+
+    <section class="dest" id="view-servers" data-route="servers" hidden>
+      <a class="back-home" href="#home">&larr; Back to home</a>
+      <h2>Servers I Play</h2>
+      <a class="dest-card dest-card-link" href="https://havencraft.pro" target="_blank" rel="noopener">
+        <h3>HavenCraft</h3>
+        <p>Java + Bedrock 1.26.x<br>Address: <strong>mc.havencraft.pro:2566</strong></p>
+      </a>
+    </section>
+
+    <section class="dest" id="view-gaming-hub" data-route="gaming-hub" hidden>
+      <a class="back-home" href="#home">&larr; Back to home</a>
+      <h2>Gaming Hub</h2>
+      <p class="dest-intro">Gaming interests, content, and related resources.</p>
+      <div class="dest-card">
+        <h3>Minecraft</h3>
+        <p>Survival, exploration, and server management — my main game.</p>
+      </div>
+      <div class="dest-card">
+        <h3>Clash of Clans</h3>
+        <p>One of my favorite games alongside Minecraft.</p>
+      </div>
+      <div class="ph-note">More games, clips, and resources will be added over time.</div>
+    </section>
+
+    <section class="dest" id="view-gaming-setup" data-route="gaming-setup" hidden>
+      <a class="back-home" href="#home">&larr; Back to home</a>
+      <h2>My Gaming Setup</h2>
+      <p class="dest-intro">Devices and setup details. Only confirmed information is listed here.</p>
+      <a class="dest-card dest-card-link" href="#gaming-hub">
+        <h3>Games I play</h3>
+        <p>Minecraft, Clash of Clans, and many more.</p>
+      </a>
+      <div class="dest-card">
+        <h3>Phone</h3>
+        <p>Vivo Y11 (3GB RAM / 32GB storage).</p>
+      </div>
+      <div class="ph-note">Detailed PC specs, console details, peripherals, and setup photos will be added over time.</div>
+    </section>
+
+    <section class="dest" id="view-youtube" data-route="youtube" hidden>
+      <a class="back-home" href="#home">&larr; Back to home</a>
+      <h2>YouTube Channel</h2>
+      <a class="dest-card dest-card-link" href="https://youtube.com/@hvn-bd?si=ZwTRp5ha6Z-C4VkP" target="_blank" rel="noopener">
+        <h3>HavenCraft YouTube Channel</h3>
+        <p>Videos and updates from the channel.</p>
+      </a>
+    </section>
+
+    <section class="dest" id="view-designs" data-route="designs" hidden>
+      <a class="back-home" href="#home">&larr; Back to home</a>
+      <h2>My Designs</h2>
+      <p class="dest-intro">Logo designs, UI concepts, visual projects, and creative work.</p>
+      <div class="dest-card"><h3>Logo concepts</h3><p class="dest-muted">Logo ideas and concept drafts.</p></div>
+      <div class="dest-card"><h3>UI concepts</h3><p class="dest-muted">Interface ideas and concept layouts.</p></div>
+      <div class="dest-card"><h3>Visual projects</h3><p class="dest-muted">Visual work and creative pieces.</p></div>
+    </section>
+
+    <section class="dest" id="view-music" data-route="music" hidden>
+      <a class="back-home" href="#home">&larr; Back to home</a>
+      <h2>Music Corner</h2>
+      <p class="dest-intro">The site's music, controlled from here or from the topbar.</p>
+      <div class="dest-card">
+        <div class="set-row">
+          <span class="set-label">Music</span>
+          <button id="musicToggleCorner" class="switch" type="button" role="switch" aria-checked="false">
+            <span class="track" aria-hidden="true"></span><span id="musicStateCorner">Off</span>
+          </button>
+        </div>
+        <p class="set-note">Track: Love Story</p>
+        <p class="set-note">This is the same player as the topbar music button — one track, one system, not a second player.</p>
+      </div>
+    </section>
+
+    <section class="dest" id="view-achievements" data-route="achievements" hidden>
+      <a class="back-home" href="#home">&larr; Back to home</a>
+      <h2>Achievements</h2>
+      <p class="dest-intro">Accomplishments and milestones.</p>
+      <div class="dest-card"><h3>HavenCraft admin</h3><p>Helping run the HavenCraft Minecraft community.</p></div>
+      <div class="dest-card"><h3>rafiprx.bond live</h3><p>Personal site with profile, social links, and an interactive Minecraft character.</p></div>
+      <div class="dest-card"><h3>Minecraft bot running 24/7</h3><p>A bot keeping a Minecraft world presence around the clock.</p></div>
+      <div class="ph-note">More milestones will be added over time.</div>
+    </section>
+
+    <section class="dest" id="view-discord" data-route="discord" hidden>
+      <a class="back-home" href="#home">&larr; Back to home</a>
+      <h2>Discord Space</h2>
+      <p class="dest-intro">My Discord community and how to reach me there.</p>
+      <a class="dest-card dest-card-link" href="https://discord.com/users/1426988198692913363" target="_blank" rel="noopener">
+        <h3>Chat with me on Discord</h3>
+        <p>My personal Discord profile.</p>
+      </a>
+      <a class="dest-card dest-card-link" href="https://dc.havencraft.pro" target="_blank" rel="noopener">
+        <h3>HavenCraft Discord Server</h3>
+        <p>Our community on Discord.</p>
+      </a>
+    </section>
+
+    <section class="dest" id="view-contact" data-route="contact" hidden>
+      <a class="back-home" href="#home">&larr; Back to home</a>
+      <h2>Contact Me</h2>
+      <p class="dest-intro">Every way to reach me, in one place.</p>
+      <a class="dest-card dest-card-link" href="tel:+8809638766466">
+        <h3>Call</h3>
+        <p>Call me directly.</p>
+      </a>
+      <a class="dest-card dest-card-link" href="https://t.me/Rafi_PRX" target="_blank" rel="noopener">
+        <h3>Telegram</h3>
+        <p>Message me on Telegram.</p>
+      </a>
+      <a class="dest-card dest-card-link" href="https://discord.com/users/1426988198692913363" target="_blank" rel="noopener">
+        <h3>Discord</h3>
+        <p>My personal Discord profile.</p>
+      </a>
+      <a class="dest-card dest-card-link" href="#social">
+        <h3>All social profiles</h3>
+        <p>All my social profiles in one place.</p>
+      </a>
+      <a class="dest-card dest-card-link" href="#email">
+        <h3>Email</h3>
+        <p>Send me a message.</p>
+      </a>
+    </section>
+
+    <section class="dest" id="view-social" data-route="social" hidden>
+      <a class="back-home" href="#home">&larr; Back to home</a>
+      <h2>Social Links</h2>
+      <p class="dest-intro">All of my social profiles in one organized location.</p>
+      <div class="dest-social">
+        <a class="pill" href="https://www.facebook.com/shahinahmedrafi02" target="_blank" rel="noopener">
+          <span>Facebook</span>
+          <svg viewBox="0 0 24 24"><path d="M13.5 21v-7h2.4l.4-3h-2.8V9.1c0-.9.3-1.5 1.6-1.5h1.3V4.9c-.3 0-1.2-.1-2.2-.1-2.2 0-3.7 1.3-3.7 3.8V11H8v3h2.5v7z"/></svg>
+        </a>
+        <a class="pill" href="https://www.instagram.com/madara_1ea?igsi=MTZ6Y2d3cGNoamIxbA==" target="_blank" rel="noopener">
+          <span>Instagram</span>
+          <svg viewBox="0 0 24 24"><path d="M12 8.8A3.2 3.2 0 1 0 12 15.2 3.2 3.2 0 0 0 12 8.8zm0-2.1a5.3 5.3 0 1 1 0 10.6 5.3 5.3 0 0 1 0-10.6zm6.8-.3a1.2 1.2 0 1 1-2.4 0 1.2 1.2 0 0 1 2.4 0zM12 4.2c-2.5 0-2.9 0-3.9.1a5.2 5.2 0 0 0-1.7.3 3.5 3.5 0 0 0-2 2 5.2 5.2 0 0 0-.3 1.7c-.1 1-.1 1.4-.1 3.9s0 2.9.1 3.9a5.2 5.2 0 0 0 .3 1.7 3.5 3.5 0 0 0 2 2 5.2 5.2 0 0 0 1.7.3c1 .1 1.4.1 3.9.1s2.9 0 3.9-.1a5.2 5.2 0 0 0 1.7-.3 3.5 3.5 0 0 0 2-2 5.2 5.2 0 0 0 .3-1.7c.1-1 .1-1.4.1-3.9s0-2.9-.1-3.9a5.2 5.2 0 0 0-.3-1.7 3.5 3.5 0 0 0-2-2 5.2 5.2 0 0 0-1.7-.3c-1-.1-1.4-.1-3.9-.1z"/></svg>
+        </a>
+        <a class="pill" href="https://discord.com/users/1426988198692913363" target="_blank" rel="noopener">
+          <span>Discord</span>
+          <svg viewBox="0 0 24 24"><path d="M18.6 5.3A16.4 16.4 0 0 0 14.5 4l-.5 1a15 15 0 0 0-3.7 0L9.8 4a16.4 16.4 0 0 0-4.1 1.3C3.4 8.9 2.7 12.3 3 15.7a16.1 16.1 0 0 0 4.9 2.5l1-1.6a10.4 10.4 0 0 1-1.7-.8l.4-.3a11.4 11.4 0 0 0 9.7 0l.4.3c-.5.3-1.1.6-1.7.8l1 1.6a16.1 16.1 0 0 0 4.9-2.5c.4-3.9-.7-7.3-2.3-10.4zM8.7 13.5c-1 0-1.7-.9-1.7-1.9s.7-1.9 1.7-1.9 1.8.9 1.7 1.9c0 1-.7 1.9-1.7 1.9zm6.6 0c-1 0-1.7-.9-1.7-1.9s.7-1.9 1.7-1.9 1.8.9 1.7 1.9c0 1-.7 1.9-1.7 1.9z"/></svg>
+        </a>
+        <a class="pill" href="https://t.me/Rafi_PRX" target="_blank" rel="noopener">
+          <span>Telegram</span>
+          <svg viewBox="0 0 24 24"><path d="M21.9 4.6 2.7 12.1c-.8.3-.8 1.4.1 1.6l4.8 1.5 1.8 5.7c.3.8 1.3.9 1.8.2l2.6-3.1 5 3.7c.6.4 1.4.1 1.7-.5l3.9-14.5c.3-.9-.6-1.7-1.5-1.1zM8.5 13.1l9.7-6.6c.2-.1.4.1.2.3l-8 7.4-.3 3-1.6-4.1z"/></svg>
+        </a>
+      </div>
+      <p class="dest-note">Call and email live on the <a href="#contact">Contact Me</a> page.</p>
+    </section>
+
+    <section class="dest" id="view-email" data-route="email" hidden>
+      <a class="back-home" href="#home">&larr; Back to home</a>
+      <h2>Email Me</h2>
+      <div class="dest-card">
+        <form id="contactForm" class="dest-form">
+          <h3>Let&rsquo;s work together.</h3>
+                    <label class="field-label" for="cfName">Name</label>
+          <input id="cfName" class="field" type="text" placeholder="Name *" required>
+                    <label class="field-label" for="cfEmail">Email</label>
+          <input id="cfEmail" class="field" type="email" placeholder="Email *" required>
+                    <label class="field-label" for="cfSubject">Subject</label>
+          <input id="cfSubject" class="field" type="text" placeholder="Your Subject *" required>
+                    <label class="field-label" for="cfMessage">Message</label>
+          <textarea id="cfMessage" class="field" rows="5" placeholder="Your Message *" required></textarea>
+          <button class="dest-btn" type="submit">Send Message</button>
+          <p class="set-note">This opens your email app with your message filled in.</p>
+                  </form>
+      </div>
+    </section>
+
+    <section class="dest" id="view-suggestions" data-route="suggestions" hidden>
+      <a class="back-home" href="#home">&larr; Back to home</a>
+      <h2>Suggestions</h2>
+      <p class="dest-intro">Have an idea for the site, a project, or anything else? Send it in.</p>
+      <form id="suggForm" class="dest-form">
+        <label class="field-label" for="suggSubject">Subject</label>
+        <input id="suggSubject" class="field" type="text" placeholder="Suggestion for RAFI PRX" required>
+        <label class="field-label" for="suggMessage">Message</label>
+        <textarea id="suggMessage" class="field" rows="5" placeholder="Write your suggestion here..." required></textarea>
+        <button class="dest-btn" type="submit">Open email app to send</button>
+        <p class="set-note">This opens your email app — suggestions are NOT submitted to a server.</p>
+      </form>
+    </section>
+
+    <section class="dest" id="view-settings" data-route="settings" hidden>
+      <a class="back-home" href="#home">&larr; Back to home</a>
+      <h2>Settings</h2>
+      <p class="dest-intro">The site's existing settings — the same controls as the settings panel.</p>
+      <div class="dest-card">
+        <div class="set-row">
+          <span class="set-label">Music</span>
+          <button id="musicToggleSection" class="switch" type="button" role="switch" aria-checked="false">
+            <span class="track" aria-hidden="true"></span><span id="musicStateSection">Off</span>
+          </button>
+        </div>
+        <p class="set-note">Track: Love Story</p>
+        <div class="set-sep" aria-hidden="true"></div>
+        <div class="set-row" style="flex-direction:column;align-items:stretch">
+          <span class="set-label">Theme</span>
+          <div class="theme-opts" role="radiogroup" aria-label="Theme">
+            <button class="theme-opt" type="button" role="radio" aria-checked="true" data-set-theme="dark"><span class="theme-name">Dark Theme <span class="rec">recommended</span></span> <span class="check" aria-hidden="true">&#10003;</span></button>
+            <button class="theme-opt" type="button" role="radio" aria-checked="false" data-set-theme="light">Light Theme <span class="check" aria-hidden="true">&#10003;</span></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="dest" id="view-appearance" data-route="appearance" hidden>
+      <a class="back-home" href="#home">&larr; Back to home</a>
+      <h2>Appearance / Theme</h2>
+      <p class="dest-intro">The site's existing light/dark theme — one theme system, shared with the topbar and settings.</p>
+      <div class="dest-card">
+        <div class="set-row" style="flex-direction:column;align-items:stretch">
+          <span class="set-label">Theme</span>
+          <div class="theme-opts" role="radiogroup" aria-label="Theme">
+            <button class="theme-opt" type="button" role="radio" aria-checked="true" data-set-theme="dark"><span class="theme-name">Dark Theme <span class="rec">recommended</span></span> <span class="check" aria-hidden="true">&#10003;</span></button>
+            <button class="theme-opt" type="button" role="radio" aria-checked="false" data-set-theme="light">Light Theme <span class="check" aria-hidden="true">&#10003;</span></button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
   <!-- Background music: the site owner's own uploaded track (love-story.m4a, kept in this repo).
        To change it later, change MUSIC_SRC in the script below. -->
   <audio id="bgMusic" loop preload="none"></audio>
@@ -490,9 +949,12 @@
     els.forEach(function(el){ io.observe(el); });
   }
 
-  /* ================= top bar panels ================= */
+  /* ================= top bar panels + navigation drawer =================
+     The hamburger now opens the left slide-out drawer (defined in the
+     routing section below; function declarations hoist, so this handler
+     can call openDrawer/closeDrawer). The settings panel keeps its own
+     small dropdown behaviour. */
   var navBtn = document.getElementById('navBtn');
-  var navMenu = document.getElementById('navMenu');
   var settingsBtn = document.getElementById('settingsBtn');
   var settingsMenu = document.getElementById('settingsMenu');
   function openPanel(btn, panel){
@@ -504,30 +966,22 @@
     btn.setAttribute('aria-expanded', 'false');
     if (focusBack) btn.focus();
   }
-  function closeAllPanels(focusBack){
-    closePanel(navBtn, navMenu, false);
-    closePanel(settingsBtn, settingsMenu, focusBack ? true : false);
-  }
   navBtn.addEventListener('click', function(ev){
     ev.stopPropagation();
-    var wasHidden = navMenu.hidden;
     closePanel(settingsBtn, settingsMenu, false);
-    if (wasHidden) openPanel(navBtn, navMenu); else closePanel(navBtn, navMenu, false);
+    if (drawer && drawer.classList.contains('open')) closeDrawer(); else openDrawer();
   });
   settingsBtn.addEventListener('click', function(ev){
     ev.stopPropagation();
     var wasHidden = settingsMenu.hidden;
-    closePanel(navBtn, navMenu, false);
     if (wasHidden) openPanel(settingsBtn, settingsMenu); else closePanel(settingsBtn, settingsMenu, false);
   });
   document.addEventListener('pointerdown', function(ev){
-    if (!navMenu.hidden && !navMenu.contains(ev.target) && ev.target !== navBtn && !navBtn.contains(ev.target)) closePanel(navBtn, navMenu, false);
     if (!settingsMenu.hidden && !settingsMenu.contains(ev.target) && ev.target !== settingsBtn && !settingsBtn.contains(ev.target)) closePanel(settingsBtn, settingsMenu, false);
   });
   document.addEventListener('keydown', function(ev){
-    if (ev.key === 'Escape' && (!navMenu.hidden || !settingsMenu.hidden)) closeAllPanels(true);
+    if (ev.key === 'Escape' && !settingsMenu.hidden) closePanel(settingsBtn, settingsMenu, true);
   });
-  navMenu.addEventListener('click', function(ev){ ev.stopPropagation(); });
   settingsMenu.addEventListener('click', function(ev){ ev.stopPropagation(); });
 
   /* ================= theme ================= */
@@ -566,6 +1020,13 @@
   var musicState = document.getElementById('musicState');
   var musicToggleTop = document.getElementById('musicToggleTop');
   var musicNote = document.getElementById('musicNote');
+  /* preview sections reuse the same music system: the Settings section
+     switch and the Music Corner switch below are reflected here, and their
+     clicks call the same setMusic() — no second player exists. */
+  var musicToggleSection = document.getElementById('musicToggleSection');
+  var musicStateSection = document.getElementById('musicStateSection');
+  var musicToggleCorner = document.getElementById('musicToggleCorner');
+  var musicStateCorner = document.getElementById('musicStateCorner');
   var musicWanted = read('rafiprx-music') === 'on';
   var musicBroken = false;
 
@@ -580,6 +1041,14 @@
       musicToggleTop.setAttribute('aria-label', (musicWanted && !musicBroken) ? 'Turn music off' : 'Turn music on');
     }
     musicNote.hidden = !musicBroken;
+    if (musicToggleSection){
+      musicToggleSection.setAttribute('aria-checked', checked);
+      if (musicStateSection) musicStateSection.textContent = on ? 'On' : 'Off';
+    }
+    if (musicToggleCorner){
+      musicToggleCorner.setAttribute('aria-checked', checked);
+      if (musicStateCorner) musicStateCorner.textContent = on ? 'On' : 'Off';
+    }
   }
   function tryPlay(){
     if (musicBroken) { reflectMusic(); return; }
@@ -596,6 +1065,8 @@
   }
   musicToggle.addEventListener('click', function(){ setMusic(!musicWanted); });
   if (musicToggleTop) musicToggleTop.addEventListener('click', function(){ setMusic(!musicWanted); });
+  if (musicToggleSection) musicToggleSection.addEventListener('click', function(){ setMusic(!musicWanted); });
+  if (musicToggleCorner) musicToggleCorner.addEventListener('click', function(){ setMusic(!musicWanted); });
   audio.addEventListener('error', function(){
     musicBroken = true;
     musicWanted = false;
@@ -700,6 +1171,10 @@
       });
     } catch (e) { showFallback(); return; }
 
+    /* preview routing hook: keep a handle so the router can pause the
+       viewer when a destination route hides the character wrapper */
+    wrap._rafiViewer = viewer;
+
     /* Still character: no animation is loaded and auto-rotate stays off.
        Zoom and pan are disabled. Dragging the character itself moves it
        (see setupCharacter); the camera-orbit controls are switched off
@@ -736,8 +1211,8 @@
        below the top bar and panels.
        SPEED MODELS (keyed off the event's pointerType, never the UA or
        the layout, so a phone in Desktop Site mode still gets phone
-       behaviour): touch = one fixed comfortable pace (gain 3.5, cap
-       520px/s) no matter how fast the finger flicks; mouse/pen = the cap
+       behaviour): touch = one fixed comfortable pace (gain 1.75, cap
+       260px/s) no matter how fast the finger flicks; mouse/pen = the cap
        follows the measured pointer speed (min 220, max 1600px/s), so a
        slow mouse means a slow run and a fast mouse means a fast catch-up,
        with smooth acceleration and deceleration throughout.
@@ -755,7 +1230,7 @@
       var SCALE = 0.4;
       var STOP_CHASE = 100;  /* stop this far from the cursor while chasing */
       var STOP_ARRIVE = 10;  /* stop this close once the pointer is over it */
-      var TOUCH_GAIN = 3.5, TOUCH_CAP = 520;   /* phones: one comfortable pace */
+      var TOUCH_GAIN = 1.75, TOUCH_CAP = 260;  /* phones: one comfortable pace, 50% of previous speed */
       var PC_GAIN = 6;                          /* PCs: gain fixed, cap follows pointer speed */
       var PC_CAP_MIN = 220, PC_CAP_MAX = 1600;
       var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1022,11 +1497,129 @@
     window.addEventListener('resize', fit);
     window.addEventListener('orientationchange', fit);
 
-    /* save power: pause rendering while the tab is hidden */
+    /* save power: pause rendering while the tab is hidden, or while a
+       destination route hides the character */
     document.addEventListener('visibilitychange', function(){
-      try { viewer.renderPaused = document.hidden; } catch (e) {}
+      try { viewer.renderPaused = document.hidden || currentRoute !== ''; } catch (e) {}
     });
+
+    /* preview routing: if a destination route is already active (e.g. the
+       page was refreshed on a hash), hide the character right away */
+    try { setCharacterVisible(currentRoute === ''); } catch (e) {}
   }
+
+  /* ================= navigation drawer + hash routing (preview) ============
+     Single-file hash routing: the homepage is the default view (no hash or
+     #home); each destination is a <section> shown only for its hash. Back /
+     forward work through hashchange; refresh reads location.hash on load;
+     an unknown hash falls back to the homepage. The entry gate overlays
+     first load and routing applies underneath it. */
+  var ROUTES = {
+    'about': 'view-about', 'projects': 'view-projects', 'apps-tools': 'view-apps-tools',
+    'experiments': 'view-experiments', 'minecraft-world': 'view-minecraft-world',
+    'servers': 'view-servers', 'gaming-hub': 'view-gaming-hub', 'gaming-setup': 'view-gaming-setup',
+    'youtube': 'view-youtube', 'designs': 'view-designs', 'music': 'view-music',
+    'achievements': 'view-achievements', 'discord': 'view-discord', 'contact': 'view-contact',
+    'social': 'view-social', 'email': 'view-email', 'suggestions': 'view-suggestions',
+    'settings': 'view-settings', 'appearance': 'view-appearance'
+  };
+  var currentRoute = '';
+  var drawer = document.getElementById('navDrawer');
+  var drawerBackdrop = document.getElementById('drawerBackdrop');
+  var drawerClose = document.getElementById('drawerClose');
+  var homeView = document.getElementById('homeView');
+
+  /* Character visibility per route: the homepage character is a fixed
+     overlay parked at its original spacer. On a destination route the home
+     card is hidden, so the character would park at a meaningless spot —
+     hide its wrapper and pause its render loop instead; restore on home. */
+  function setCharacterVisible(show){
+    if (wrap) wrap.style.display = show ? '' : 'none';
+    var v = wrap ? wrap._rafiViewer : null;
+    if (v) { try { v.renderPaused = show ? document.hidden : true; } catch (e) {} }
+  }
+  function openDrawer(){
+    if (!drawer) return;
+    drawer.classList.add('open');
+    if (drawerBackdrop) drawerBackdrop.hidden = false;
+    navBtn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+    try { if (drawerClose) drawerClose.focus(); } catch (e) {}
+  }
+  function closeDrawer(){
+    if (!drawer) return;
+    drawer.classList.remove('open');
+    if (drawerBackdrop) drawerBackdrop.hidden = true;
+    navBtn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+  if (drawerClose) drawerClose.addEventListener('click', function(){ closeDrawer(); navBtn.focus(); });
+  if (drawerBackdrop) drawerBackdrop.addEventListener('click', closeDrawer);
+  document.addEventListener('keydown', function(ev){
+    if (ev.key === 'Escape' && drawer && drawer.classList.contains('open')) closeDrawer();
+  });
+  document.querySelectorAll('.drawer-cat-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var panel = document.getElementById(btn.getAttribute('aria-controls'));
+      var expanded = btn.getAttribute('aria-expanded') === 'true';
+      /* Accordion: opening one category closes every other one. */
+      document.querySelectorAll('.drawer-cat-btn').forEach(function(other){
+        if (other !== btn) {
+          other.setAttribute('aria-expanded', 'false');
+          var otherPanel = document.getElementById(other.getAttribute('aria-controls'));
+          if (otherPanel) otherPanel.classList.remove('open');
+        }
+      });
+      btn.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+      if (panel) panel.classList.toggle('open', !expanded);
+    });
+  });
+
+  function applyRoute(){
+    var raw = (location.hash || '').replace(/^#/, '');
+    var slug = raw === 'home' ? '' : raw;
+    var viewId = ROUTES[slug];
+    var isDest = !!viewId;
+    currentRoute = isDest ? slug : '';
+    if (homeView) homeView.hidden = isDest;
+    Object.keys(ROUTES).forEach(function(s){
+      var el = document.getElementById(ROUTES[s]);
+      if (el) el.hidden = (s !== slug);
+    });
+    setCharacterVisible(!isDest);
+    document.querySelectorAll('.drawer-link').forEach(function(a){
+      if (a.getAttribute('data-route') === slug) a.setAttribute('aria-current', 'page');
+      else a.removeAttribute('aria-current');
+    });
+    closeDrawer();
+    window.scrollTo(0, 0);
+  }
+  window.addEventListener('hashchange', applyRoute);
+  applyRoute();
+
+  /* Suggestions: mailto fallback (no server). Opens the visitor's email app. */
+  var suggForm = document.getElementById('suggForm');
+  if (suggForm) suggForm.addEventListener('submit', function(ev){
+    ev.preventDefault();
+    var subj = document.getElementById('suggSubject').value || 'Suggestion for RAFI PRX';
+    var msg = document.getElementById('suggMessage').value || '';
+    window.location.href = 'mailto:princerafi5801@gmail.com?subject=' + encodeURIComponent(subj) + '&body=' + encodeURIComponent(msg);
+  });
+
+  /* Contact form: UI only for now (no backend yet). Same mailto mechanism as
+     suggestions: opens the visitor's email app with the message filled in.
+     Later this handler is swapped for a real form-service endpoint. */
+  var contactForm = document.getElementById('contactForm');
+  if (contactForm) contactForm.addEventListener('submit', function(ev){
+    ev.preventDefault();
+    var name = document.getElementById('cfName').value.trim();
+    var email = document.getElementById('cfEmail').value.trim();
+    var subj = document.getElementById('cfSubject').value.trim();
+    var msg = document.getElementById('cfMessage').value.trim();
+    var body = 'Name: ' + name + '\nEmail: ' + email + '\n\n' + msg;
+    window.location.href = 'mailto:princerafi5801@gmail.com?subject=' + encodeURIComponent(subj) + '&body=' + encodeURIComponent(body);
+  });
+
   function startViewer(){
     if (window.skinview3d) { initViewer(); return; }
     /* primary CDN failed: try the mirror once, then show the fallback note */
