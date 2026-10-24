@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Redirecting…</title>
+<script>
+  /* GitHub Pages serves this file for any path that is not a real file
+     (e.g. /settings). Save the requested path, then send the browser to
+     the homepage — index.html restores the clean path on load, so a
+     direct visit or refresh on a destination URL lands on the right view
+     instead of a dead 404. Real files and directories (/, /games/, assets)
+     never reach this page. */
+  try { sessionStorage.setItem('rafiprx-path', location.pathname + location.search); } catch (e) {}
+  location.replace('/');
+</script>
+</head>
+<body><p>Redirecting…</p></body>
+</html>
