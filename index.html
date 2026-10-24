@@ -11,6 +11,9 @@
 <link rel="icon" type="image/png" sizes="512x512" href="./icon-512.png">
 <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
 <meta name="theme-color" content="#0a0a10">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://mc-heads.net" crossorigin>
+<link rel="preload" as="image" href="https://mc-heads.net/skin/alxxq" crossorigin="anonymous" fetchpriority="high">
 <script>
 /* Apply saved theme before first paint (default: dark) */
 (function(){try{var t=localStorage.getItem('rafiprx-theme');document.documentElement.setAttribute('data-theme',t==='light'?'light':'dark');}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();
@@ -124,9 +127,11 @@
 
   .card{position:relative;z-index:1;width:100%;max-width:620px;margin:0 auto;text-align:center;padding:clamp(72px,8vh,76px) 22px 72px}
 
-  /* ---------- 3D avatar ---------- */
-  .avatar-wrap{position:relative}
-  .skin-viewer{width:min(74vw,290px);height:372px;margin:0 auto;position:relative}
+  /* ---------- 3D avatar: fixed overlay, displayed at 40% via scale ---------- */
+  .avatar-wrap{position:relative;height:240px} /* spacer: keeps quote/links exactly where they are */
+  .skin-viewer{width:min(74vw,290px);height:372px;margin:0;position:fixed;left:0;top:0;z-index:40;transform-origin:0 0}
+  .skin-viewer .skin-ph{position:absolute;left:50%;top:8%;transform:translateX(-50%);width:125px;height:125px;border-radius:22px;pointer-events:none;display:none;animation:phPulse 1.6s ease-in-out infinite}
+  @keyframes phPulse{0%,100%{opacity:.55}50%{opacity:1}}
   .skin-viewer canvas{width:100%;height:100%;display:block;cursor:grab;border-radius:18px}
   .skin-viewer canvas:active{cursor:grabbing}
   .skin-note{color:var(--muted);font-size:.9rem;padding:24px 10px}
@@ -158,8 +163,7 @@
   /* ---------- top bar + panels ---------- */
   .topbar{position:fixed;top:0;left:0;right:0;height:56px;z-index:60;display:flex;align-items:center;justify-content:space-between;padding:0 12px;background:var(--glass);backdrop-filter:blur(16px) saturate(1.3);-webkit-backdrop-filter:blur(16px) saturate(1.3)}
   .topbar-right{display:flex;align-items:center;gap:10px}
-  .topbar-btn{position:relative;width:40px;height:40px;border-radius:50%;background:transparent;border:1px solid var(--glass-brd);color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .18s ease,transform .18s ease;flex:0 0 40px}
-  .topbar-btn:hover{background:var(--glass-hi)}
+  .topbar-btn{position:relative;width:40px;height:40px;border-radius:14px;background:transparent;border:0;color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .18s ease;flex:0 0 40px}
   .topbar-btn:active{transform:scale(.94)}
   .topbar-btn svg{width:22px;height:22px}
   /* theme icon morph: moon and sun crossfade + rotate + scale, slowly */
@@ -205,11 +209,13 @@
   .pills .pill:nth-child(5){transition-delay:.2s}
 
   @media (max-width:480px){
+    .avatar-wrap{height:210px}
     .skin-viewer{height:336px}
     h1{margin:22px 0 26px}
   }
   @media (prefers-reduced-motion: reduce){
     .cube{animation:none}
+    .skin-ph{animation:none}
     .rv{opacity:1;transform:none;transition:none}
     html{scroll-behavior:auto}
   }
@@ -409,9 +415,10 @@
   </div>
 
   <main class="card">
-    <div class="avatar-wrap rv">
+    <div class="avatar-wrap" id="avatarWrap">
       <div class="skin-viewer" id="skinViewer">
-        <canvas id="skinCanvas" role="img" aria-label="Interactive 3D Minecraft avatar for alxxq. The character looks toward your cursor or tap. Drag to rotate the character."></canvas>
+        <img id="skinPlaceholder" class="skin-ph" src="https://mc-heads.net/avatar/alxxq/100" alt="" aria-hidden="true" onerror="this.style.display='none'">
+        <canvas id="skinCanvas" role="img" aria-label="Interactive 3D Minecraft avatar for alxxq. Drag the character to move it. It runs toward your cursor or tap."></canvas>
         <p id="skinNote" class="skin-note" hidden>3D avatar could not load. Minecraft username: <strong>alxxq</strong></p>
       </div>
     </div>
@@ -453,7 +460,7 @@
        To change it later, change MUSIC_SRC in the script below. -->
   <audio id="bgMusic" loop preload="none"></audio>
 
-<script src="https://cdn.jsdelivr.net/npm/skinview3d@3.4.1/bundles/skinview3d.bundle.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/skinview3d@3.4.1/bundles/skinview3d.bundle.js"></script>
 <script>
 (function(){
   'use strict';
@@ -663,10 +670,21 @@
   var canvas = document.getElementById('skinCanvas');
   var wrap = document.getElementById('skinViewer');
   var skinNote = document.getElementById('skinNote');
+  var skinPh = document.getElementById('skinPlaceholder');
+  var skinReady = false; /* true once a skin texture is applied; drives the loading face */
 
   function showFallback(){
     canvas.hidden = true;
+    canvas.style.display = 'none'; /* author CSS display:block would otherwise override [hidden] */
     skinNote.hidden = false;
+    if (skinPh) skinPh.style.display = 'none';
+    /* the viewer is a fixed overlay: put it back in flow so the note shows */
+    wrap.style.position = 'relative';
+    wrap.style.transform = 'none';
+    wrap.style.left = 'auto';
+    wrap.style.top = 'auto';
+    wrap.style.zIndex = 'auto';
+    wrap.style.margin = '0 auto';
   }
 
   function initViewer(){
@@ -683,8 +701,9 @@
     } catch (e) { showFallback(); return; }
 
     /* Still character: no animation is loaded and auto-rotate stays off.
-       The viewer's built-in drag controls rotate left/right; vertical
-       dragging tilts the view within limits. Zoom and pan are disabled. */
+       Zoom and pan are disabled. Dragging the character itself moves it
+       (see setupCharacter); the camera-orbit controls are switched off
+       while a drag is active so the view never spins mid-drag. */
     viewer.autoRotate = false;
     if (viewer.controls) {
       viewer.controls.enablePan = false;
@@ -693,26 +712,133 @@
       viewer.controls.minPolarAngle = 1.0;
       viewer.controls.maxPolarAngle = 2.1;
     }
+    /* touch swipes starting on the character may scroll the page; only an
+       active drag switches this to 'none' (see endDrag) */
+    canvas.style.touchAction = 'pan-y';
 
     viewer.loadSkin(SKIN_URL, { model: 'auto-detect' })
+      .then(function(){ skinReady = true; if (skinPh) skinPh.style.display = 'none'; })
       .catch(function(){ return viewer.loadSkin(SKIN_FALLBACK_DATA, { model: 'auto-detect' }); })
+      .then(function(){ skinReady = true; if (skinPh) skinPh.style.display = 'none'; })
       .catch(function(){ showFallback(); });
 
-    /* ---- Head tracking (Minecraft inventory style) ----
-       The character's head turns toward the pointer: on desktop it follows
-       the mouse live; on touch screens it looks at the last tap/click point
-       and holds it — tapping a link, the menu, or anywhere makes him look
-       there. Listeners are passive and never block or delay clicks.
-       Dragging still rotates the camera; the head math compensates for the
-       camera's orbit angle so he keeps looking at the screen point. */
-    (function setupHeadTracking(){
-      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    /* ---- Character movement + head tracking ----
+       The viewer is a fixed overlay displayed at 40% (CSS scale) that runs
+       toward the pointer: on desktop it follows the mouse live; on touch
+       screens it runs to the last tap point. Before the first pointer
+       interaction it stays parked at the centre of its original spot.
+       Dragging the character itself moves it (the chase is replaced by
+       drag positioning while dragging). Links stay clickable: while chasing, the character stops
+       ~100px short of the cursor, so the click point is never under it;
+       it only closes right in when the pointer is already over it, so it
+       can still be grabbed and dragged. Movement is clamped to the area
+       below the top bar down to just past the contact links, and the
+       character renders above the card but below the top bar and panels.
+       SPEED MODELS (keyed off the event's pointerType, never the UA or
+       the layout, so a phone in Desktop Site mode still gets phone
+       behaviour): touch = one fixed comfortable pace (gain 3.5, cap
+       520px/s) no matter how fast the finger flicks; mouse/pen = the cap
+       follows the measured pointer speed (min 220, max 1600px/s), so a
+       slow mouse means a slow run and a fast mouse means a fast catch-up,
+       with smooth acceleration and deceleration throughout.
+       DRAG & HOLD (on top of chasing): pressing the character itself
+       drags it — mouse/pen start dragging at once, touch arms a long-press
+       (350ms, 12px tolerance) so taps and swipes never drag by accident.
+       While dragging, the character glides quickly to sit directly under
+       the pointer (no snap: it eases there), the camera controls switch
+       off, and page scrolling is blocked only for the active drag. On
+       release, chasing resumes from the existing speed system, and a
+       click caused by the drag itself is swallowed once so no link
+       underneath can fire by accident. */
+    (function setupCharacter(){
+      var spacer = document.getElementById('avatarWrap');
+      var SCALE = 0.4;
+      var STOP_CHASE = 100;  /* stop this far from the cursor while chasing */
+      var STOP_ARRIVE = 10;  /* stop this close once the pointer is over it */
+      var TOUCH_GAIN = 3.5, TOUCH_CAP = 520;   /* phones: one comfortable pace */
+      var PC_GAIN = 6;                          /* PCs: gain fixed, cap follows pointer speed */
+      var PC_CAP_MIN = 220, PC_CAP_MAX = 1600;
+      var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      function halfSize(){
+        return { hw: (wrap.clientWidth * SCALE) / 2, hh: (wrap.clientHeight * SCALE) / 2 };
+      }
+      function place(cx, cy){
+        var h = halfSize();
+        wrap.style.transform = 'translate3d(' + (cx - h.hw) + 'px,' + (cy - h.hh) + 'px,0) scale(' + SCALE + ')';
+        if (skinPh && !skinReady) skinPh.style.display = 'block'; /* show loading face once positioned */
+      }
+      function spacerCenter(){
+        var r = spacer.getBoundingClientRect();
+        return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+      }
+      if (reduced) {
+        /* no motion at all: park the small character in its original spot */
+        var c0 = spacerCenter();
+        place(c0.x, c0.y);
+        return;
+      }
       var MAX_YAW = 0.62;    /* head turn from pointer position, radians */
       var MAX_PITCH = 0.36;  /* head tilt up/down */
       var MAX_HEAD = 0.85;   /* absolute clamp so the neck never over-turns */
-      var tYaw = 0, tPitch = 0;  /* target (screen space) */
-      var cYaw = 0, cPitch = 0;  /* smoothed current values */
-      function setTarget(clientX, clientY){
+      var tYaw = 0, tPitch = 0;  /* head target (screen space) */
+      var cYaw = 0, cPitch = 0;  /* head smoothed current values */
+      var pos = spacerCenter();
+      var target = { x: pos.x, y: pos.y };
+      var hasTarget = false, dragging = false, lastPointerType = 'mouse';
+      var lastPX = pos.x, lastPY = pos.y;
+      var pendingTouchDrag = null, grabPos = null, dragMoved = false, suppressClick = false;
+      var ptrSpeed = 0, lastMoveT = 0, lastMX = 0, lastMY = 0; /* smoothed pointer speed (mouse/pen only) */
+      var faceYaw = 0, runBlend = 0, runPhase = 0, lastT = 0;
+
+      function clearPendingTouchDrag(){
+        if (pendingTouchDrag) { clearTimeout(pendingTouchDrag.timer); pendingTouchDrag = null; }
+      }
+      function startDrag(){
+        if (dragging) return;
+        dragging = true;
+        grabPos = { x: pos.x, y: pos.y };
+        dragMoved = false;
+        try { if (viewer.controls) viewer.controls.enabled = false; } catch (e) {}
+        canvas.style.touchAction = 'none';
+      }
+      function endDrag(moved){
+        clearPendingTouchDrag();
+        if (!dragging) return;
+        dragging = false;
+        try { if (viewer.controls) viewer.controls.enabled = true; } catch (e) {}
+        canvas.style.touchAction = 'pan-y';
+        target = clampTarget(lastPX, lastPY); /* resume chasing from the release point */
+        hasTarget = true;
+        if (moved) {
+          /* swallow the single click the drag's own release would otherwise dispatch */
+          suppressClick = true;
+          setTimeout(function(){ suppressClick = false; }, 350);
+        }
+      }
+      /* one-shot click guard: eats only the click that ends a real drag */
+      window.addEventListener('click', function(e){
+        if (suppressClick) { suppressClick = false; e.stopPropagation(); e.preventDefault(); }
+      }, true);
+      /* block page scrolling only while a drag is actually active */
+      window.addEventListener('touchmove', function(e){
+        if (dragging) e.preventDefault();
+      }, { passive: false });
+
+      function clampTarget(tx, ty){
+        var h = halfSize();
+        var vw = window.innerWidth, vh = window.innerHeight;
+        var left = Math.min(h.hw + 8, vw / 2), right = Math.max(vw - h.hw - 8, vw / 2);
+        var top = 64, bottom = vh * 0.75;
+        var links = document.querySelector('.contact-split') || document.querySelector('.pills');
+        if (links) {
+          var lb = links.getBoundingClientRect().bottom;
+          if (lb > 140) bottom = Math.min(lb + 48, vh - 30);
+          if (bottom < top + 80) bottom = vh * 0.75;
+        }
+        return { x: Math.max(left, Math.min(right, tx)), y: Math.max(top, Math.min(bottom, ty)) };
+      }
+      function setHeadTarget(clientX, clientY){
         var r = canvas.getBoundingClientRect();
         if (!r.width || !window.innerWidth) return;
         var hx = r.left + r.width / 2;
@@ -728,18 +854,156 @@
         tYaw = nx * MAX_YAW;
         tPitch = ny * MAX_PITCH;
       }
-      window.addEventListener('pointermove', function(e){ setTarget(e.clientX, e.clientY); }, { passive: true });
-      window.addEventListener('pointerdown', function(e){ setTarget(e.clientX, e.clientY); }, { passive: true });
-      (function tick(){
+      window.addEventListener('pointermove', function(e){
+        setHeadTarget(e.clientX, e.clientY);
+        if (e.pointerType === 'touch') {
+          if (dragging) { lastPX = e.clientX; lastPY = e.clientY; return; }
+          /* a swipe before the long-press fires cancels the pending drag */
+          if (pendingTouchDrag &&
+              (Math.abs(e.clientX - pendingTouchDrag.x) > 12 || Math.abs(e.clientY - pendingTouchDrag.y) > 12)) clearPendingTouchDrag();
+          return; /* touch: taps move it, scrolls must not */
+        }
+        /* mouse released outside the window: a move with no button held ends the drag */
+        if (dragging && e.buttons === 0) { endDrag(dragMoved); return; }
+        lastPointerType = e.pointerType || 'mouse';
+        lastPX = e.clientX; lastPY = e.clientY;
+        target = clampTarget(e.clientX, e.clientY);
+        hasTarget = true;
+        /* measure pointer speed (smoothed) for the PC dynamic cap */
+        var nowMs = performance.now();
+        if (lastMoveT) {
+          var mdt = (nowMs - lastMoveT) / 1000;
+          if (mdt > 0.01) {
+            var inst = Math.sqrt((e.clientX - lastMX) * (e.clientX - lastMX) + (e.clientY - lastMY) * (e.clientY - lastMY)) / mdt;
+            ptrSpeed = ptrSpeed * 0.7 + Math.min(inst, 4000) * 0.3;
+          }
+        }
+        lastMX = e.clientX; lastMY = e.clientY; lastMoveT = nowMs;
+      }, { passive: true });
+      window.addEventListener('pointerdown', function(e){
+        setHeadTarget(e.clientX, e.clientY);
+        lastPointerType = e.pointerType || 'mouse';
+        lastPX = e.clientX; lastPY = e.clientY;
+        target = clampTarget(e.clientX, e.clientY);
+        hasTarget = true;
+      }, { passive: true });
+      canvas.addEventListener('pointerdown', function(e){
+        if (e.pointerType === 'touch') {
+          /* arm a long-press: only a still hold becomes a drag; a swipe or tap cancels it */
+          clearPendingTouchDrag();
+          var sx = e.clientX, sy = e.clientY;
+          pendingTouchDrag = { x: sx, y: sy, timer: setTimeout(function(){
+            pendingTouchDrag = null;
+            startDrag();
+          }, 350) };
+        } else if (e.button === 0 || e.button === undefined) {
+          startDrag();
+        }
+      }, { passive: true });
+      window.addEventListener('pointerup', function(){
+        if (dragging) endDrag(dragMoved);
+        else clearPendingTouchDrag();
+      }, { passive: true });
+      window.addEventListener('pointercancel', function(){
+        clearPendingTouchDrag();
+        if (dragging) endDrag(false);
+      }, { passive: true });
+
+      (function tick(now){
         requestAnimationFrame(tick);
-        if (document.hidden) return;
+        if (document.hidden || canvas.hidden) return;
+        if (!lastT) lastT = now || performance.now();
+        var t = now || performance.now();
+        var dt = Math.min((t - lastT) / 1000, 0.05);
+        lastT = t;
+        var speed = 0;
+        /* pointer stopped: let the PC speed cap decay back to its minimum */
+        if (lastMoveT && t - lastMoveT > 150) ptrSpeed *= Math.exp(-3 * dt);
+
+        if (!hasTarget) {
+          /* parked on the original spot until the first pointer interaction */
+          var sc = spacerCenter();
+          pos.x = sc.x; pos.y = sc.y;
+          place(pos.x, pos.y);
+        } else if (dragging) {
+          /* dragged: glide quickly to sit directly under the pointer (no snap, no stop radius) */
+          var dc = clampTarget(lastPX, lastPY);
+          var ddx = dc.x - pos.x, ddy = dc.y - pos.y;
+          var ddist = Math.sqrt(ddx * ddx + ddy * ddy);
+          if (ddist > 0.5) {
+            var dk = 1 - Math.exp(-14 * dt);
+            var nnx = pos.x + ddx * dk, nny = pos.y + ddy * dk;
+            speed = Math.sqrt((nnx - pos.x) * (nnx - pos.x) + (nny - pos.y) * (nny - pos.y)) / Math.max(dt, 0.001);
+            pos.x = nnx; pos.y = nny;
+            if (grabPos && Math.sqrt((pos.x - grabPos.x) * (pos.x - grabPos.x) + (pos.y - grabPos.y) * (pos.y - grabPos.y)) > 12) dragMoved = true;
+            if (speed > 40 && Math.abs(ddx) > 20) {
+              var dwant = ddx > 0 ? Math.PI / 2 : -Math.PI / 2;
+              var ddiff = Math.atan2(Math.sin(dwant - faceYaw), Math.cos(dwant - faceYaw));
+              faceYaw += ddiff * (1 - Math.exp(-10 * dt));
+            }
+          }
+          place(pos.x, pos.y);
+        } else {
+          var pc = clampTarget(pos.x, pos.y);
+          pos.x = pc.x; pos.y = pc.y;
+          var h = halfSize();
+          var over = lastPointerType !== 'touch' &&
+            Math.abs(lastPX - pos.x) <= h.hw + 4 && Math.abs(lastPY - pos.y) <= h.hh + 4;
+          var isTouch = lastPointerType === 'touch';
+          var stopR = (over || isTouch) ? STOP_ARRIVE : STOP_CHASE;
+          var dx = target.x - pos.x, dy = target.y - pos.y;
+          var dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist > stopR) {
+            var gain = isTouch ? TOUCH_GAIN : PC_GAIN;
+            var cap = isTouch ? TOUCH_CAP : Math.max(PC_CAP_MIN, Math.min(PC_CAP_MAX, PC_CAP_MIN + ptrSpeed * 0.9));
+            var vx = dx * gain, vy = dy * gain;
+            var vm = Math.sqrt(vx * vx + vy * vy);
+            if (vm > cap) { vx = vx / vm * cap; vy = vy / vm * cap; }
+            var nx = pos.x + vx * dt, ny = pos.y + vy * dt;
+            var ndx = target.x - nx, ndy = target.y - ny;
+            var ndist = Math.sqrt(ndx * ndx + ndy * ndy);
+            if (ndist < stopR && ndist > 0) { nx = target.x - ndx / ndist * stopR; ny = target.y - ndy / ndist * stopR; }
+            speed = Math.sqrt((nx - pos.x) * (nx - pos.x) + (ny - pos.y) * (ny - pos.y)) / Math.max(dt, 0.001);
+            pos.x = nx; pos.y = ny;
+            /* face travel direction (side view, never backwards) */
+            if (speed > 40 && Math.abs(dx) > 20) {
+              var want = dx > 0 ? Math.PI / 2 : -Math.PI / 2;
+              var diff = Math.atan2(Math.sin(want - faceYaw), Math.cos(want - faceYaw));
+              faceYaw += diff * (1 - Math.exp(-10 * dt));
+            }
+          }
+          place(pos.x, pos.y);
+        }
+        /* run/idle blend (attack fast, release slower, so no pops) */
+        var wantBlend = speed > 40 ? 1 : 0;
+        runBlend += (wantBlend - runBlend) * (1 - Math.exp(-(wantBlend ? 8 : 4) * dt));
+        if (runBlend > 0.01) runPhase += dt * 13;
+        /* idle: ease back to the subtle turn toward the pointer */
+        if (speed <= 40) {
+          var diff0 = Math.atan2(Math.sin(cYaw * 0.18 - faceYaw), Math.cos(cYaw * 0.18 - faceYaw));
+          faceYaw += diff0 * (1 - Math.exp(-5 * dt));
+        }
+
+        /* head smoothing (unchanged behaviour) */
         cYaw += (tYaw - cYaw) * 0.10;
         cPitch += (tPitch - cPitch) * 0.10;
         var player = viewer.playerObject;
         var head = player && player.skin && player.skin.head;
         if (!player || !head) return;
-        /* a hint of body turn toward the pointer, like the inventory model */
-        player.rotation.y = cYaw * 0.18;
+        player.rotation.y = faceYaw;
+        /* running pose: Minecraft limb-swing cycle, amplitude follows runBlend */
+        var skin = player.skin;
+        if (skin) {
+          var b = runBlend, ph = runPhase;
+          var lc = Math.cos(ph);
+          if (skin.leftLeg) skin.leftLeg.rotation.x = -1.3 * b * lc;
+          if (skin.rightLeg) skin.rightLeg.rotation.x = 1.3 * b * lc;
+          if (skin.leftArm) { skin.leftArm.rotation.x = 1.5 * b * lc; skin.leftArm.rotation.z = b * (0.1 * lc + 0.1 * Math.PI); }
+          if (skin.rightArm) { skin.rightArm.rotation.x = -1.5 * b * lc; skin.rightArm.rotation.z = b * (-0.1 * lc - 0.1 * Math.PI); }
+          player.position.y = b * Math.cos(2 * ph);
+          player.position.x = b * 0.15 * lc;
+          player.rotation.z = b * 0.01 * Math.cos(ph + Math.PI);
+        }
         var az = 0;
         try { if (viewer.controls && viewer.controls.getAzimuthalAngle) az = viewer.controls.getAzimuthalAngle(); } catch (e) {}
         var yaw = cYaw + az - player.rotation.y;
@@ -747,7 +1011,7 @@
         while (yaw < -Math.PI) yaw += Math.PI * 2;
         head.rotation.y = Math.max(-MAX_HEAD, Math.min(MAX_HEAD, yaw));
         head.rotation.x = cPitch;
-      })();
+      })(performance.now());
     })();
 
     function fit(){
