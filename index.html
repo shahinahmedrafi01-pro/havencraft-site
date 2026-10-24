@@ -62,7 +62,8 @@
     --cube-brd:rgba(147,51,234,.25);
     --cube-bg:linear-gradient(145deg,rgba(147,51,234,.12),rgba(147,51,234,.03));
     --focus:#7e22ce;
-    --bgwash:linear-gradient(180deg, rgba(250,246,238,.87), rgba(250,246,238,.91));
+    /* light wash over the new bright scenes — light enough that the photos stay visible */
+    --bgwash:linear-gradient(180deg, rgba(255,255,255,.28), rgba(255,255,255,.42));
     --glassbox:rgba(255,255,255,.22);
     --glassbox-hi:rgba(255,255,255,.40);
   }
@@ -85,7 +86,7 @@
      Phones — including phone desktop mode — get the portrait scene;
      large PC screens get the wide scene. cover-fit only: the artwork is
      never stretched or distorted. A theme wash above it keeps the glass
-     UI readable in both dark and light themes. */
+     UI readable in each theme. */
   body::before{
     content:"";position:fixed;top:0;left:0;right:0;height:100vh;height:100lvh;z-index:0;pointer-events:none;
     background:url('./bg-mobile.webp') center 30%/cover no-repeat;
@@ -103,6 +104,11 @@
   @media (min-width:1100px) and (pointer:fine), (min-width:1100px) and (min-aspect-ratio:13/10){
     body::before{background-image:url('./bg-desktop.webp');background-position:center}
   }
+  /* light theme uses the owner's new bright scenes; dark keeps the current scenes — never mixed */
+  :root[data-theme="light"] body::before{background-image:url('./bg-light-mobile.webp')}
+  @media (min-width:1100px) and (pointer:fine), (min-width:1100px) and (min-aspect-ratio:13/10){
+    :root[data-theme="light"] body::before{background-image:url('./bg-light-desktop.webp')}
+  }
 
   /* decorative glass cubes — light, mostly static */
   .bg{position:fixed;top:0;left:0;right:0;height:100vh;height:100lvh;overflow:hidden;z-index:0;pointer-events:none}
@@ -116,7 +122,7 @@
   @keyframes drift{from{margin-top:0}to{margin-top:14px}}
   .cube.c1,.cube.c3{animation:drift 13s ease-in-out infinite alternate}
 
-  .card{position:relative;z-index:1;width:100%;max-width:620px;margin:0 auto;text-align:center;padding:clamp(40px,8vh,76px) 22px 72px}
+  .card{position:relative;z-index:1;width:100%;max-width:620px;margin:0 auto;text-align:center;padding:clamp(72px,8vh,76px) 22px 72px}
 
   /* ---------- 3D avatar ---------- */
   .avatar-wrap{position:relative}
@@ -128,13 +134,6 @@
   h1{font-size:clamp(1.35rem,4.6vw,1.9rem);font-weight:700;line-height:1.3;letter-spacing:-.01em;margin:26px 0 30px}
 
   /* ---------- glass contact shortcuts ---------- */
-  .icon-row{display:flex;justify-content:center;gap:20px}
-  .icon-btn{position:relative;width:52px;height:52px;display:flex;align-items:center;justify-content:center;color:var(--accent2);background:var(--glassbox);backdrop-filter:blur(8px) saturate(1.25);-webkit-backdrop-filter:blur(8px) saturate(1.25);border-radius:14px;filter:drop-shadow(0 8px 18px rgba(0,0,0,.45)) drop-shadow(0 0 8px rgba(147,51,234,.25));transition:transform .18s ease,background .18s ease}
-  .icon-btn::before{content:"";position:absolute;inset:0;padding:1px;background:linear-gradient(135deg,rgba(192,132,252,.95),rgba(147,51,234,.55) 55%,rgba(192,132,252,.95));border-radius:inherit;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;pointer-events:none}
-  .icon-btn:hover{transform:translateY(-3px) scale(1.05);background:var(--glassbox-hi)}
-  .icon-btn:active{transform:scale(.96)}
-  .icon-btn svg{position:relative;z-index:1;width:23px;height:23px;fill:currentColor}
-  .icon-btn svg[fill="none"]{fill:none}
 
   /* ---------- glass social pills ---------- */
   .pills{display:flex;flex-direction:column;gap:14px;margin-top:38px}
@@ -144,17 +143,41 @@
   .pill:hover{transform:translateY(-2px);background:var(--glassbox-hi)}
   .pill:active{transform:scale(.985)}
   .pill svg{width:26px;height:26px;fill:var(--accent2);flex:0 0 26px}
+  /* contact row: two separate rounded pills (Call | Email) */
+  .contact-split{display:flex;gap:14px;margin-top:14px}
+  .contact-half{position:relative;flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:16px 12px;text-decoration:none;color:var(--ink);font-weight:600;font-size:1.05rem;background:var(--glassbox);backdrop-filter:blur(8px) saturate(1.25);-webkit-backdrop-filter:blur(8px) saturate(1.25);border-radius:16px;filter:drop-shadow(0 10px 22px rgba(0,0,0,.45)) drop-shadow(0 0 10px rgba(147,51,234,.25));transition:transform .18s ease,background .18s ease}
+  .contact-half::before{content:"";position:absolute;inset:0;padding:1px;background:linear-gradient(120deg,rgba(192,132,252,.95),rgba(147,51,234,.55) 50%,rgba(192,132,252,.95));border-radius:inherit;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;pointer-events:none}
+  .contact-half>*{position:relative;z-index:1}
+  .contact-half:hover{transform:translateY(-2px);background:var(--glassbox-hi)}
+  .contact-half:active{transform:scale(.985)}
+  .contact-half svg{width:24px;height:24px;fill:var(--accent2);flex:0 0 24px}
+  .contact-half svg[fill="none"]{fill:none;stroke:var(--accent2)}
 
   a:focus-visible, button:focus-visible{outline:2px solid var(--focus);outline-offset:3px}
 
-  /* ---------- three-dot settings ---------- */
-  .menu-wrap{position:fixed;top:14px;left:14px;z-index:60}
-  .menu-btn{width:44px;height:44px;border-radius:50%;background:var(--glass);border:1px solid var(--glass-brd);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:var(--shadow);color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .18s ease,transform .18s ease}
-  .menu-btn:hover{background:var(--glass-hi)}
-  .menu-btn:active{transform:scale(.94)}
-  .menu-btn svg{width:20px;height:20px;fill:currentColor}
-  .settings{position:absolute;top:54px;left:0;width:min(238px,82vw);background:var(--glass);border:1px solid var(--glass-brd);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-radius:18px;box-shadow:var(--shadow);padding:14px;text-align:left}
+  /* ---------- top bar + panels ---------- */
+  .topbar{position:fixed;top:0;left:0;right:0;height:56px;z-index:60;display:flex;align-items:center;justify-content:space-between;padding:0 12px;background:var(--glass);backdrop-filter:blur(16px) saturate(1.3);-webkit-backdrop-filter:blur(16px) saturate(1.3)}
+  .topbar-right{display:flex;align-items:center;gap:10px}
+  .topbar-btn{position:relative;width:40px;height:40px;border-radius:50%;background:transparent;border:1px solid var(--glass-brd);color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .18s ease,transform .18s ease;flex:0 0 40px}
+  .topbar-btn:hover{background:var(--glass-hi)}
+  .topbar-btn:active{transform:scale(.94)}
+  .topbar-btn svg{width:22px;height:22px}
+  /* theme icon morph: moon and sun crossfade + rotate + scale, slowly */
+  .theme-toggle svg{position:absolute;inset:0;margin:auto;transition:opacity .45s ease,transform .45s ease}
+  .theme-toggle .ic-moon{opacity:1;transform:rotate(0deg) scale(1)}
+  .theme-toggle .ic-sun{opacity:0;transform:rotate(-90deg) scale(.5)}
+  :root[data-theme="light"] .theme-toggle .ic-moon{opacity:0;transform:rotate(90deg) scale(.5)}
+  :root[data-theme="light"] .theme-toggle .ic-sun{opacity:1;transform:rotate(0deg) scale(1)}
+  /* music mute slash: sits exactly centered; drops down from above when muted, rises back up when unmuted */
+  .music-btn .slash{position:absolute;left:50%;top:50%;width:28px;height:2.5px;margin-left:-14px;margin-top:-1.25px;background:currentColor;border-radius:2px;transform:translateY(-30px) rotate(45deg);opacity:0;transition:transform .45s ease,opacity .3s ease;pointer-events:none}
+  .music-btn.muted .slash{transform:translateY(0) rotate(45deg);opacity:1}
+  /* settings gear turns slightly when its panel opens */
+  #settingsBtn svg{transition:transform .35s ease}
+  #settingsBtn[aria-expanded="true"] svg{transform:rotate(45deg)}
+  .settings{position:fixed;top:64px;right:12px;z-index:70;width:min(264px,82vw);background:var(--glass);border:1px solid var(--glass-brd);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-radius:18px;box-shadow:var(--shadow);padding:14px;text-align:left}
   .settings[hidden]{display:none}
+  .nav-panel{position:fixed;top:64px;left:12px;z-index:70;width:min(264px,82vw);min-height:48px;background:var(--glass);border:1px solid var(--glass-brd);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-radius:18px;box-shadow:var(--shadow);padding:14px}
+  .nav-panel[hidden]{display:none}
   .set-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:4px 2px}
   .set-label{font-weight:600;font-size:.95rem}
   .set-note{font-size:.78rem;color:var(--muted);padding:4px 2px 0}
@@ -170,6 +193,8 @@
   .theme-opt .check{color:var(--accent2);font-weight:800;visibility:hidden}
   .theme-opt[aria-checked="true"] .check{visibility:visible}
   .theme-opt[aria-checked="true"]{border-color:var(--accent)}
+  .theme-name{display:inline-flex;align-items:center;gap:8px}
+  .rec{font-size:.58rem;font-weight:700;letter-spacing:.04em;color:var(--accent2);background:rgba(168,85,247,.14);border:1px solid var(--glass-brd);padding:1px 6px;border-radius:999px}
 
   /* scroll reveal (kept from the original page) */
   .rv{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
@@ -182,7 +207,6 @@
   @media (max-width:480px){
     .skin-viewer{height:336px}
     h1{margin:22px 0 26px}
-    .icon-btn{width:48px;height:48px}
   }
   @media (prefers-reduced-motion: reduce){
     .cube{animation:none}
@@ -227,6 +251,11 @@
   /* on large PC screens the entry uses the wide scene, same as the page */
   @media (min-width:1100px) and (pointer:fine), (min-width:1100px) and (min-aspect-ratio:13/10){
     .entry-art::before{background-image:url('./bg-desktop.webp');background-position:center}
+  }
+  /* entry gate follows the theme too: light shows the new bright scenes */
+  :root[data-theme="light"] .entry-art::before{background-image:url('./bg-light-mobile.webp')}
+  @media (min-width:1100px) and (pointer:fine), (min-width:1100px) and (min-aspect-ratio:13/10){
+    :root[data-theme="light"] .entry-art::before{background-image:url('./bg-light-desktop.webp')}
   }
   .entry-art .nebula{
     position:absolute;left:-32%;top:9%;width:165%;height:36%;
@@ -339,27 +368,42 @@
 
   <div class="bg" aria-hidden="true"><div class="cube c1"></div><div class="cube c2"></div><div class="cube c3"></div><div class="cube c4"></div><div class="cube c5"></div></div>
 
-  <!-- Settings menu (button at top-left) -->
-  <div class="menu-wrap">
-    <button id="menuBtn" class="menu-btn" type="button" aria-label="Settings" aria-haspopup="true" aria-expanded="false" aria-controls="settingsMenu">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" fill="none"/></svg>
+  <!-- Top bar: hamburger (empty menu for now) on the left; music, theme quick-toggle and settings on the right -->
+  <header class="topbar">
+    <button id="navBtn" class="topbar-btn" type="button" aria-label="Menu" aria-haspopup="true" aria-expanded="false" aria-controls="navMenu">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" fill="none"/></svg>
     </button>
-    <div id="settingsMenu" class="settings" role="menu" aria-label="Settings" hidden>
-      <div class="set-row">
-        <span class="set-label" id="musicLabel">Music</span>
-        <button id="musicToggle" class="switch" type="button" role="switch" aria-checked="false" aria-labelledby="musicLabel">
-          <span class="track" aria-hidden="true"></span><span id="musicState">Off</span>
-        </button>
-      </div>
-      <p id="musicNote" class="set-note" hidden>Music unavailable right now.</p>
-      <p class="set-note">Track: Love Story</p>
-      <div class="set-sep" aria-hidden="true"></div>
-      <div class="set-row" style="flex-direction:column;align-items:stretch">
-        <span class="set-label">Theme</span>
-        <div class="theme-opts">
-          <button class="theme-opt" type="button" role="menuitemradio" aria-checked="true" data-set-theme="dark">Dark Theme <span class="check" aria-hidden="true">&#10003;</span></button>
-          <button class="theme-opt" type="button" role="menuitemradio" aria-checked="false" data-set-theme="light">Light Theme <span class="check" aria-hidden="true">&#10003;</span></button>
-        </div>
+    <div class="topbar-right">
+      <button id="musicToggleTop" class="topbar-btn music-btn" type="button" role="switch" aria-checked="false" aria-label="Music">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l12-2v13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="18" r="3" fill="none" stroke="currentColor" stroke-width="2.4"/><circle cx="18" cy="16" r="3" fill="none" stroke="currentColor" stroke-width="2.4"/></svg>
+        <span class="slash" aria-hidden="true"></span>
+      </button>
+      <button id="themeToggleTop" class="topbar-btn theme-toggle" type="button" aria-label="Switch to light theme">
+        <svg class="ic-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="ic-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><path d="M12 5V2.5M12 21.5V19M5 12H2.5M21.5 12H19M6.95 6.95L5.28 5.28M18.72 18.72L17.05 17.05M17.05 6.95L18.72 5.28M5.28 18.72L6.95 17.05" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>
+      </button>
+      <button id="settingsBtn" class="topbar-btn" type="button" aria-label="Settings" aria-haspopup="true" aria-expanded="false" aria-controls="settingsMenu">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M 9.93 3.04 A 9.2 9.2 0 0 1 14.07 3.04 L 14.05 5.31 A 7.0 7.0 0 0 1 16.77 6.88 L 18.73 5.73 A 9.2 9.2 0 0 1 20.80 9.31 L 18.82 10.43 A 7.0 7.0 0 0 1 18.82 13.57 L 20.80 14.69 A 9.2 9.2 0 0 1 18.73 18.27 L 16.77 17.12 A 7.0 7.0 0 0 1 14.05 18.69 L 14.07 20.96 A 9.2 9.2 0 0 1 9.93 20.96 L 9.95 18.69 A 7.0 7.0 0 0 1 7.23 17.12 L 5.27 18.27 A 9.2 9.2 0 0 1 3.20 14.69 L 5.18 13.57 A 7.0 7.0 0 0 1 5.18 10.43 L 3.20 9.31 A 9.2 9.2 0 0 1 5.27 5.73 L 7.23 6.88 A 7.0 7.0 0 0 1 9.95 5.31 Z" fill="none" stroke="currentColor" stroke-width="2.0" stroke-linejoin="round"/><circle cx="12" cy="12" r="3.4" fill="none" stroke="currentColor" stroke-width="2.0"/></svg>
+      </button>
+    </div>
+  </header>
+  <!-- Empty menu for now — items will be added later -->
+  <div id="navMenu" class="nav-panel" role="menu" aria-label="Menu" hidden></div>
+  <div id="settingsMenu" class="settings" role="menu" aria-label="Settings" hidden>
+    <div class="set-row">
+      <span class="set-label" id="musicLabel">Music</span>
+      <button id="musicToggle" class="switch" type="button" role="switch" aria-checked="false" aria-labelledby="musicLabel">
+        <span class="track" aria-hidden="true"></span><span id="musicState">Off</span>
+      </button>
+    </div>
+    <p id="musicNote" class="set-note" hidden>Music unavailable right now.</p>
+    <p class="set-note">Track: Love Story</p>
+    <div class="set-sep" aria-hidden="true"></div>
+    <div class="set-row" style="flex-direction:column;align-items:stretch">
+      <span class="set-label">Theme</span>
+      <div class="theme-opts">
+        <button class="theme-opt" type="button" role="menuitemradio" aria-checked="true" data-set-theme="dark"><span class="theme-name">Dark Theme <span class="rec">recommended</span></span> <span class="check" aria-hidden="true">&#10003;</span></button>
+        <button class="theme-opt" type="button" role="menuitemradio" aria-checked="false" data-set-theme="light">Light Theme <span class="check" aria-hidden="true">&#10003;</span></button>
       </div>
     </div>
   </div>
@@ -373,18 +417,6 @@
     </div>
 
     <h1 class="rv">Life is short focus on what truly matters, grow daily, and leave a positive impact.</h1>
-
-    <div class="icon-row rv">
-      <a class="icon-btn" href="sms:+8801516523070" aria-label="Message" title="Message">
-        <svg viewBox="0 0 24 24"><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/></svg>
-      </a>
-      <a class="icon-btn" href="tel:+8801516523070" aria-label="Mobile" title="Mobile">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><line x1="10.6" y1="18.6" x2="13.4" y2="18.6" stroke-linecap="round"/></svg>
-      </a>
-      <a class="icon-btn" href="mailto:user@domain.ext" aria-label="Email" title="Email">
-        <svg viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4-8 5-8-5V6l8 5 8-5z"/></svg>
-      </a>
-    </div>
 
     <div class="pills">
       <a class="pill rv" href="https://www.facebook.com/shahinahmedrafi02" target="_blank" rel="noopener">
@@ -403,9 +435,16 @@
         <span>Telegram</span>
         <svg viewBox="0 0 24 24"><path d="M21.9 4.6 2.7 12.1c-.8.3-.8 1.4.1 1.6l4.8 1.5 1.8 5.7c.3.8 1.3.9 1.8.2l2.6-3.1 5 3.7c.6.4 1.4.1 1.7-.5l3.9-14.5c.3-.9-.6-1.7-1.5-1.1zM8.5 13.1l9.7-6.6c.2-.1.4.1.2.3l-8 7.4-.3 3-1.6-4.1z"/></svg>
       </a>
-      <a class="pill rv" href="https://wa.me/+8801516523070" target="_blank" rel="noopener">
-        <span>WhatsApp</span>
-        <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.4 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.4-.7-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .6l-.4.6-.5.5c-.2.2-.3.4-.1.7.2.3.9 1.5 2 2.4 1.4 1.2 2.5 1.6 2.9 1.8.3.2.5.2.7-.1l1-1.2c.2-.3.4-.2.7-.1l2 1c.3.1.5.2.6.4 0 .1 0 .7-.2 1.4z"/></svg>
+    </div>
+
+    <div class="contact-split rv">
+      <a class="contact-half" href="tel:+8809638766466" aria-label="Call">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><line x1="10.6" y1="18.6" x2="13.4" y2="18.6" stroke-linecap="round"/></svg>
+        <span>Call</span>
+      </a>
+      <a class="contact-half" href="mailto:user@domain.ext" aria-label="Email">
+        <svg viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4-8 5-8-5V6l8 5 8-5z"/></svg>
+        <span>Email</span>
       </a>
     </div>
   </main>
@@ -444,37 +483,55 @@
     els.forEach(function(el){ io.observe(el); });
   }
 
-  /* ================= settings menu ================= */
-  var menuBtn = document.getElementById('menuBtn');
-  var menu = document.getElementById('settingsMenu');
-  function openMenu(){
-    menu.hidden = false;
-    menuBtn.setAttribute('aria-expanded', 'true');
+  /* ================= top bar panels ================= */
+  var navBtn = document.getElementById('navBtn');
+  var navMenu = document.getElementById('navMenu');
+  var settingsBtn = document.getElementById('settingsBtn');
+  var settingsMenu = document.getElementById('settingsMenu');
+  function openPanel(btn, panel){
+    panel.hidden = false;
+    btn.setAttribute('aria-expanded', 'true');
   }
-  function closeMenu(focusBack){
-    menu.hidden = true;
-    menuBtn.setAttribute('aria-expanded', 'false');
-    if (focusBack) menuBtn.focus();
+  function closePanel(btn, panel, focusBack){
+    panel.hidden = true;
+    btn.setAttribute('aria-expanded', 'false');
+    if (focusBack) btn.focus();
   }
-  menuBtn.addEventListener('click', function(ev){
+  function closeAllPanels(focusBack){
+    closePanel(navBtn, navMenu, false);
+    closePanel(settingsBtn, settingsMenu, focusBack ? true : false);
+  }
+  navBtn.addEventListener('click', function(ev){
     ev.stopPropagation();
-    if (menu.hidden) openMenu(); else closeMenu(false);
+    var wasHidden = navMenu.hidden;
+    closePanel(settingsBtn, settingsMenu, false);
+    if (wasHidden) openPanel(navBtn, navMenu); else closePanel(navBtn, navMenu, false);
+  });
+  settingsBtn.addEventListener('click', function(ev){
+    ev.stopPropagation();
+    var wasHidden = settingsMenu.hidden;
+    closePanel(navBtn, navMenu, false);
+    if (wasHidden) openPanel(settingsBtn, settingsMenu); else closePanel(settingsBtn, settingsMenu, false);
   });
   document.addEventListener('pointerdown', function(ev){
-    if (!menu.hidden && !menu.contains(ev.target) && ev.target !== menuBtn && !menuBtn.contains(ev.target)) closeMenu(false);
+    if (!navMenu.hidden && !navMenu.contains(ev.target) && ev.target !== navBtn && !navBtn.contains(ev.target)) closePanel(navBtn, navMenu, false);
+    if (!settingsMenu.hidden && !settingsMenu.contains(ev.target) && ev.target !== settingsBtn && !settingsBtn.contains(ev.target)) closePanel(settingsBtn, settingsMenu, false);
   });
   document.addEventListener('keydown', function(ev){
-    if (ev.key === 'Escape' && !menu.hidden) closeMenu(true);
+    if (ev.key === 'Escape' && (!navMenu.hidden || !settingsMenu.hidden)) closeAllPanels(true);
   });
-  menu.addEventListener('click', function(ev){ ev.stopPropagation(); });
+  navMenu.addEventListener('click', function(ev){ ev.stopPropagation(); });
+  settingsMenu.addEventListener('click', function(ev){ ev.stopPropagation(); });
 
   /* ================= theme ================= */
   var themeOpts = document.querySelectorAll('[data-set-theme]');
+  var themeToggleTop = document.getElementById('themeToggleTop');
   function reflectTheme(){
     var cur = document.documentElement.getAttribute('data-theme') || 'dark';
     themeOpts.forEach(function(b){
       b.setAttribute('aria-checked', b.getAttribute('data-set-theme') === cur ? 'true' : 'false');
     });
+    if (themeToggleTop) themeToggleTop.setAttribute('aria-label', cur === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
   }
   themeOpts.forEach(function(b){
     b.addEventListener('click', function(){
@@ -482,8 +539,15 @@
       document.documentElement.setAttribute('data-theme', t);
       store('rafiprx-theme', t);
       reflectTheme();
-      closeMenu(false);
+      closePanel(settingsBtn, settingsMenu, false);
     });
+  });
+  themeToggleTop.addEventListener('click', function(){
+    var cur = document.documentElement.getAttribute('data-theme') || 'dark';
+    var t = cur === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+    store('rafiprx-theme', t);
+    reflectTheme();
   });
   reflectTheme();
 
@@ -493,14 +557,21 @@
   audio.volume = 0.5;
   var musicToggle = document.getElementById('musicToggle');
   var musicState = document.getElementById('musicState');
+  var musicToggleTop = document.getElementById('musicToggleTop');
   var musicNote = document.getElementById('musicNote');
   var musicWanted = read('rafiprx-music') === 'on';
   var musicBroken = false;
 
   function reflectMusic(){
     var on = musicWanted && !audio.paused;
-    musicToggle.setAttribute('aria-checked', (musicWanted && !musicBroken) ? 'true' : 'false');
+    var checked = (musicWanted && !musicBroken) ? 'true' : 'false';
+    musicToggle.setAttribute('aria-checked', checked);
     musicState.textContent = on ? 'On' : 'Off';
+    if (musicToggleTop){
+      musicToggleTop.setAttribute('aria-checked', checked);
+      musicToggleTop.classList.toggle('muted', !(musicWanted && !musicBroken));
+      musicToggleTop.setAttribute('aria-label', (musicWanted && !musicBroken) ? 'Turn music off' : 'Turn music on');
+    }
     musicNote.hidden = !musicBroken;
   }
   function tryPlay(){
@@ -517,6 +588,7 @@
     else { audio.pause(); reflectMusic(); }
   }
   musicToggle.addEventListener('click', function(){ setMusic(!musicWanted); });
+  if (musicToggleTop) musicToggleTop.addEventListener('click', function(){ setMusic(!musicWanted); });
   audio.addEventListener('error', function(){
     musicBroken = true;
     musicWanted = false;
