@@ -731,9 +731,9 @@
        drag positioning while dragging). Links stay clickable: while chasing, the character stops
        ~100px short of the cursor, so the click point is never under it;
        it only closes right in when the pointer is already over it, so it
-       can still be grabbed and dragged. Movement is clamped to the area
-       below the top bar down to just past the contact links, and the
-       character renders above the card but below the top bar and panels.
+       can still be grabbed and dragged. Movement covers the whole visible
+       viewport (8px margin), and the character renders above the card but
+       below the top bar and panels.
        SPEED MODELS (keyed off the event's pointerType, never the UA or
        the layout, so a phone in Desktop Site mode still gets phone
        behaviour): touch = one fixed comfortable pace (gain 3.5, cap
@@ -825,17 +825,19 @@
         if (dragging) e.preventDefault();
       }, { passive: false });
 
+      /* Full visible viewport, 8px margin on every side: the character's
+         box always stays fully on screen, and its centre can reach every
+         corner and edge. Bounds come from the actual viewport size read
+         fresh on every call — never from the card, the links, or any fixed
+         height — so tall viewports (e.g. a phone in Desktop Site mode,
+         where the layout viewport is much taller than the card) get their
+         whole bottom half too. The min/max guards keep a valid range on
+         viewports narrower or shorter than the character itself. */
       function clampTarget(tx, ty){
         var h = halfSize();
         var vw = window.innerWidth, vh = window.innerHeight;
         var left = Math.min(h.hw + 8, vw / 2), right = Math.max(vw - h.hw - 8, vw / 2);
-        var top = 64, bottom = vh * 0.75;
-        var links = document.querySelector('.contact-split') || document.querySelector('.pills');
-        if (links) {
-          var lb = links.getBoundingClientRect().bottom;
-          if (lb > 140) bottom = Math.min(lb + 48, vh - 30);
-          if (bottom < top + 80) bottom = vh * 0.75;
-        }
+        var top = Math.min(h.hh + 8, vh / 2), bottom = Math.max(vh - h.hh - 8, vh / 2);
         return { x: Math.max(left, Math.min(right, tx)), y: Math.max(top, Math.min(bottom, ty)) };
       }
       function setHeadTarget(clientX, clientY){
