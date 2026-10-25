@@ -386,6 +386,10 @@
   .drawer-link[aria-current="page"]{background:rgba(168,85,247,.28);font-weight:800}
   .drawer-foot{border-top:1px solid rgba(168,85,247,.28);padding:12px 16px}
   .drawer-foot .drawer-link{margin:2px 0}
+  .drawer-standalone{display:flex;align-items:center;gap:12px;margin:2px 0 6px;padding:11px 10px;border-radius:12px;color:#f5f3fb;text-decoration:none;font-size:.98rem;font-weight:700;transition:background .18s ease}
+  .drawer-standalone:hover{background:rgba(168,85,247,.14)}
+  .drawer-standalone svg{width:22px;height:22px;flex:0 0 22px;color:#c084fc}
+  .drawer-standalone[aria-current="page"]{background:rgba(168,85,247,.28);font-weight:800}
 
   /* ================= destination views (preview) ================= */
   #destViews{position:relative;z-index:1;width:100%;max-width:620px;margin:0 auto;padding:clamp(72px,8vh,76px) 22px 72px}
@@ -403,6 +407,9 @@
   .dest-card::before{content:"";position:absolute;inset:0;padding:1px;background:linear-gradient(120deg,rgba(192,132,252,.95),rgba(147,51,234,.55) 50%,rgba(192,132,252,.95));border-radius:inherit;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;pointer-events:none}
   .dest-card>*{position:relative;z-index:1}
   .dest-card h3{font-size:1.05rem;margin-bottom:6px}
+  .skill-head{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+  .skill-head svg{width:22px;height:22px;flex:0 0 22px;color:#c084fc}
+  .skill-head h3{margin-bottom:0}
   .dest-card p{color:var(--muted);line-height:1.6;font-size:.95rem}
   .dest-card p strong{color:var(--ink)}
   .dest-card-link{display:block;color:var(--ink);text-decoration:none;transition:filter .18s ease}
@@ -490,6 +497,10 @@
       </button>
     </div>
     <div class="drawer-cats">
+      <a class="drawer-link drawer-standalone" data-route="" href="/">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-7 8 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 10v10h12V10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 20v-6h4v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Home</span>
+      </a>
       <div class="drawer-cat">
         <button class="drawer-cat-btn" type="button" aria-expanded="false" aria-controls="drawer-items-personal">
           <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 20c0-3.3 3.6-5 8-5s8 1.7 8 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -503,6 +514,10 @@
           <li><a class="drawer-link" data-route="experiments" href="/experiments">Experiments</a></li>
         </ul></div>
       </div>
+      <a class="drawer-link drawer-standalone" data-route="skills" href="/skills">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8L19 15z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Skills</span>
+      </a>
       <div class="drawer-cat">
         <button class="drawer-cat-btn" type="button" aria-expanded="false" aria-controls="drawer-items-gaming">
           <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="11" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M7 11v4M5 13h4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="17" cy="12" r="1.1" fill="currentColor"/><circle cx="19" cy="14.5" r="1.1" fill="currentColor"/></svg>
@@ -636,6 +651,79 @@
       </div>
     </section>
 
+    <section class="dest" id="view-skills" data-route="skills" hidden>
+      <h2>Skills</h2>
+      <div class="dest-card skill-card">
+        <div class="skill-head">
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/><path d="M12 12l8-4.5M12 12L4 7.5M12 12v9"/></svg>
+          <h3>Minecraft Server Management</h3>
+        </div>
+        <p>Experience managing Minecraft servers, configuring plugins and permissions, organizing server events, maintaining rules, and handling player-related issues.</p>
+      </div>
+      <div class="dest-card skill-card">
+        <div class="skill-head">
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/></svg>
+          <h3>Website Development &amp; Project Planning</h3>
+        </div>
+        <p>Experience planning website pages, features, navigation, responsive layouts, and interactive elements while working with GitHub and website development tools.</p>
+      </div>
+      <div class="dest-card skill-card">
+        <div class="skill-head">
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8L19 15z"/></svg>
+          <h3>AI Tools &amp; AI Agent Management</h3>
+        </div>
+        <p>Using AI tools and AI agents to assist with website development, research, troubleshooting, content creation, and project execution.</p>
+      </div>
+      <div class="dest-card skill-card">
+        <div class="skill-head">
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.4"/><path d="M2.5 19c.8-3 3.4-4.5 6.5-4.5S14.7 16 15.5 19"/><circle cx="17" cy="9" r="2.6"/><path d="M15.5 14.6c2.6.3 4.4 1.7 5 4.4"/></svg>
+          <h3>Discord Community &amp; Team Management</h3>
+        </div>
+        <p>Experience managing Discord communities, organizing staff responsibilities, configuring roles and channels, handling reports, and coordinating community events.</p>
+      </div>
+      <div class="dest-card skill-card">
+        <div class="skill-head">
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          <h3>Technical Troubleshooting</h3>
+        </div>
+        <p>Identifying technical issues, investigating possible causes, testing solutions, and improving websites, server configurations, software, and device setups.</p>
+      </div>
+      <div class="dest-card skill-card">
+        <div class="skill-head">
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6c-2-1.5-4.5-2-8-2v16c3.5 0 6 .5 8 2 2-1.5 4.5-2 8-2V4c-3.5 0-6 .5-8 2z"/><path d="M12 6v16"/></svg>
+          <h3>Technology Research &amp; Learning</h3>
+        </div>
+        <p>Researching technologies, comparing tools and services, exploring documentation, learning new concepts, and finding practical ways to apply them to projects.</p>
+      </div>
+      <div class="dest-card skill-card">
+        <div class="skill-head">
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+          <h3>UI/UX Design &amp; Visual Direction</h3>
+        </div>
+        <p>Planning user interfaces, navigation, icons, layouts, themes, animations, and interactions with a focus on usability and responsive design.</p>
+      </div>
+      <div class="dest-card skill-card">
+        <div class="skill-head">
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5.5" width="19" height="13" rx="2.5"/><path d="M10 9.5l5 2.5-5 2.5z"/></svg>
+          <h3>Content Creation &amp; Automation Planning</h3>
+        </div>
+        <p>Planning AI-assisted video content, Bengali narration, short-form videos, publishing schedules, branding, and automated content workflows.</p>
+      </div>
+      <div class="dest-card skill-card">
+        <div class="skill-head">
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11M4 6l.8.8L6.5 5M4 12l.8.8L6.5 11M4 18l.8.8L6.5 17"/></svg>
+          <h3>Project Management &amp; Feature Planning</h3>
+        </div>
+        <p>Breaking projects into smaller tasks, defining requirements, prioritizing features, coordinating AI-assisted work, reviewing results, and planning improvements.</p>
+      </div>
+      <div class="dest-card skill-card">
+        <div class="skill-head">
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-8 8H4l2-3.5A8 8 0 1 1 21 12z"/><path d="M8 11h8M8 14h5"/></svg>
+          <h3>Technical Communication &amp; Prompt Writing</h3>
+        </div>
+        <p>Writing clear instructions for AI agents, explaining technical problems, reviewing generated results, requesting revisions, and preparing documentation and announcements.</p>
+      </div>
+    </section>
     <section class="dest" id="view-projects" data-route="projects" hidden>
       <h2>My Projects</h2>
       <p class="dest-intro">Things I have built or help run.</p>
@@ -1505,7 +1593,7 @@
      links still work: they are rewritten to the clean path on load. The
      entry gate overlays first load and routing applies underneath it. */
   var ROUTES = {
-    'about': 'view-about', 'projects': 'view-projects', 'apps-tools': 'view-apps-tools',
+    'about': 'view-about', 'skills': 'view-skills', 'projects': 'view-projects', 'apps-tools': 'view-apps-tools',
     'experiments': 'view-experiments', 'minecraft-world': 'view-minecraft-world',
     'servers': 'view-servers', 'gaming-hub': 'view-gaming-hub', 'gaming-setup': 'view-gaming-setup',
     'youtube': 'view-youtube', 'designs': 'view-designs', 'music': 'view-music',
