@@ -45,8 +45,9 @@
     --cube-bg:linear-gradient(145deg,rgba(168,85,247,.16),rgba(168,85,247,.03));
     --focus:#d8b4fe;
     --bgwash:linear-gradient(180deg, rgba(7,4,16,.50), rgba(7,4,16,.64));
-    --glassbox:rgba(24,16,46,.16);
-    --glassbox-hi:rgba(40,28,72,.30);
+    /* border-only cards: glass fill removed (Sir's order 2026-10-25) */
+    --glassbox:transparent;
+    --glassbox-hi:transparent;
   }
   :root[data-theme="light"]{
     color-scheme:light;
@@ -67,8 +68,8 @@
     --focus:#7e22ce;
     /* light wash over the new bright scenes — light enough that the photos stay visible */
     --bgwash:linear-gradient(180deg, rgba(255,255,255,.28), rgba(255,255,255,.42));
-    --glassbox:rgba(255,255,255,.22);
-    --glassbox-hi:rgba(255,255,255,.40);
+    --glassbox:transparent;
+    --glassbox-hi:transparent;
   }
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
@@ -142,7 +143,7 @@
 
   /* ---------- glass social pills ---------- */
   .pills{display:flex;flex-direction:column;gap:14px;margin-top:38px}
-  .pill{position:relative;display:flex;align-items:center;justify-content:space-between;padding:16px 24px;text-decoration:none;color:var(--ink);font-weight:600;font-size:1.05rem;background:var(--glassbox);backdrop-filter:blur(8px) saturate(1.25);-webkit-backdrop-filter:blur(8px) saturate(1.25);border-radius:16px;filter:drop-shadow(0 10px 22px rgba(0,0,0,.45)) drop-shadow(0 0 10px rgba(147,51,234,.25));transition:transform .18s ease,background .18s ease}
+  .pill{position:relative;display:flex;align-items:center;justify-content:space-between;padding:16px 24px;text-decoration:none;color:var(--ink);font-weight:600;font-size:1.05rem;background:var(--glassbox);border:1px solid rgba(168,85,247,.35);border-radius:16px;filter:drop-shadow(0 10px 22px rgba(0,0,0,.45)) drop-shadow(0 0 10px rgba(147,51,234,.25));transition:transform .18s ease,background .18s ease}
   .pill::before{content:"";position:absolute;inset:0;padding:1px;background:linear-gradient(120deg,rgba(192,132,252,.95),rgba(147,51,234,.55) 50%,rgba(192,132,252,.95));border-radius:inherit;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;pointer-events:none}
   .pill>*{position:relative;z-index:1}
   .pill:hover{transform:translateY(-2px);background:var(--glassbox-hi)}
@@ -150,7 +151,7 @@
   .pill svg{width:26px;height:26px;fill:var(--accent2);flex:0 0 26px}
   /* contact row: two separate rounded pills (Call | Email) */
   .contact-split{display:flex;gap:14px;margin-top:14px}
-  .contact-half{position:relative;flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:16px 12px;text-decoration:none;color:var(--ink);font-weight:600;font-size:1.05rem;background:var(--glassbox);backdrop-filter:blur(8px) saturate(1.25);-webkit-backdrop-filter:blur(8px) saturate(1.25);border-radius:16px;filter:drop-shadow(0 10px 22px rgba(0,0,0,.45)) drop-shadow(0 0 10px rgba(147,51,234,.25));transition:transform .18s ease,background .18s ease}
+  .contact-half{position:relative;flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:16px 12px;text-decoration:none;color:var(--ink);font-weight:600;font-size:1.05rem;background:var(--glassbox);border:1px solid rgba(168,85,247,.35);border-radius:16px;filter:drop-shadow(0 10px 22px rgba(0,0,0,.45)) drop-shadow(0 0 10px rgba(147,51,234,.25));transition:transform .18s ease,background .18s ease}
   .contact-half::before{content:"";position:absolute;inset:0;padding:1px;background:linear-gradient(120deg,rgba(192,132,252,.95),rgba(147,51,234,.55) 50%,rgba(192,132,252,.95));border-radius:inherit;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;pointer-events:none}
   .contact-half>*{position:relative;z-index:1}
   .contact-half:hover{transform:translateY(-2px);background:var(--glassbox-hi)}
@@ -317,7 +318,6 @@
     letter-spacing:.30em;text-indent:.30em;text-transform:uppercase;color:#ecd9ff;
     padding:17px 30px;border:none;
     background:var(--glassbox);
-    backdrop-filter:blur(14px) saturate(1.35);-webkit-backdrop-filter:blur(14px) saturate(1.35);
     border-radius:16px;
     transition:filter .2s ease,background .2s ease;
   }
@@ -400,8 +400,8 @@
   .dest-muted{color:var(--muted)}
   .back-home{display:inline-flex;text-decoration:none;color:var(--accent2);font-weight:700;font-size:.92rem;padding:6px 2px}
   .dest-card{
-    position:relative;background:var(--glassbox);backdrop-filter:blur(8px) saturate(1.25);
-    -webkit-backdrop-filter:blur(8px) saturate(1.25);border-radius:16px;padding:18px 20px;margin-bottom:14px;
+    position:relative;background:var(--glassbox);
+    border-radius:16px;padding:18px 20px;margin-bottom:14px;
     filter:drop-shadow(0 10px 22px rgba(0,0,0,.35));
   }
   .dest-card::before{content:"";position:absolute;inset:0;padding:1px;background:linear-gradient(120deg,rgba(192,132,252,.95),rgba(147,51,234,.55) 50%,rgba(192,132,252,.95));border-radius:inherit;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;pointer-events:none}
@@ -423,7 +423,7 @@
   .gh-items.open{grid-template-rows:1fr}
   .gh-items > div{overflow:hidden;min-height:0}
   .gh-grid{display:grid;gap:12px;grid-template-columns:1fr;padding-top:12px}
-  .gh-card{position:relative;background:var(--glassbox);backdrop-filter:blur(8px) saturate(1.25);-webkit-backdrop-filter:blur(8px) saturate(1.25);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+  .gh-card{position:relative;background:var(--glassbox);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
   .gh-card::before{content:"";position:absolute;inset:0;padding:1px;background:linear-gradient(120deg,rgba(192,132,252,.95),rgba(147,51,234,.55) 50%,rgba(192,132,252,.95));border-radius:inherit;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;pointer-events:none}
   .gh-card > *{position:relative;z-index:1}
   .gh-body{padding:16px 18px;display:flex;flex-direction:column;gap:6px;flex:1}
