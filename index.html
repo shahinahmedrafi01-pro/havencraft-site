@@ -410,6 +410,31 @@
   .skill-head{display:flex;align-items:center;gap:10px;margin-bottom:6px}
   .skill-head svg{width:22px;height:22px;flex:0 0 22px;color:#c084fc}
   .skill-head h3{margin-bottom:0}
+
+  /* ================= gaming hub ================= */
+  .gh-favs{margin-bottom:20px;scroll-margin-top:72px}
+  .gh-favs-title{font-size:1.05rem;margin:0 0 12px}
+  .gh-cat{margin-bottom:14px;scroll-margin-top:72px}
+  .gh-cat-head{width:100%;display:flex;align-items:center;gap:10px;background:var(--glassbox);border:1px solid rgba(168,85,247,.35);border-radius:14px;padding:13px 16px;color:var(--ink);font:inherit;font-weight:700;font-size:.98rem;text-align:left;cursor:pointer}
+  .gh-cat-head .gh-count{margin-left:auto;color:var(--muted);font-size:.85rem;font-weight:600}
+  .gh-cat-head .gh-chev{width:18px;height:18px;flex:0 0 18px;color:#c084fc;transition:transform .25s ease}
+  .gh-cat-head[aria-expanded="true"] .gh-chev{transform:rotate(180deg)}
+  .gh-items{display:grid;grid-template-rows:0fr;transition:grid-template-rows .28s ease}
+  .gh-items.open{grid-template-rows:1fr}
+  .gh-items > div{overflow:hidden;min-height:0}
+  .gh-grid{display:grid;gap:12px;grid-template-columns:1fr;padding-top:12px}
+  .gh-card{position:relative;background:var(--glassbox);backdrop-filter:blur(8px) saturate(1.25);-webkit-backdrop-filter:blur(8px) saturate(1.25);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+  .gh-card::before{content:"";position:absolute;inset:0;padding:1px;background:linear-gradient(120deg,rgba(192,132,252,.95),rgba(147,51,234,.55) 50%,rgba(192,132,252,.95));border-radius:inherit;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;pointer-events:none}
+  .gh-card > *{position:relative;z-index:1}
+  .gh-body{padding:16px 18px;display:flex;flex-direction:column;gap:6px;flex:1}
+  .gh-body h4{font-size:.95rem;margin:0;line-height:1.35}
+  .gh-favstar{font-size:.85em}
+  .gh-meta{font-size:.78rem;color:var(--muted);line-height:1.4}
+  .gh-body p{font-size:.86rem;color:var(--muted);line-height:1.5;margin:0;flex:1}
+  .gh-link{align-self:flex-start;color:var(--accent2);font-weight:700;font-size:.85rem;text-decoration:none;margin-top:4px}
+  .gh-link:hover{text-decoration:underline}
+  .gh-note{font-size:.8rem;color:#e8c468;margin-top:4px}
+  @media (prefers-reduced-motion: reduce){.gh-items,.gh-cat-head .gh-chev{transition:none}}
   .dest-card p{color:var(--muted);line-height:1.6;font-size:.95rem}
   .dest-card p strong{color:var(--ink)}
   .dest-card-link{display:block;color:var(--ink);text-decoration:none;transition:filter .18s ease}
@@ -788,15 +813,11 @@
     <section class="dest" id="view-gaming-hub" data-route="gaming-hub" hidden>
       <h2>Gaming Hub</h2>
       <p class="dest-intro">Gaming interests, content, and related resources.</p>
-      <div class="dest-card">
-        <h3>Minecraft</h3>
-        <p>Survival, exploration, and server management — my main game.</p>
+      <div class="gh-favs" id="ghFavs">
+        <h3 class="gh-favs-title">⭐ Favorite Games</h3>
+        <div class="gh-grid" id="ghFavGrid"></div>
       </div>
-      <div class="dest-card">
-        <h3>Clash of Clans</h3>
-        <p>One of my favorite games alongside Minecraft.</p>
-      </div>
-      <div class="ph-note">More games, clips, and resources will be added over time.</div>
+      <div id="ghCats"></div>
     </section>
 
     <section class="dest" id="view-gaming-setup" data-route="gaming-setup" hidden>
@@ -1602,6 +1623,11 @@
     'settings': 'view-settings', 'appearance': 'view-appearance'
   };
   var currentRoute = '';
+  /* Fallback when history.pushState is blocked (e.g. a sandboxed preview
+     viewer): without it a failed pushState leaves applyRoute reading the
+     old path and the page silently falls back to home. The override is
+     used only in that failure path; normal navigation is unchanged. */
+  var routeOverride = null;
   var drawer = document.getElementById('navDrawer');
   var drawerBackdrop = document.getElementById('drawerBackdrop');
   var drawerClose = document.getElementById('drawerClose');
@@ -1660,7 +1686,8 @@
   }
   function goRoute(slug){
     var path = slug ? '/' + slug : '/';
-    try { history.pushState(null, '', path); } catch (e) {}
+    try { history.pushState(null, '', path); routeOverride = null; }
+    catch (e) { routeOverride = slug; }
     applyRoute();
   }
   /* Restore a destination path saved by 404.html, or rewrite a legacy
@@ -1678,7 +1705,7 @@
     }
   } catch (e) {}
   function applyRoute(){
-    var slug = slugFromPath(location.pathname);
+    var slug = routeOverride !== null ? routeOverride : slugFromPath(location.pathname);
     var viewId = ROUTES[slug];
     var isDest = !!viewId;
     currentRoute = isDest ? slug : '';
@@ -1706,7 +1733,7 @@
     if (href === '/') { ev.preventDefault(); goRoute(''); return; }
     if (href.charAt(0) === '/' && ROUTES[href.slice(1)]) { ev.preventDefault(); goRoute(href.slice(1)); }
   });
-  window.addEventListener('popstate', applyRoute);
+  window.addEventListener('popstate', function(){ routeOverride = null; applyRoute(); });
   applyRoute();
 
   /* Suggestions: mailto fallback (no server). Opens the visitor's email app. */
@@ -1746,5 +1773,88 @@
   } else { startViewer(); }
 })();
 </script>
+  <script>
+  /* Gaming Hub: single shared game list. Favorites render from the same
+     records (by id) — no duplicated game data. No photos: cards are
+     full-width text rows, like the drawer menu items. */
+  (function(){
+    var CATS = [
+      {code:'A', name:'Battle Royale & FPS'},
+      {code:'B', name:'Sandbox & Social Gaming'},
+      {code:'C', name:'MOBA'},
+      {code:'D', name:'Strategy'},
+      {code:'E', name:'Football & Racing'},
+      {code:'F', name:'RPG & Open-World Adventure'},
+      {code:'G', name:'Console & PC Games'}
+    ];
+    var GAMES = [
+      {id:'pubg-mobile', title:'PUBG Mobile', cat:'A', platform:'Android / iOS', desc:'100-player battle royale on mobile — drop in, loot up, and be the last one standing.', link:'https://www.pubgmobile.com/', linkLabel:'Official site'},
+      {id:'free-fire-max', title:'Free Fire MAX', cat:'A', platform:'Android / iOS', desc:'Fast, 50-player battle royale matches with enhanced graphics.', link:'https://ff.garena.com/', linkLabel:'Official site'},
+      {id:'cod-mobile', title:'Call of Duty: Mobile', cat:'A', platform:'Android / iOS', desc:'Classic CoD multiplayer and battle royale action on mobile.', link:'https://www.callofduty.com/mobile', linkLabel:'Official site'},
+      {id:'fortnite', title:'Fortnite', cat:'A', platform:'Android / Console / PC', desc:'Battle royale with building, live events, and cross-platform play.', link:'https://www.fortnite.com/', linkLabel:'Official site'},
+      {id:'minecraft', title:'Minecraft', cat:'B', platform:'Android / PC / Console', desc:'Sandbox survival and building in infinite blocky worlds.', link:'https://www.minecraft.net/', linkLabel:'Official site'},
+      {id:'roblox', title:'Roblox', cat:'B', platform:'Android / PC / Console', desc:'A platform of user-created games and social worlds.', link:'https://www.roblox.com/', linkLabel:'Official site'},
+      {id:'among-us', title:'Among Us', cat:'B', platform:'Android / PC / Console', desc:'Social deduction — find the impostors before they sabotage the crew.', link:'https://www.innersloth.com/games/among-us/', linkLabel:'Official site'},
+      {id:'mlbb', title:'Mobile Legends: Bang Bang', cat:'C', platform:'Android / iOS', desc:'Fast 5v5 MOBA battles on mobile.', link:'https://www.mobilelegends.com/', linkLabel:'Official site'},
+      {id:'marvel-super-war', title:'Marvel Super War', cat:'C', platform:'Android / iOS', desc:'A MOBA featuring Marvel heroes.', note:'Service ended in 2024 — no longer available.', link:'https://en.wikipedia.org/wiki/Marvel_Super_War', linkLabel:'More info'},
+      {id:'clash-of-clans', title:'Clash of Clans', cat:'D', platform:'Android / iOS', desc:'Build a village, train troops, and battle other players.', link:'https://supercell.com/en/games/clashofclans/', linkLabel:'Official site'},
+      {id:'clash-royale', title:'Clash Royale', cat:'D', platform:'Android / iOS', desc:'Real-time card battles starring Clash characters.', link:'https://supercell.com/en/games/clashroyale/', linkLabel:'Official site'},
+      {id:'efootball', title:'eFootball', cat:'E', platform:'Android / iOS / Console / PC', desc:'Konami free-to-play football game.', link:'https://www.konami.com/efootball/', linkLabel:'Official site'},
+      {id:'fc-mobile', title:'EA SPORTS FC Mobile', cat:'E', platform:'Android / iOS', desc:'EA mobile football game with real clubs and players.', link:'https://www.ea.com/games/ea-sports-fc-mobile', linkLabel:'Official site'},
+      {id:'asphalt-legends', title:'Asphalt Legends', cat:'E', platform:'Android / iOS / PC / Console', desc:'High-speed arcade racing with licensed cars.', link:'https://en.wikipedia.org/wiki/Asphalt_Legends_Unite', linkLabel:'More info'},
+      {id:'nfs-no-limits', title:'Need for Speed: No Limits', cat:'E', platform:'Android / iOS', desc:'Street racing with deep car customization.', link:'https://en.wikipedia.org/wiki/Need_for_Speed:_No_Limits', linkLabel:'More info'},
+      {id:'genshin-impact', title:'Genshin Impact', cat:'F', platform:'Android / PC / Console', desc:'Open-world action RPG in the world of Teyvat.', link:'https://genshin.hoyoverse.com/', linkLabel:'Official site'},
+      {id:'zenless-zone-zero', title:'Zenless Zone Zero', cat:'F', platform:'Android / PC / Console', desc:'Fast-paced urban action RPG from HoYoverse.', link:'https://zenless.hoyoverse.com/', linkLabel:'Official site'},
+      {id:'wuthering-waves', title:'Wuthering Waves', cat:'F', platform:'Android / PC / Console', desc:'Open-world action RPG with fast combat.', link:'https://wutheringwaves.kurogames.com/', linkLabel:'Official site'},
+      {id:'pokemon-go', title:'Pokémon GO', cat:'F', platform:'Android / iOS', desc:'Catch Pokémon in the real world with AR.', link:'https://pokemongolive.com/', linkLabel:'Official site'},
+      {id:'gow-psp', title:'God of War', cat:'G', platform:'PSP', desc:'Kratos action-adventure saga, originally on PSP.', link:null},
+      {id:'dbz-shin-budokai', title:'Dragon Ball Z: Shin Budokai', cat:'G', platform:'PSP', desc:'Dragon Ball fighting action, originally on PSP.', link:'https://en.wikipedia.org/wiki/Dragon_Ball_Z:_Shin_Budokai', linkLabel:'More info'},
+      {id:'naruto-ninja-impact', title:'Naruto Shippuden: Ultimate Ninja Impact', cat:'G', platform:'PSP', desc:'Naruto action game, originally on PSP.', link:'https://en.wikipedia.org/wiki/Naruto:_Ultimate_Ninja#Naruto_Shippuden:_Ultimate_Ninja_Impact', linkLabel:'More info'},
+      {id:'gta-vice-city', title:'Grand Theft Auto: Vice City', cat:'G', platform:'PC', desc:'Open-world crime story set in Vice City.', link:'https://en.wikipedia.org/wiki/Grand_Theft_Auto:_Vice_City', linkLabel:'More info'},
+      {id:'gta-san-andreas', title:'Grand Theft Auto: San Andreas', cat:'G', platform:'PC', desc:'Open-world adventure across San Andreas.', link:'https://en.wikipedia.org/wiki/Grand_Theft_Auto:_San_Andreas', linkLabel:'More info'},
+      {id:'spider-man-3', title:'Spider-Man 3', cat:'G', platform:'Console / PC', desc:'The 2007 movie tie-in action game.', link:'https://en.wikipedia.org/wiki/Spider-Man_3_(video_game)', linkLabel:'More info'}
+    ];
+    var FAVS = ['minecraft', 'clash-of-clans'];
+    function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+    function catName(code){ for (var i = 0; i < CATS.length; i++){ if (CATS[i].code === code) return CATS[i].name; } return ''; }
+    function byId(id){ for (var i = 0; i < GAMES.length; i++){ if (GAMES[i].id === id) return GAMES[i]; } return null; }
+    function cardHTML(g, isFav){
+      var title = esc(g.title);
+      if (isFav) title = '<span class="gh-favstar">⭐</span> ' + title;
+      var foot = '';
+      if (g.note) foot += '<div class="gh-note">' + esc(g.note) + '</div>';
+      if (g.link) foot += '<a class="gh-link" href="' + g.link + '" target="_blank" rel="noopener">' + esc(g.linkLabel || 'Official site') + ' ↗</a>';
+      return '<article class="gh-card" data-id="' + g.id + '"><div class="gh-body"><h4>' + title + '</h4><div class="gh-meta">' + esc(catName(g.cat)) + ' • ' + esc(g.platform) + '</div><p>' + esc(g.desc) + '</p>' + foot + '</div></article>';
+    }
+    var favGrid = document.getElementById('ghFavGrid');
+    var catsWrap = document.getElementById('ghCats');
+    if (!favGrid || !catsWrap) return;
+    FAVS.forEach(function(id){ var g = byId(id); if (g) favGrid.innerHTML += cardHTML(g, true); });
+    CATS.forEach(function(c){
+      var games = GAMES.filter(function(g){ return g.cat === c.code; });
+      var cards = games.map(function(g){ return cardHTML(g, false); }).join('');
+      catsWrap.innerHTML += '<section class="gh-cat" id="gh-cat-' + c.code + '"><button class="gh-cat-head" type="button" aria-expanded="false" aria-controls="gh-items-' + c.code + '"><span>' + esc(c.name) + '</span><span class="gh-count">' + games.length + ' games</span><svg class="gh-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="gh-items" id="gh-items-' + c.code + '"><div><div class="gh-grid">' + cards + '</div></div></div></section>';
+    });
+    function setCatOpen(code, open, scroll){
+      var head = document.querySelector('.gh-cat-head[aria-controls="gh-items-' + code + '"]');
+      var panel = document.getElementById('gh-items-' + code);
+      if (!head || !panel) return;
+      head.setAttribute('aria-expanded', open ? 'true' : 'false');
+      panel.classList.toggle('open', open);
+      if (open && scroll) {
+        var sec = document.getElementById('gh-cat-' + code);
+        var smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        setTimeout(function(){ sec.scrollIntoView({behavior: smooth ? 'smooth' : 'auto', block: 'start'}); }, 300);
+      }
+    }
+    catsWrap.addEventListener('click', function(ev){
+      var head = ev.target.closest ? ev.target.closest('.gh-cat-head') : null;
+      if (!head) return;
+      var code = head.getAttribute('aria-controls').replace('gh-items-', '');
+      var willOpen = head.getAttribute('aria-expanded') !== 'true';
+      setCatOpen(code, willOpen, willOpen);
+    });
+  })();
+  </script>
 </body>
 </html>
