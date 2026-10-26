@@ -149,6 +149,11 @@
   .pill:hover{transform:translateY(-2px);background:var(--glassbox-hi)}
   .pill:active{transform:scale(.985)}
   .pill svg{width:26px;height:26px;fill:var(--accent2);flex:0 0 26px}
+  /* homepage social grid (screenshot-2 style): 4 small icon-top buttons */
+  .pills-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  .pills-grid .pill{justify-content:center;padding:18px 2px}
+  .pills-grid .pill svg{width:30px;height:30px}
+  .pills-grid .pill span{display:none}
   /* contact row: two separate rounded pills (Call | Email) */
   .contact-split{display:flex;gap:14px;margin-top:14px}
   .contact-half{position:relative;flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:16px 12px;text-decoration:none;color:var(--ink);font-weight:600;font-size:1.05rem;background:var(--glassbox);border:1px solid rgba(168,85,247,.35);border-radius:16px;filter:drop-shadow(0 10px 22px rgba(0,0,0,.45)) drop-shadow(0 0 10px rgba(147,51,234,.25));transition:transform .18s ease,background .18s ease}
@@ -629,20 +634,20 @@
 
     <h1 class="rv">Life is short focus on what truly matters, grow daily, and leave a positive impact.</h1>
 
-    <div class="pills">
-      <a class="pill rv" href="https://www.facebook.com/shahinahmedrafi02" target="_blank" rel="noopener">
+    <div class="pills pills-grid">
+      <a class="pill rv" href="https://www.facebook.com/shahinahmedrafi02" target="_blank" rel="noopener" aria-label="Facebook">
         <span>Facebook</span>
         <svg viewBox="0 0 24 24"><path d="M13.5 21v-7h2.4l.4-3h-2.8V9.1c0-.9.3-1.5 1.6-1.5h1.3V4.9c-.3 0-1.2-.1-2.2-.1-2.2 0-3.7 1.3-3.7 3.8V11H8v3h2.5v7z"/></svg>
       </a>
-      <a class="pill rv" href="https://www.instagram.com/madara_1ea?igsi=MTZ6Y2d3cGNoamIxbA==" target="_blank" rel="noopener">
+      <a class="pill rv" href="https://www.instagram.com/madara_1ea?igsi=MTZ6Y2d3cGNoamIxbA==" target="_blank" rel="noopener" aria-label="Instagram">
         <span>Instagram</span>
         <svg viewBox="0 0 24 24"><path d="M12 8.8A3.2 3.2 0 1 0 12 15.2 3.2 3.2 0 0 0 12 8.8zm0-2.1a5.3 5.3 0 1 1 0 10.6 5.3 5.3 0 0 1 0-10.6zm6.8-.3a1.2 1.2 0 1 1-2.4 0 1.2 1.2 0 0 1 2.4 0zM12 4.2c-2.5 0-2.9 0-3.9.1a5.2 5.2 0 0 0-1.7.3 3.5 3.5 0 0 0-2 2 5.2 5.2 0 0 0-.3 1.7c-.1 1-.1 1.4-.1 3.9s0 2.9.1 3.9a5.2 5.2 0 0 0 .3 1.7 3.5 3.5 0 0 0 2 2 5.2 5.2 0 0 0 1.7.3c1 .1 1.4.1 3.9.1s2.9 0 3.9-.1a5.2 5.2 0 0 0 1.7-.3 3.5 3.5 0 0 0 2-2 5.2 5.2 0 0 0 .3-1.7c.1-1 .1-1.4.1-3.9s0-2.9-.1-3.9a5.2 5.2 0 0 0-.3-1.7 3.5 3.5 0 0 0-2-2 5.2 5.2 0 0 0-1.7-.3c-1-.1-1.4-.1-3.9-.1z"/></svg>
       </a>
-      <a class="pill rv" href="https://discord.com/users/1426988198692913363" target="_blank" rel="noopener">
+      <a class="pill rv" href="https://discord.com/users/1426988198692913363" target="_blank" rel="noopener" aria-label="Discord">
         <span>Discord</span>
         <svg viewBox="0 0 24 24"><path d="M18.6 5.3A16.4 16.4 0 0 0 14.5 4l-.5 1a15 15 0 0 0-3.7 0L9.8 4a16.4 16.4 0 0 0-4.1 1.3C3.4 8.9 2.7 12.3 3 15.7a16.1 16.1 0 0 0 4.9 2.5l1-1.6a10.4 10.4 0 0 1-1.7-.8l.4-.3a11.4 11.4 0 0 0 9.7 0l.4.3c-.5.3-1.1.6-1.7.8l1 1.6a16.1 16.1 0 0 0 4.9-2.5c.4-3.9-.7-7.3-2.3-10.4zM8.7 13.5c-1 0-1.7-.9-1.7-1.9s.7-1.9 1.7-1.9 1.8.9 1.7 1.9c0 1-.7 1.9-1.7 1.9zm6.6 0c-1 0-1.7-.9-1.7-1.9s.7-1.9 1.7-1.9 1.8.9 1.7 1.9c0 1-.7 1.9-1.7 1.9z"/></svg>
       </a>
-      <a class="pill rv" href="https://t.me/Rafi_PRX" target="_blank" rel="noopener">
+      <a class="pill rv" href="https://t.me/Rafi_PRX" target="_blank" rel="noopener" aria-label="Telegram">
         <span>Telegram</span>
         <svg viewBox="0 0 24 24"><path d="M21.9 4.6 2.7 12.1c-.8.3-.8 1.4.1 1.6l4.8 1.5 1.8 5.7c.3.8 1.3.9 1.8.2l2.6-3.1 5 3.7c.6.4 1.4.1 1.7-.5l3.9-14.5c.3-.9-.6-1.7-1.5-1.1zM8.5 13.1l9.7-6.6c.2-.1.4.1.2.3l-8 7.4-.3 3-1.6-4.1z"/></svg>
       </a>
