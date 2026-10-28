@@ -467,6 +467,17 @@
   @media (prefers-reduced-motion: reduce){
     .drawer,.drawer-items,.drawer-cat-btn .chev{transition:none}
   }
+
+  /* ================= My PC (gaming-setup) ================= */
+  .pc-grid{display:grid;gap:10px;grid-template-columns:1fr;margin-bottom:14px}
+  @media (min-width:520px){.pc-grid{grid-template-columns:1fr 1fr}}
+  .pc-card{position:relative;background:var(--glassbox);border-radius:14px;padding:12px 14px;text-align:center;filter:drop-shadow(0 10px 22px rgba(0,0,0,.35))}
+  .pc-card::before{content:"";position:absolute;inset:0;padding:1px;background:linear-gradient(120deg,rgba(192,132,252,.95),rgba(147,51,234,.55) 50%,rgba(192,132,252,.95));border-radius:inherit;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;pointer-events:none}
+  .pc-card>*{position:relative;z-index:1}
+  .pc-card h3{font-size:1.02rem;margin-bottom:2px}
+  .pc-card p{color:var(--muted);line-height:1.45;font-size:.92rem;margin:0}
+  .pc-card p + p{margin-top:2px}
+  .pc-card p strong{color:var(--ink)}
 </style>
 </head>
 <body>
@@ -827,7 +838,16 @@
 
     <section class="dest" id="view-gaming-setup" data-route="gaming-setup" hidden>
       <h2>My Gaming Setup</h2>
-      <p class="dest-intro">Devices and setup details. Only confirmed information is listed here.</p>
+      <div class="pc-grid">
+        <div class="pc-card"><h3>Processor</h3><p><strong>AMD Ryzen 5 5600</strong></p><p>6 Cores / 12 Threads</p></div>
+        <div class="pc-card"><h3>Motherboard</h3><p><strong>MSI B550M-A PRO</strong></p><p>AM4, Micro-ATX</p></div>
+        <div class="pc-card"><h3>RAM</h3><p><strong>Corsair Vengeance LPX</strong></p><p>8GB DDR4 3200MHz</p></div>
+        <div class="pc-card"><h3>Storage</h3><p><strong>Lexar NM620</strong></p><p>512GB M.2 NVMe SSD</p></div>
+        <div class="pc-card"><h3>Graphics Card</h3><p><strong>AFOX GeForce GTX 1660 Ti</strong></p><p>6GB GDDR6</p></div>
+        <div class="pc-card"><h3>Power Supply</h3><p><strong>Gamdias HELIOS M1-500B</strong></p><p>500W, 80 Plus Bronze</p></div>
+        <div class="pc-card"><h3>Casing</h3><p><strong>Antec VCX100M ARGB</strong></p><p>Black, Micro-ATX</p></div>
+        <div class="pc-card"><h3>Monitor</h3><p><strong>MSI PRO MP225 E12L</strong></p><p>22-inch, 120Hz, FHD IPS</p></div>
+      </div>
       <a class="dest-card dest-card-link" href="/gaming-hub">
         <h3>Games I play</h3>
         <p>Minecraft, Clash of Clans, and many more.</p>
