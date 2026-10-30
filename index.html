@@ -478,6 +478,17 @@
   .pc-card p{color:var(--muted);line-height:1.45;font-size:.92rem;margin:0}
   .pc-card p + p{margin-top:2px}
   .pc-card p strong{color:var(--ink)}
+
+  /* ================= Access Denied (restricted page) ================= */
+  .denied{text-align:center;padding:38px 8px 22px;display:flex;flex-direction:column;align-items:center}
+  .denied-icon{position:relative;width:94px;height:94px;border-radius:50%;background:var(--glassbox);display:flex;align-items:center;justify-content:center;margin-bottom:20px;filter:drop-shadow(0 10px 22px rgba(0,0,0,.35))}
+  .denied-icon::before{content:"";position:absolute;inset:0;padding:1px;background:linear-gradient(120deg,rgba(192,132,252,.95),rgba(147,51,234,.55) 50%,rgba(192,132,252,.95));border-radius:inherit;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;pointer-events:none}
+  .denied-icon svg{width:44px;height:44px;color:var(--ink)}
+  .denied h2{margin:0 0 6px}
+  .denied-sub{font-size:1.06rem;font-weight:600;color:var(--ink);margin:0 0 10px}
+  .denied-msg{color:var(--muted);line-height:1.6;font-size:.95rem;max-width:430px;margin:0 0 22px}
+  .denied-btn{display:inline-block;padding:11px 24px;border-radius:999px;border:1px solid var(--glass-brd);background:var(--glassbox);color:var(--ink);text-decoration:none;font-weight:600;font-size:.95rem}
+  .denied-btn:hover{border-color:rgba(192,132,252,.8)}
 </style>
 </head>
 <body>
@@ -836,27 +847,19 @@
       <div id="ghCats"></div>
     </section>
 
+    <!-- RESTRICTED by owner's request (2026-10-30): the original Gaming Setup
+         content is preserved in the site backup and can be restored from it.
+         Nothing private is kept in this section on purpose. -->
     <section class="dest" id="view-gaming-setup" data-route="gaming-setup" hidden>
-      <h2>My Gaming Setup</h2>
-      <div class="pc-grid">
-        <div class="pc-card"><h3>Processor</h3><p><strong>AMD Ryzen 5 5600</strong></p><p>6 Cores / 12 Threads</p></div>
-        <div class="pc-card"><h3>Motherboard</h3><p><strong>MSI B550M-A PRO</strong></p><p>AM4, Micro-ATX</p></div>
-        <div class="pc-card"><h3>RAM</h3><p><strong>Corsair Vengeance LPX</strong></p><p>8GB DDR4 3200MHz</p></div>
-        <div class="pc-card"><h3>Storage</h3><p><strong>Lexar NM620</strong></p><p>512GB M.2 NVMe SSD</p></div>
-        <div class="pc-card"><h3>Graphics Card</h3><p><strong>AFOX GeForce GTX 1660 Ti</strong></p><p>6GB GDDR6</p></div>
-        <div class="pc-card"><h3>Power Supply</h3><p><strong>Gamdias HELIOS M1-500B</strong></p><p>500W, 80 Plus Bronze</p></div>
-        <div class="pc-card"><h3>Casing</h3><p><strong>Antec VCX100M ARGB</strong></p><p>Black, Micro-ATX</p></div>
-        <div class="pc-card"><h3>Monitor</h3><p><strong>MSI PRO MP225 E12L</strong></p><p>22-inch, 120Hz, FHD IPS</p></div>
+      <div class="denied">
+        <div class="denied-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/><circle cx="12" cy="15.5" r="1.4" fill="currentColor" stroke="none"/></svg>
+        </div>
+        <h2>Access Denied!</h2>
+        <p class="denied-sub">This page is restricted.</p>
+        <p class="denied-msg">Sorry, this page is currently private and not available for public access.</p>
+        <a class="denied-btn" href="/">Back to Home</a>
       </div>
-      <a class="dest-card dest-card-link" href="/gaming-hub">
-        <h3>Games I play</h3>
-        <p>Minecraft, Clash of Clans, and many more.</p>
-      </a>
-      <div class="dest-card">
-        <h3>Phone</h3>
-        <p>Vivo Y11 (3GB RAM / 32GB storage).</p>
-      </div>
-      <div class="ph-note">Detailed PC specs, console details, peripherals, and setup photos will be added over time.</div>
     </section>
 
     <section class="dest" id="view-youtube" data-route="youtube" hidden>
