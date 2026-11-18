@@ -110,12 +110,20 @@
      element fed the page's scrollable overflow in the phone WebView,
      opening a long empty void below the footer that grew as you scrolled.) */
   .char-layer{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:40}
-  /* pointer-events:none — the character never blocks a tap, click, link or
-     form field underneath it; all pointer input is read at window level. */
+  /* The layer and wrapper stay pointer-events:none — roaming is driven by
+     window-level listeners and the character never blocks a tap, click,
+     link or form field underneath it. Only the canvas itself re-enables
+     pointer events, so a press that lands on the character's own small
+     displayed box (~78×100px) grabs the character instead of passing
+     through to the text below: drag to spin it (skinview3d OrbitControls).
+     touch-action:none makes a finger drag rotate rather than scroll, and
+     user-select / -webkit-touch-callout:none make sure pressing and
+     holding the character can never select or call out page text. */
   .skin-viewer{width:min(74vw,290px);height:372px;margin:0;position:absolute;left:0;top:0;transform-origin:0 0;pointer-events:none}
   .skin-viewer .skin-ph{position:absolute;left:50%;top:8%;transform:translateX(-50%);width:125px;height:125px;border-radius:22px;pointer-events:none;display:none;animation:phPulse 1.6s ease-in-out infinite}
   @keyframes phPulse{0%,100%{opacity:.55}50%{opacity:1}}
-  .skin-viewer canvas{width:100%;height:100%;display:block;border-radius:18px;pointer-events:none}
+  .skin-viewer canvas{width:100%;height:100%;display:block;border-radius:18px;pointer-events:auto;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;cursor:grab}
+  .skin-viewer canvas:active{cursor:grabbing}
   .skin-note{color:var(--muted);font-size:.9rem;padding:24px 10px}
 
   h1{font-size:clamp(1.35rem,4.6vw,1.9rem);font-weight:900;line-height:1.3;letter-spacing:-.01em;margin:26px 0 30px}
@@ -564,7 +572,7 @@
         <div class="char-layer" id="charLayer">
           <div class="skin-viewer" id="skinViewer">
             <img id="skinPlaceholder" class="skin-ph" src="assets/avatar.png" alt="" aria-hidden="true" onerror="this.style.display='none'">
-            <canvas id="skinCanvas" role="img" aria-label="3D Minecraft avatar for alxxq. It stands in the hero, runs after your cursor on desktop, and runs to wherever you tap on a phone."></canvas>
+            <canvas id="skinCanvas" role="img" aria-label="3D Minecraft avatar for alxxq. It stands in the hero, runs after your cursor on desktop, and runs to wherever you tap on a phone. Drag the character itself to spin it around."></canvas>
             <p id="skinNote" class="skin-note" hidden>3D avatar could not load. Minecraft username: <strong>alxxq</strong></p>
           </div>
         </div>
@@ -1287,29 +1295,50 @@
        viewer when a destination route hides the character wrapper */
     wrap._rafiViewer = viewer;
 
-    /* The character is pointer-events:none (CSS), so the viewer controls
-       can never receive input — they stay configured but inert, and every
-       tap/click passes straight through to the page underneath. Movement
-       is driven entirely by window-level pointer listeners (see
-       setupCharacter). Auto-rotate stays off. */
+    /* Grab-and-spin: the canvas (and only the canvas) accepts pointer
+       events, so the viewer's OrbitControls receive drags that land on
+       the character itself — drag horizontally to spin it, with a little
+       pitch from vertical drags. Everything else still passes straight
+       through to the page underneath, and roaming movement is driven by
+       window-level pointer listeners (see setupCharacter). Auto-rotate
+       stays off; pan and zoom stay disabled so a drag can only rotate. */
     viewer.autoRotate = false;
     if (viewer.controls) {
       viewer.controls.enablePan = false;
       viewer.controls.enableZoom = false;
+      viewer.controls.enableRotate = true;
       viewer.controls.autoRotate = false;
       viewer.controls.minPolarAngle = 1.0;
       viewer.controls.maxPolarAngle = 2.1;
     }
-    canvas.style.touchAction = 'pan-y';
+    /* OrbitControls sets this too; state it explicitly so no other rule
+       re-opens page scroll or text selection from a character drag. */
+    canvas.style.touchAction = 'none';
+
+    /* Drag state shared with setupCharacter: while the visitor is
+       spinning the character, roaming pauses; on release the camera
+       keeps its new angle (the character keeps its new facing) and the
+       normal idle/run behaviour resumes. preventDefault on the press
+       (plus the canvas CSS) guarantees a grab can never start a text
+       selection, even as the pointer moves off the character mid-drag. */
+    var charDrag = { active: false };
+    canvas.addEventListener('pointerdown', function(e){
+      charDrag.active = true;
+      e.preventDefault();
+    });
+    canvas.addEventListener('contextmenu', function(e){ e.preventDefault(); });
+    window.addEventListener('pointerup', function(){ charDrag.active = false; }, { passive: true });
+    window.addEventListener('pointercancel', function(){ charDrag.active = false; }, { passive: true });
 
     viewer.loadSkin(SKIN_URL, { model: 'auto-detect' })
       .then(function(){ skinReady = true; if (skinPh) skinPh.style.display = 'none'; })
       .catch(function(){ showFallback(); });
 
     /* ---- Character movement + head tracking ----
-       The viewer is a fixed overlay displayed at 27% scale (~100px tall)
-       with pointer-events:none: it runs after the pointer and never blocks
-       a tap, click, link or form field. On desktop it follows the mouse
+       The viewer is a fixed overlay displayed at 27% scale (~100px tall).
+       Its layer stays pointer-events:none — only the canvas takes input,
+       for grab-and-spin drags — so the character runs after the pointer
+       and never blocks a tap, click, link or form field. On desktop it follows the mouse
        live; on touch screens it runs to the last tap point and stands
        there. Before the first pointer interaction it stands idle beside
        the hero name (gentle bob, head tracking the pointer). While
@@ -1465,8 +1494,9 @@
           var sc = spacerCenter();
           pos.x = sc.x; pos.y = sc.y;
           place(pos.x, pos.y);
-        } else if (typing) {
-          /* paused while the visitor writes: stand still, keep facing */
+        } else if (typing || charDrag.active) {
+          /* paused while the visitor writes, or while they are holding
+             the character to spin it: stand still, keep facing */
           place(pos.x, pos.y);
         } else {
           var pc = clampTarget(pos.x, pos.y);
