@@ -8,8 +8,10 @@
 <link rel="icon" href="data:,">
 <meta name="color-scheme" content="light dark">
 <script>
-/* Apply saved theme before first paint (default: light for first-time visitors) */
-(function(){try{var t=localStorage.getItem('rafiprx-theme');document.documentElement.setAttribute('data-theme',t==='dark'?'dark':'light');}catch(e){document.documentElement.setAttribute('data-theme','light');}})();
+/* Always open in Light theme on every fresh load — any previously saved
+   theme is ignored and cleared, so Dark never carries over to the next visit.
+   Switching to Dark still works for the current visit only. */
+(function(){try{localStorage.removeItem('rafiprx-theme');}catch(e){}document.documentElement.setAttribute('data-theme','light');})();
 </script>
 <script>
 /* Entry gate state before first paint: visitors who already entered in this
@@ -1050,7 +1052,7 @@
   }
   function setTheme(t){
     document.documentElement.setAttribute('data-theme', t);
-    store('rafiprx-theme', t);
+    /* Session-only: theme is NOT persisted, so the next fresh load always starts Light. */
     syncThemeControls();
   }
   themeGroups.forEach(function(g){
