@@ -1,22 +1,15 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>About Me</title>
 <meta name="description" content="Life is short focus on what truly matters, grow daily, and leave a positive impact.">
-<link rel="icon" href="./favicon.ico" sizes="any">
-<link rel="icon" type="image/png" sizes="32x32" href="./favicon-32.png">
-<link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
-<link rel="icon" type="image/png" sizes="512x512" href="./icon-512.png">
-<link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
-<meta name="theme-color" content="#0a0a10">
-<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="preconnect" href="https://mc-heads.net" crossorigin>
-<link rel="preload" as="image" href="https://mc-heads.net/skin/alxxq" crossorigin="anonymous" fetchpriority="high">
+<link rel="icon" href="data:,">
+<meta name="color-scheme" content="light dark">
 <script>
-/* Apply saved theme before first paint (default: dark) */
-(function(){try{var t=localStorage.getItem('rafiprx-theme');document.documentElement.setAttribute('data-theme',t==='light'?'light':'dark');}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();
+/* Apply saved theme before first paint (default: light for first-time visitors) */
+(function(){try{var t=localStorage.getItem('rafiprx-theme');document.documentElement.setAttribute('data-theme',t==='dark'?'dark':'light');}catch(e){document.documentElement.setAttribute('data-theme','light');}})();
 </script>
 <script>
 /* Entry gate state before first paint: visitors who already entered in this
@@ -25,470 +18,382 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Nunito:ital,wght@0,600;0,800;0,900;1,800;1,900&display=swap" rel="stylesheet">
+<script defer src="assets/skinview3d.bundle.js"></script>
 <style>
-  :root, :root[data-theme="dark"]{
-    color-scheme:dark;
-    --bg:#0a0a10;
-    --bg2:#14101f;
-    --ink:#f5f3fb;
-    --muted:#a49ec0;
-    --accent:#a855f7;
-    --accent2:#c084fc;
-    --glass:rgba(26,22,46,.34);
-    --glass-brd:rgba(168,85,247,.32);
-    --glass-hi:rgba(40,34,72,.50);
-    --shadow:0 10px 30px rgba(0,0,0,.45);
-    --glow1:rgba(147,51,234,.22);
-    --glow2:rgba(147,51,234,.12);
-    --cube-brd:rgba(168,85,247,.28);
-    --cube-bg:linear-gradient(145deg,rgba(168,85,247,.16),rgba(168,85,247,.03));
-    --focus:#d8b4fe;
-    --bgwash:linear-gradient(180deg, rgba(7,4,16,.50), rgba(7,4,16,.64));
-    /* border-only cards: glass fill removed (Sir's order 2026-10-25) */
-    --glassbox:transparent;
-    --glassbox-hi:transparent;
+  /* Animated controls keep their own default colours; only layout widths are set here.
+     The dark theme below re-skins them to match the page's dark paper. */
+  :root{
+    --sk-slider-width:100%;
+    --sk-input-width:100%;
+    --sk-progress-width:100%;
   }
-  :root[data-theme="light"]{
+  [data-theme="dark"]{
+    --sk-ink:#f2f0ff; --sk-card:#262052; --sk-pri:#8f8df7; --sk-acc:#ff5fa8;
+    --sk-soft:#3d3577; --sk-dim:#a49fd0; --sk-track:#453d85; --sk-sh:6px 7px 0 #14102c;
+    --sk-btn-line:#f2f0ff; --sk-alt-line:#f2f0ff;
+  }
+
+  /* ---------- Page theme: white paper, lavender / violet line, pink accents ---------- */
+  :root, :root[data-theme="light"]{
     color-scheme:light;
-    --bg:#faf6ee;
-    --bg2:#f1e9da;
-    --ink:#2c2140;
-    --muted:#6f6484;
-    --accent:#9333ea;
-    --accent2:#a855f7;
-    --glass:rgba(255,255,255,.45);
-    --glass-brd:rgba(147,51,234,.30);
-    --glass-hi:rgba(255,255,255,.62);
-    --shadow:0 10px 26px rgba(76,50,120,.15);
-    --glow1:rgba(147,51,234,.14);
-    --glow2:rgba(147,51,234,.07);
-    --cube-brd:rgba(147,51,234,.25);
-    --cube-bg:linear-gradient(145deg,rgba(147,51,234,.12),rgba(147,51,234,.03));
+    --paper:#fdfcff; --paper-dot:#e3e0fb;
+    --ink:#1d1a4a; --muted:#55507e; --faint:#8580b0;
+    --lav:#8f8df7; --lav-soft:#b8b3ff; --lav-bg:#efedff;
+    --pink:#ff5fa8; --pink-bg:#ffeef6;
+    --card:#ffffff; --line:#1d1a4a;
+    --shadow:6px 7px 0 var(--lav-soft);
     --focus:#7e22ce;
-    /* light wash over the new bright scenes — light enough that the photos stay visible */
-    --bgwash:linear-gradient(180deg, rgba(255,255,255,.28), rgba(255,255,255,.42));
-    --glassbox:transparent;
-    --glassbox-hi:transparent;
+  }
+  :root[data-theme="dark"]{
+    color-scheme:dark;
+    --paper:#16132e; --paper-dot:#241e4d;
+    --ink:#f2f0ff; --muted:#c6c1ea; --faint:#a49fd0;
+    --lav-bg:#241e4d; --card:#1f1a42; --line:#b8b3ff;
+    --shadow:6px 7px 0 #0d0a22; --pink-bg:#3a1f38;
+    --focus:#d8b4fe;
   }
   *{margin:0;padding:0;box-sizing:border-box}
-  html{scroll-behavior:smooth}
+  /* overscroll-behavior:none — no rubber-band travel past the top or
+     bottom of the page; scrolling ends at the footer. */
+  html{scroll-behavior:smooth;overflow-x:hidden;overscroll-behavior:none}
+  /* The animated controls bleed a local effects canvas 160px past their box
+     on every side (inside their shadow roots). Clipping — not hiding — the
+     root's horizontal overflow keeps that bleed from widening the page,
+     which on phones pushed the fixed top bar's right-hand buttons off
+     screen. */
+  @supports (overflow:clip){
+    html{overflow-x:clip}
+    body{overflow-x:clip}
+  }
+  /* The animated controls' effects canvases bleed ~160px past their hosts
+     inside their shadow roots, which still inflated the body's scroll
+     width on phones even with the root clipped. Clipping horizontal
+     overflow at the top-level section containers stops the bleed from
+     widening the page; the effects themselves still paint across the
+     full screen width on phones, and the roaming character sits in its
+     own fixed full-screen layer (below), so it is not clipped either. */
+  #destViews, main.card, .site-footer, .entry-frame{overflow-x:clip}
   body{
-    font-family:'Inter',system-ui,-apple-system,sans-serif;
+    font-family:"Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;
+    font-weight:600;
     color:var(--ink);
     min-height:100vh;
     position:relative;
     overflow-x:hidden;
+    line-height:1.55;
     background:
-      radial-gradient(640px 420px at 88% -6%, var(--glow1), transparent 62%),
-      radial-gradient(760px 540px at -12% 104%, var(--glow2), transparent 60%),
-      linear-gradient(180deg, var(--bg2), var(--bg));
-    transition:background .35s ease, color .35s ease;
+      radial-gradient(var(--paper-dot) 1.6px, transparent 1.7px) 0 0/22px 22px,
+      var(--paper);
+    transition:background-color .35s ease, color .35s ease;
   }
-
-  /* ---------- scenic background (the owner's two artworks) ----------
-     Phones — including phone desktop mode — get the portrait scene;
-     large PC screens get the wide scene. cover-fit only: the artwork is
-     never stretched or distorted. A theme wash above it keeps the glass
-     UI readable in each theme. */
-  body::before{
-    content:"";position:fixed;top:0;left:0;right:0;height:100vh;height:100lvh;z-index:0;pointer-events:none;
-    background:url('./bg-mobile.webp') center 30%/cover no-repeat;
-  }
-  body::after{
-    content:"";position:fixed;top:0;left:0;right:0;height:100vh;height:100lvh;z-index:0;pointer-events:none;
-    background:var(--bgwash);
-  }
-  @media (orientation:landscape) and (max-width:1099px){
-    body::before{background-position:center 32%}
-  }
-  /* large screens get the wide scene: real PCs match pointer:fine; the
-     aspect-ratio arm covers pointer-less environments. Phones in desktop
-     mode report a <1100px viewport, so they keep the portrait scene. */
-  @media (min-width:1100px) and (pointer:fine), (min-width:1100px) and (min-aspect-ratio:13/10){
-    body::before{background-image:url('./bg-desktop.webp');background-position:center}
-  }
-  /* light theme uses the owner's new bright scenes; dark keeps the current scenes — never mixed */
-  :root[data-theme="light"] body::before{background-image:url('./bg-light-mobile.webp')}
-  @media (min-width:1100px) and (pointer:fine), (min-width:1100px) and (min-aspect-ratio:13/10){
-    :root[data-theme="light"] body::before{background-image:url('./bg-light-desktop.webp')}
-  }
-
-  /* decorative glass cubes — light, mostly static */
-  .bg{position:fixed;top:0;left:0;right:0;height:100vh;height:100lvh;overflow:hidden;z-index:0;pointer-events:none}
-  .cube{position:absolute;border-radius:16px;background:var(--cube-bg);border:1px solid var(--cube-brd);box-shadow:var(--shadow);opacity:.5}
-  .cube::after{content:"";position:absolute;inset:0;border-radius:16px;background:linear-gradient(115deg,rgba(255,255,255,.14),transparent 45%)}
-  .cube.c1{width:110px;height:110px;top:9%;left:5%;transform:rotate(14deg)}
-  .cube.c2{width:64px;height:64px;top:63%;left:8%;transform:rotate(-10deg)}
-  .cube.c3{width:140px;height:140px;top:14%;right:6%;transform:rotate(-16deg)}
-  .cube.c4{width:74px;height:74px;bottom:8%;right:10%;transform:rotate(22deg)}
-  .cube.c5{width:44px;height:44px;top:46%;left:2.5%;transform:rotate(28deg)}
-  @keyframes drift{from{margin-top:0}to{margin-top:14px}}
-  .cube.c1,.cube.c3{animation:drift 13s ease-in-out infinite alternate}
-
-  .card{position:relative;z-index:1;width:100%;max-width:620px;margin:0 auto;text-align:center;padding:clamp(72px,8vh,76px) 22px 72px}
-
-  /* ---------- 3D avatar: fixed overlay, displayed at 40% via scale ---------- */
-  .avatar-wrap{position:relative;height:240px} /* spacer: keeps quote/links exactly where they are */
-  .skin-viewer{width:min(74vw,290px);height:372px;margin:0;position:fixed;left:0;top:0;z-index:40;transform-origin:0 0}
-  .skin-viewer .skin-ph{position:absolute;left:50%;top:8%;transform:translateX(-50%);width:125px;height:125px;border-radius:22px;pointer-events:none;display:none;animation:phPulse 1.6s ease-in-out infinite}
-  @keyframes phPulse{0%,100%{opacity:.55}50%{opacity:1}}
-  .skin-viewer canvas{width:100%;height:100%;display:block;cursor:grab;border-radius:18px}
-  .skin-viewer canvas:active{cursor:grabbing}
-  .skin-note{color:var(--muted);font-size:.9rem;padding:24px 10px}
-
-  h1{font-size:clamp(1.35rem,4.6vw,1.9rem);font-weight:700;line-height:1.3;letter-spacing:-.01em;margin:26px 0 30px}
-
-  /* ---------- glass contact shortcuts ---------- */
-
-  /* ---------- glass social pills ---------- */
-  .pills{display:flex;flex-direction:column;gap:14px;margin-top:38px}
-  .pill{position:relative;display:flex;align-items:center;justify-content:space-between;padding:16px 24px;text-decoration:none;color:var(--ink);font-weight:600;font-size:1.05rem;background:var(--glassbox);border:1px solid rgba(168,85,247,.35);border-radius:16px;filter:drop-shadow(0 10px 22px rgba(0,0,0,.45)) drop-shadow(0 0 10px rgba(147,51,234,.25));transition:transform .18s ease,background .18s ease}
-  .pill::before{content:"";position:absolute;inset:0;padding:1px;background:linear-gradient(120deg,rgba(192,132,252,.95),rgba(147,51,234,.55) 50%,rgba(192,132,252,.95));border-radius:inherit;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;pointer-events:none}
-  .pill>*{position:relative;z-index:1}
-  .pill:hover{transform:translateY(-2px);background:var(--glassbox-hi)}
-  .pill:active{transform:scale(.985)}
-  .pill svg{width:26px;height:26px;fill:var(--accent2);flex:0 0 26px}
-  /* homepage social grid (screenshot-2 style): 4 small icon-top buttons */
-  .pills-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-  .pills-grid .pill{justify-content:center;padding:18px 2px}
-  .pills-grid .pill svg{width:30px;height:30px}
-  .pills-grid .pill span{display:none}
-  /* contact row: two separate rounded pills (Call | Email) */
-  .contact-split{display:flex;gap:14px;margin-top:14px}
-  .contact-half{position:relative;flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:16px 12px;text-decoration:none;color:var(--ink);font-weight:600;font-size:1.05rem;background:var(--glassbox);border:1px solid rgba(168,85,247,.35);border-radius:16px;filter:drop-shadow(0 10px 22px rgba(0,0,0,.45)) drop-shadow(0 0 10px rgba(147,51,234,.25));transition:transform .18s ease,background .18s ease}
-  .contact-half::before{content:"";position:absolute;inset:0;padding:1px;background:linear-gradient(120deg,rgba(192,132,252,.95),rgba(147,51,234,.55) 50%,rgba(192,132,252,.95));border-radius:inherit;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;pointer-events:none}
-  .contact-half>*{position:relative;z-index:1}
-  .contact-half:hover{transform:translateY(-2px);background:var(--glassbox-hi)}
-  .contact-half:active{transform:scale(.985)}
-  .contact-half svg{width:24px;height:24px;fill:var(--accent2);flex:0 0 24px}
-  .contact-half svg[fill="none"]{fill:none;stroke:var(--accent2)}
-
+  a{color:var(--lav)}
+  button,[role="button"]{min-height:36px}
   a:focus-visible, button:focus-visible{outline:2px solid var(--focus);outline-offset:3px}
 
-  /* ---------- top bar + panels ---------- */
-  .topbar{position:fixed;top:0;left:0;right:0;height:56px;z-index:60;display:flex;align-items:center;justify-content:space-between;padding:0 12px;background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none}
+  .card{position:relative;z-index:1;width:100%;max-width:620px;margin:0 auto;text-align:center;padding:clamp(72px,8vh,76px) 22px 72px}
+  /* The hero card hosts the fixed 3D character: its stacking context sits
+     above the destination sections, so the character always renders on top
+     of section cards — never sliding under them. The top bar (z 60),
+     settings (70), drawer (80) and entry gate (200) still stay above it. */
+  #homeView{z-index:30}
+  .card[hidden]{display:none}
+
+  /* ---------- 3D avatar: fixed overlay, displayed at 27% via scale (~100px tall) ---------- */
+  .avatar-wrap{position:relative;height:132px;width:104px;flex:0 0 104px}
+  /* The roaming character lives inside this fixed, viewport-sized layer:
+     inset:0 pins the layer itself to the screen, and overflow:hidden clips
+     the character's transformed box inside it, so the character can never
+     add scrollable height or width to the document. (A transformed fixed
+     element fed the page's scrollable overflow in the phone WebView,
+     opening a long empty void below the footer that grew as you scrolled.) */
+  .char-layer{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:40}
+  /* pointer-events:none — the character never blocks a tap, click, link or
+     form field underneath it; all pointer input is read at window level. */
+  .skin-viewer{width:min(74vw,290px);height:372px;margin:0;position:absolute;left:0;top:0;transform-origin:0 0;pointer-events:none}
+  .skin-viewer .skin-ph{position:absolute;left:50%;top:8%;transform:translateX(-50%);width:125px;height:125px;border-radius:22px;pointer-events:none;display:none;animation:phPulse 1.6s ease-in-out infinite}
+  @keyframes phPulse{0%,100%{opacity:.55}50%{opacity:1}}
+  .skin-viewer canvas{width:100%;height:100%;display:block;border-radius:18px;pointer-events:none}
+  .skin-note{color:var(--muted);font-size:.9rem;padding:24px 10px}
+
+  h1{font-size:clamp(1.35rem,4.6vw,1.9rem);font-weight:900;line-height:1.3;letter-spacing:-.01em;margin:26px 0 30px}
+
+  /* ---------- hero top (approved mockup): name + roles + intro beside the
+     character, quote under them, About cards directly below the quote ---------- */
+  .hero-top{display:flex;align-items:center;gap:16px;text-align:left;margin-top:4px}
+  .hero-text{flex:1 1 auto;min-width:0}
+  .hero-name{font-size:clamp(1.65rem,6.2vw,2.45rem);font-weight:900;line-height:1.15;letter-spacing:-.01em}
+  .hero-roles{margin-top:8px;font-weight:900;color:var(--lav);font-size:clamp(.9rem,3.3vw,1.03rem);line-height:1.45}
+  .hero-intro{margin-top:8px;color:var(--muted);line-height:1.55;font-size:.97rem}
+
+  /* ---------- social pills + contact halves (animated secondary buttons inside the original links) ---------- */
+  .pills{display:flex;flex-direction:column;gap:14px;margin-top:38px}
+  /* homepage social grid, as on the original site: 4 icon-only buttons in a row */
+  .pills-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  .pills-grid .pill-link{display:flex;min-width:0}
+  .pills-grid sakuga-button{flex:1 1 0;min-width:0}
+  .pills-grid .pill-txt{display:none}
+  .pills-grid .pill-link svg{width:30px;height:30px;margin:0;vertical-align:middle}
+  .pill-link{display:inline-flex;text-decoration:none}
+  .pill-link svg{width:26px;height:26px;fill:currentColor;vertical-align:-7px;margin-left:9px}
+  /* Social Links: two rows of two equal-width pills — Facebook + Instagram
+     on the first row, Discord + Telegram on the second. */
+  .dest-social{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px}
+  .dest-social .pill-link{display:flex;min-width:0}
+  .dest-social .pill-link sakuga-button{flex:1 1 0;min-width:0}
+  .contact-split{display:flex;gap:14px;margin-top:26px}
+  .contact-half{flex:1 1 0;min-width:0;display:flex;text-decoration:none}
+  .contact-half sakuga-button{flex:1 1 0;min-width:0}
+  .contact-half svg{width:20px;height:20px;fill:currentColor;vertical-align:-4px;margin-right:7px}
+  .contact-half svg[fill="none"]{fill:none;stroke:currentColor}
+
+  /* ---------- top bar ---------- */
+  .topbar{position:fixed;top:0;left:0;right:0;height:56px;z-index:60;display:flex;align-items:center;justify-content:space-between;padding:0 12px}
   .topbar-right{display:flex;align-items:center;gap:10px}
-  .topbar-btn{position:relative;width:40px;height:40px;border-radius:14px;background:transparent;border:0;color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .18s ease;flex:0 0 40px}
+  .topbar-btn{position:relative;width:42px;height:42px;border-radius:50%;background:var(--card);border:2.5px solid var(--line);color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .18s ease;flex:0 0 42px;font-family:inherit}
   .topbar-btn:active{transform:scale(.94)}
-  .topbar-btn svg{width:22px;height:22px}
-  /* theme icon morph: moon and sun crossfade + rotate + scale, slowly */
+  .topbar-btn svg{width:21px;height:21px}
   .theme-toggle svg{position:absolute;inset:0;margin:auto;transition:opacity .45s ease,transform .45s ease}
   .theme-toggle .ic-moon{opacity:1;transform:rotate(0deg) scale(1)}
   .theme-toggle .ic-sun{opacity:0;transform:rotate(-90deg) scale(.5)}
   :root[data-theme="light"] .theme-toggle .ic-moon{opacity:0;transform:rotate(90deg) scale(.5)}
   :root[data-theme="light"] .theme-toggle .ic-sun{opacity:1;transform:rotate(0deg) scale(1)}
-  /* music mute slash: sits exactly centered; drops down from above when muted, rises back up when unmuted */
-  .music-btn .slash{position:absolute;left:50%;top:50%;width:28px;height:2.5px;margin-left:-14px;margin-top:-1.25px;background:currentColor;border-radius:2px;transform:translateY(-30px) rotate(45deg);opacity:0;transition:transform .45s ease,opacity .3s ease;pointer-events:none}
-  .music-btn.muted .slash{transform:translateY(0) rotate(45deg);opacity:1}
-  /* settings gear turns slightly when its panel opens */
+  /* Mute slash: the A(top-left) -> D(bottom-right) diagonal, built from two
+     halves. Muting: one half draws in from corner A, the other from corner
+     D, and they meet at the centre. Unmuting: the halves split at the
+     centre and slide back out to A and D until the line is gone. Each half
+     is a 17px bar rotated 45deg about its outer (corner) end, so scaleX
+     grows/shrinks it along the diagonal from that corner. Both halves lie
+     on the same diagonal through the button centre, and at full length
+     each one runs ~3px PAST the centre, so the two overlap there: the
+     muted slash is one continuous stick with no gap, no step and no
+     pinched joint. The meeting ends are square-cut for the same reason —
+     only the outer, corner ends are rounded. */
+  .music-btn .slash{position:absolute;inset:0;pointer-events:none}
+  .music-btn .slash i{position:absolute;width:17px;height:2.5px;background:currentColor;transition:transform .28s ease}
+  .music-btn .slash .s-a{left:50%;top:50%;margin-left:-9.9px;margin-top:-11.15px;border-radius:2px 0 0 2px;transform-origin:0 50%;transform:rotate(45deg) scaleX(0)}
+  .music-btn .slash .s-d{left:50%;top:50%;margin-left:-7.1px;margin-top:8.65px;border-radius:0 2px 2px 0;transform-origin:100% 50%;transform:rotate(45deg) scaleX(0)}
+  .music-btn.muted .slash .s-a,.music-btn.muted .slash .s-d{transform:rotate(45deg) scaleX(1)}
   #settingsBtn svg{transition:transform .35s ease}
   #settingsBtn[aria-expanded="true"] svg{transform:rotate(45deg)}
-  .settings{position:fixed;top:64px;right:12px;z-index:70;width:min(264px,82vw);background:var(--glass);border:1px solid var(--glass-brd);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-radius:18px;box-shadow:var(--shadow);padding:14px;text-align:left}
+
+  /* ---------- settings panel ---------- */
+  .settings{position:fixed;top:64px;right:12px;z-index:70;width:min(264px,82vw);background:var(--card);border:3px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:14px;text-align:left}
   .settings[hidden]{display:none}
-  .nav-panel{position:fixed;top:64px;left:12px;z-index:70;width:min(264px,82vw);min-height:48px;background:var(--glass);border:1px solid var(--glass-brd);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-radius:18px;box-shadow:var(--shadow);padding:14px}
-  .nav-panel[hidden]{display:none}
   .set-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:4px 2px}
-  .set-label{font-weight:600;font-size:.95rem}
-  .set-note{font-size:.78rem;color:var(--muted);padding:4px 2px 0}
-  .set-sep{height:1px;background:var(--glass-brd);margin:10px 0;opacity:.6}
-  .switch{display:inline-flex;align-items:center;gap:8px;background:transparent;border:1px solid var(--glass-brd);border-radius:999px;padding:5px 10px 5px 5px;cursor:pointer;color:var(--ink);font:inherit;font-size:.85rem;font-weight:600}
-  .switch .track{width:34px;height:19px;border-radius:999px;background:rgba(140,130,170,.35);position:relative;transition:background .2s ease;flex:0 0 34px}
-  .switch .track::after{content:"";position:absolute;top:2px;left:2px;width:15px;height:15px;border-radius:50%;background:#fff;transition:left .2s ease;box-shadow:0 1px 4px rgba(0,0,0,.35)}
-  .switch[aria-checked="true"] .track{background:var(--accent)}
-  .switch[aria-checked="true"] .track::after{left:17px}
-  .theme-opts{display:flex;flex-direction:column;gap:6px;width:100%;margin-top:8px}
-  .theme-opt{display:flex;align-items:center;justify-content:space-between;width:100%;background:transparent;border:1px solid var(--glass-brd);border-radius:12px;padding:9px 12px;color:var(--ink);font:inherit;font-size:.9rem;font-weight:600;cursor:pointer;transition:background .18s ease}
-  .theme-opt:hover{background:var(--glass-hi)}
-  .theme-opt .check{color:var(--accent2);font-weight:800;visibility:hidden}
-  .theme-opt[aria-checked="true"] .check{visibility:visible}
-  .theme-opt[aria-checked="true"]{border-color:var(--accent)}
-  .theme-name{display:inline-flex;align-items:center;gap:8px}
-  .rec{font-size:.58rem;font-weight:700;letter-spacing:.04em;color:var(--accent2);background:rgba(168,85,247,.14);border:1px solid var(--glass-brd);padding:1px 6px;border-radius:999px}
+  .set-label{font-weight:900;font-size:.95rem}
+  .set-note{font-size:.8rem;color:var(--muted);padding:4px 2px 0;line-height:1.5}
+  .set-sep{height:2px;background:var(--lav-soft);margin:10px 0;opacity:.7;border-radius:2px}
+  .switch-state{font-size:.85rem;font-weight:800;min-width:26px}
+  .toggle-cell{display:inline-flex;align-items:center;gap:10px}
+
+  /* native switch fallback (built by JS only if the animated toggle fails to load) */
+  .switch{display:inline-flex;align-items:center;gap:8px;background:var(--card);border:2.5px solid var(--line);border-radius:999px;padding:5px 10px 5px 5px;cursor:pointer;color:var(--ink);font:inherit;font-size:.85rem;font-weight:800}
+  .switch .track{width:34px;height:19px;border-radius:999px;background:var(--lav-bg);position:relative;transition:background .2s ease;flex:0 0 34px;border:2px solid var(--line)}
+  .switch .track::after{content:"";position:absolute;top:1px;left:2px;width:13px;height:13px;border-radius:50%;background:var(--card);border:2px solid var(--line);transition:left .2s ease}
+  .switch[aria-checked="true"] .track{background:var(--lav)}
+  .switch[aria-checked="true"] .track::after{left:15px}
+
+  /* native radio fallback */
+  .fb-radio{display:flex;gap:10px;align-items:center;padding:9px 2px;font-weight:800;cursor:pointer;min-height:40px}
+  .fb-radio input{width:22px;height:22px;accent-color:var(--lav);flex:none}
 
   /* scroll reveal (kept from the original page) */
   .rv{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
   .rv.in{opacity:1;transform:none}
-  .pills .pill:nth-child(2){transition-delay:.05s}
-  .pills .pill:nth-child(3){transition-delay:.1s}
-  .pills .pill:nth-child(4){transition-delay:.15s}
-  .pills .pill:nth-child(5){transition-delay:.2s}
 
   @media (max-width:480px){
-    .avatar-wrap{height:210px}
+    .avatar-wrap{height:124px;width:92px;flex-basis:92px}
     .skin-viewer{height:336px}
     h1{margin:22px 0 26px}
   }
-  @media (prefers-reduced-motion: reduce){
-    .cube{animation:none}
-    .skin-ph{animation:none}
-    .rv{opacity:1;transform:none;transition:none}
-    html{scroll-behavior:auto}
-  }
 
-  /* ================= Entry Page (mobile-first) =================
-     A framed cinematic panel floating with margins on a near-black field —
-     the artwork lives inside the frame, never edge-to-edge. Shown once per
-     tab session; BEGIN THE JOURNEY closes it and starts the site music. */
+  /* ================= Entry Page (mobile-first) ================= */
   html.gated body{overflow:hidden}
   .entry{display:none}
   html.gated .entry{
     display:flex;align-items:center;justify-content:center;
     position:fixed;inset:0;z-index:200;
-    padding:0;
-    background:#040409;
+    background:
+      radial-gradient(var(--paper-dot) 1.6px, transparent 1.7px) 0 0/22px 22px,
+      var(--paper);
     opacity:1;transition:opacity .5s ease;
   }
   .entry.leaving{opacity:0;pointer-events:none}
-  .entry-frame{
-    position:relative;width:100%;height:100%;
-    border-radius:0;overflow:hidden;isolation:isolate;
-    border:none;
-    background:linear-gradient(165deg,#0d0718 0%,#050409 52%,#0a0514 100%);
-    box-shadow:inset 0 0 120px rgba(0,0,0,.5);
-    display:flex;align-items:center;justify-content:center;
-  }
-  /* --- original artwork: layered gradients + geometry, drawn in CSS --- */
-  .entry-art{position:absolute;inset:0;z-index:0;overflow:hidden}
-  /* the portrait scene fills the frame; a contrast wash keeps the quote
-     and button perfectly readable over it */
-  .entry-art::before{
-    content:"";position:absolute;inset:0;
-    background:url('./bg-mobile.webp') center 24%/cover no-repeat;
-  }
-  .entry-art::after{
-    content:"";position:absolute;inset:0;
-    background:linear-gradient(180deg, rgba(5,3,12,.14) 0%, rgba(5,3,12,.34) 40%, rgba(5,3,12,.55) 60%, rgba(5,3,12,.34) 100%);
-  }
-  /* on large PC screens the entry uses the wide scene, same as the page */
-  @media (min-width:1100px) and (pointer:fine), (min-width:1100px) and (min-aspect-ratio:13/10){
-    .entry-art::before{background-image:url('./bg-desktop.webp');background-position:center}
-  }
-  /* entry gate follows the theme too: light shows the new bright scenes */
-  :root[data-theme="light"] .entry-art::before{background-image:url('./bg-light-mobile.webp')}
-  @media (min-width:1100px) and (pointer:fine), (min-width:1100px) and (min-aspect-ratio:13/10){
-    :root[data-theme="light"] .entry-art::before{background-image:url('./bg-light-desktop.webp')}
-  }
-  .entry-art .nebula{
-    position:absolute;left:-32%;top:9%;width:165%;height:36%;
-    transform:rotate(-31deg);opacity:.45;
-    background:radial-gradient(ellipse 50% 50% at 50% 50%, rgba(217,180,255,.34) 0%, rgba(168,85,247,.34) 34%, rgba(109,40,217,.16) 58%, transparent 74%);
-    filter:blur(14px);
-  }
-  .entry-art .nebula.core{
-    top:16.5%;height:13%;
-    background:radial-gradient(ellipse 50% 50% at 50% 50%, rgba(240,220,255,.5) 0%, rgba(192,132,252,.38) 42%, transparent 72%);
-    filter:blur(7px);
-  }
-  .entry-art .nebula.low{
-    top:auto;bottom:-4%;left:-20%;height:26%;opacity:.55;
-    transform:rotate(-24deg);
-  }
-  .entry-art .dust{
-    position:absolute;inset:0;
-    background-image:
-      radial-gradient(1.6px 1.6px at 22% 30%, rgba(233,213,255,.75) 50%, transparent 51%),
-      radial-gradient(1.2px 1.2px at 71% 18%, rgba(233,213,255,.55) 50%, transparent 51%),
-      radial-gradient(1.3px 1.3px at 84% 57%, rgba(216,180,254,.6) 50%, transparent 51%),
-      radial-gradient(1.1px 1.1px at 14% 68%, rgba(216,180,254,.5) 50%, transparent 51%),
-      radial-gradient(1.5px 1.5px at 57% 84%, rgba(233,213,255,.45) 50%, transparent 51%),
-      radial-gradient(1px 1px at 40% 12%, rgba(233,213,255,.5) 50%, transparent 51%);
-  }
-  .entry-art .geo{position:absolute;border:1px solid rgba(192,132,252,.30)}
-  .entry-art .geo.sq1{width:118px;height:118px;top:11%;right:-34px;transform:rotate(24deg)}
-  .entry-art .geo.sq2{width:64px;height:64px;bottom:15%;left:-20px;transform:rotate(-14deg);border-color:rgba(192,132,252,.22)}
-  .entry-art .geo.ring{width:150px;height:150px;border-radius:50%;bottom:-52px;right:-38px;border-color:rgba(192,132,252,.16)}
-  .entry-art .geo.line{width:150%;height:0;border:none;border-top:1px solid rgba(192,132,252,.13);top:64%;left:-25%;transform:rotate(-31deg)}
-  .entry-art .geo.dia{width:9px;height:9px;top:26%;left:16%;transform:rotate(45deg);background:rgba(192,132,252,.55);border:none;box-shadow:0 0 10px rgba(168,85,247,.8)}
+  .entry-frame{position:relative;width:100%;height:100%;overflow:hidden;isolation:isolate;display:flex;align-items:center;justify-content:center}
+  /* The glow bands are painted as background layers on this box itself:
+     as separate oversized divs their boxes stuck out past the frame and
+     widened the whole page sideways on phones. Same soft lavender/pink
+     glow, nothing outside the frame. */
+  .entry-art{position:absolute;inset:0;z-index:0;overflow:hidden;background:
+    radial-gradient(ellipse 88% 30% at 42% 19%, rgba(255,238,246,.75) 0%, rgba(255,214,235,.5) 30%, rgba(184,179,255,.45) 55%, rgba(143,141,247,.16) 76%, transparent 88%),
+    radial-gradient(ellipse 96% 38% at 58% 30%, rgba(184,179,255,.38) 0%, rgba(143,141,247,.15) 55%, transparent 78%),
+    radial-gradient(ellipse 82% 27% at 50% 93%, rgba(255,214,235,.42) 0%, rgba(184,179,255,.36) 45%, rgba(143,141,247,.12) 70%, transparent 86%)}
+  .entry-art .dust{position:absolute;inset:0;background-image:
+      radial-gradient(1.6px 1.6px at 22% 30%, rgba(143,141,247,.75) 50%, transparent 51%),
+      radial-gradient(1.2px 1.2px at 71% 18%, rgba(143,141,247,.55) 50%, transparent 51%),
+      radial-gradient(1.3px 1.3px at 84% 57%, rgba(255,95,168,.6) 50%, transparent 51%),
+      radial-gradient(1.1px 1.1px at 14% 68%, rgba(255,95,168,.5) 50%, transparent 51%),
+      radial-gradient(1.5px 1.5px at 57% 84%, rgba(143,141,247,.45) 50%, transparent 51%),
+      radial-gradient(1px 1px at 40% 12%, rgba(143,141,247,.5) 50%, transparent 51%)}
+  .entry-art .geo{position:absolute;border:2px solid var(--lav-soft)}
+  .entry-art .geo.sq1{width:118px;height:118px;top:11%;right:22px;transform:rotate(24deg)}
+  .entry-art .geo.sq2{width:64px;height:64px;bottom:15%;left:10px;transform:rotate(-14deg);opacity:.7}
+  .entry-art .geo.ring{width:150px;height:150px;border-radius:50%;bottom:-52px;right:12px;opacity:.55}
+  .entry-art .geo.line{width:100%;height:0;border:none;border-top:2px solid var(--lav-soft);top:64%;left:0;transform:rotate(-31deg);opacity:.5}
+  .entry-art .geo.dia{width:9px;height:9px;top:26%;left:16%;transform:rotate(45deg);background:var(--pink);border:none}
   .entry-art .geo.dia.d2{top:auto;left:auto;bottom:24%;right:15%;width:7px;height:7px;opacity:.8}
-  /* --- content --- */
   .entry-inner{position:relative;z-index:1;text-align:center;padding:34px 30px;max-width:340px}
-  .entry-quote{
-    font-family:'Cormorant Garamond',Georgia,'Times New Roman',serif;
-    font-weight:500;font-size:clamp(1.78rem,7.4vw,2.25rem);line-height:1.38;
-    letter-spacing:.015em;color:#f1eafd;text-wrap:balance;
-    text-shadow:0 2px 26px rgba(147,51,234,.4);
-    animation:entryRise .9s ease both .1s;
-  }
-  .entry-rule{
-    width:44px;height:1px;margin:26px auto 30px;
-    background:linear-gradient(90deg,transparent,rgba(216,180,254,.9),transparent);
-    box-shadow:0 0 8px rgba(168,85,247,.7);
-    animation:entryRise .9s ease both .25s;
-  }
-  .entry-btn-wrap{display:inline-block;filter:drop-shadow(0 0 16px rgba(147,51,234,.45));animation:entryRise .9s ease both .4s}
-  .entry-btn{
-    position:relative;display:inline-block;cursor:pointer;
-    font-family:'Inter',system-ui,sans-serif;font-weight:600;font-size:.82rem;
-    letter-spacing:.30em;text-indent:.30em;text-transform:uppercase;color:#ecd9ff;
-    padding:17px 30px;border:none;
-    background:var(--glassbox);
-    border-radius:16px;
-    transition:filter .2s ease,background .2s ease;
-  }
-  .entry-btn::before{
-    content:"";position:absolute;inset:0;padding:1px;
-    background:linear-gradient(120deg,#a855f7,#7e22ce 55%,#a855f7);
-    border-radius:inherit;
-    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;
-    mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;
-    pointer-events:none;
-  }
-  .entry-btn span{position:relative;z-index:1}
-  .entry-btn:focus-visible{outline:none;box-shadow:0 0 0 2px rgba(192,132,252,.9),0 0 24px rgba(168,85,247,.45)}
-  .entry-btn:hover,.entry-btn:active{background:var(--glassbox-hi)}
-  .entry-btn:active{filter:brightness(1.25)}
+  .entry-quote{font-family:"Cormorant Garamond",Georgia,"Times New Roman",serif;font-weight:500;font-size:clamp(1.78rem,7.4vw,2.25rem);line-height:1.38;letter-spacing:.015em;color:var(--ink);text-wrap:balance;animation:entryRise .9s ease both .1s}
+  .entry-rule{width:44px;height:2px;margin:26px auto 30px;background:linear-gradient(90deg,transparent,var(--lav),transparent);animation:entryRise .9s ease both .25s}
+  .entry-btn-wrap{display:inline-block;animation:entryRise .9s ease both .4s}
   @keyframes entryRise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
-  @keyframes nebulaDrift{from{margin-left:0}to{margin-left:-14px}}
-  .entry-art .nebula{animation:nebulaDrift 11s ease-in-out infinite alternate}
-  @media (max-height:560px){
-    .entry-frame{height:100%}
-    .entry-quote{font-size:1.55rem}
-    .entry-inner{padding:22px 24px}
-  }
-  @media (prefers-reduced-motion: reduce){
-    .entry-quote,.entry-rule,.entry-btn-wrap{animation:none}
-    .entry-art .nebula{animation:none}
-  }
+  @media (max-height:560px){.entry-quote{font-size:1.55rem}.entry-inner{padding:22px 24px}}
 
-  /* ================= navigation drawer (preview) ================= */
-  .drawer-backdrop{position:fixed;inset:0;z-index:75;background:rgba(4,2,12,.6)}
+  /* ================= navigation drawer ================= */
+  .drawer-backdrop{position:fixed;inset:0;z-index:75;background:rgba(10,6,32,.55)}
   .drawer-backdrop[hidden]{display:none}
-  .drawer{
-    position:fixed;top:0;left:0;bottom:0;height:100vh;height:100dvh;width:min(320px,88vw);
-    z-index:80;background:rgba(20,12,38,.94);border-right:1px solid rgba(168,85,247,.35);
-    box-shadow:var(--shadow);overflow-y:auto;overscroll-behavior:contain;
-    transform:translateX(-105%);visibility:hidden;
-    transition:transform .28s ease,visibility 0s linear .28s;
-  }
-  .drawer.open{transform:translateX(0);visibility:visible;transition:transform .28s ease}
-  .drawer-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px;border-bottom:1px solid rgba(168,85,247,.28)}
-  .drawer-brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:#f5f3fb;min-width:0}
-  .drawer-brand img{width:48px;height:48px;border-radius:14px;flex:0 0 48px}
+  .drawer{position:fixed;top:0;left:0;bottom:0;height:100vh;height:100dvh;width:min(320px,88vw);z-index:80;background:var(--card);border-right:3px solid var(--line);box-shadow:var(--shadow);overflow-y:auto;overscroll-behavior:contain;display:none;transform:translateX(-105%);pointer-events:none;transition:transform .28s ease}
+  .drawer.open{transform:translateX(0);pointer-events:auto}
+  .drawer-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px;border-bottom:2.5px dashed var(--lav-soft)}
+  .drawer-brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink);min-width:0}
+  .drawer-brand img{width:48px;height:48px;border-radius:14px;flex:0 0 48px;border:2px solid var(--line)}
   .drawer-brand-text{display:flex;flex-direction:column;line-height:1.25;min-width:0}
-  .drawer-brand-text strong{font-size:1rem;letter-spacing:.02em}
-  .drawer-brand-text small{font-size:.8rem;color:#c4b5fd;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .drawer-brand-text strong{font-size:1rem;letter-spacing:.02em;font-weight:900}
+  .drawer-brand-text small{font-size:.8rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}
+  .drawer-tabs{display:flex;justify-content:center;padding:14px 12px 4px}
   .drawer-cats{padding:10px 12px 20px}
   .drawer-cat{margin-bottom:6px}
-  .drawer-cat-btn{
-    width:100%;display:flex;align-items:center;gap:12px;background:transparent;border:0;
-    color:#f5f3fb;font:inherit;font-weight:700;font-size:.98rem;text-align:left;
-    padding:11px 10px;border-radius:12px;cursor:pointer;transition:background .18s ease;
-  }
-  .drawer-cat-btn:hover{background:rgba(168,85,247,.14)}
-  .drawer-cat-btn svg{width:22px;height:22px;flex:0 0 22px;color:#c084fc}
-  .drawer-cat-btn .chev{width:18px;height:18px;flex:0 0 18px;margin-left:auto;color:#a49ec0;transition:transform .25s ease}
+  .drawer-cat-btn{width:100%;display:flex;align-items:center;gap:12px;background:transparent;border:0;color:var(--ink);font:inherit;font-weight:900;font-size:.98rem;text-align:left;padding:11px 10px;border-radius:12px;cursor:pointer;transition:background .18s ease}
+  .drawer-cat-btn:hover{background:var(--lav-bg)}
+  .drawer-cat-btn svg{width:22px;height:22px;flex:0 0 22px;color:var(--lav)}
+  .drawer-cat-btn .chev{width:18px;height:18px;flex:0 0 18px;margin-left:auto;color:var(--faint);transition:transform .25s ease}
   .drawer-cat-btn[aria-expanded="true"] .chev{transform:rotate(180deg)}
   .drawer-items{display:grid;grid-template-rows:0fr;transition:grid-template-rows .28s ease}
   .drawer-items.open{grid-template-rows:1fr}
   .drawer-items ul{overflow:hidden;min-height:0;list-style:none;margin:0;padding:0}
-  .drawer-link{
-    display:block;margin:2px 0 2px 34px;padding:10px 12px;border-radius:10px;
-    color:#e9e4fb;text-decoration:none;font-size:.94rem;font-weight:600;
-    transition:background .18s ease;
-  }
-  .drawer-link:hover{background:rgba(168,85,247,.14)}
-  .drawer-link[aria-current="page"]{background:rgba(168,85,247,.28);font-weight:800}
-  .drawer-foot{border-top:1px solid rgba(168,85,247,.28);padding:12px 16px}
+  .drawer-link{display:block;margin:2px 0 2px 34px;padding:10px 12px;border-radius:10px;color:var(--ink);text-decoration:none;font-size:.94rem;font-weight:700;transition:background .18s ease}
+  .drawer-link:hover{background:var(--lav-bg)}
+  .drawer-link[aria-current="page"]{background:var(--lav-bg);font-weight:900}
+  .drawer-foot{border-top:2.5px dashed var(--lav-soft);padding:12px 16px}
   .drawer-foot .drawer-link{margin:2px 0}
-  .drawer-standalone{display:flex;align-items:center;gap:12px;margin:2px 0 6px;padding:11px 10px;border-radius:12px;color:#f5f3fb;text-decoration:none;font-size:.98rem;font-weight:700;transition:background .18s ease}
-  .drawer-standalone:hover{background:rgba(168,85,247,.14)}
-  .drawer-standalone svg{width:22px;height:22px;flex:0 0 22px;color:#c084fc}
-  .drawer-standalone[aria-current="page"]{background:rgba(168,85,247,.28);font-weight:800}
+  .drawer-standalone{display:flex;align-items:center;gap:12px;margin:2px 0 6px;padding:11px 10px;border-radius:12px;color:var(--ink);text-decoration:none;font-size:.98rem;font-weight:900;transition:background .18s ease}
+  .drawer-standalone:hover{background:var(--lav-bg)}
+  .drawer-standalone svg{width:22px;height:22px;flex:0 0 22px;color:var(--lav)}
+  .drawer-standalone[aria-current="page"]{background:var(--lav-bg)}
 
-  /* ================= destination views (preview) ================= */
+  /* ================= destination views ================= */
   #destViews{position:relative;z-index:1;width:100%;max-width:620px;margin:0 auto;padding:clamp(72px,8vh,76px) 22px 72px}
-  .dest{text-align:left}
-  .dest h2{font-size:clamp(1.4rem,5vw,1.9rem);font-weight:700;line-height:1.3;text-align:center;margin:10px 0}
+  #destViews.home-scroll{padding-top:2px}
+  .card.home-top{padding-bottom:16px}
+  .dest{text-align:left;scroll-margin-top:66px}
+  .dest[hidden]{display:none}
+  .dest h2{font-size:clamp(1.4rem,5vw,1.9rem);font-weight:900;line-height:1.3;text-align:center;margin:10px 0}
   .dest-intro{color:var(--muted);text-align:center;margin-bottom:22px;line-height:1.6}
   .dest-note{color:var(--muted);font-size:.9rem;text-align:center;margin-top:14px;line-height:1.6}
   .dest-muted{color:var(--muted)}
-  .back-home{display:inline-flex;text-decoration:none;color:var(--accent2);font-weight:700;font-size:.92rem;padding:6px 2px}
-  .dest-card{
-    position:relative;background:var(--glassbox);
-    border-radius:16px;padding:18px 20px;margin-bottom:14px;
-    filter:drop-shadow(0 10px 22px rgba(0,0,0,.35));
-  }
-  .dest-card::before{content:"";position:absolute;inset:0;padding:1px;background:linear-gradient(120deg,rgba(192,132,252,.95),rgba(147,51,234,.55) 50%,rgba(192,132,252,.95));border-radius:inherit;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;pointer-events:none}
-  .dest-card>*{position:relative;z-index:1}
-  .dest-card h3{font-size:1.05rem;margin-bottom:6px}
+  .dest-card{position:relative;background:var(--card);border:3px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:18px 20px;margin-bottom:16px}
+  .dest-card h3{font-size:1.05rem;margin-bottom:6px;font-weight:900}
+  .dest-card p{color:var(--muted);line-height:1.6;font-size:.95rem}
+  .dest-card p strong{color:var(--ink)}
+  .dest-card a{color:var(--lav);font-weight:800}
+  a.dest-card{display:block;color:var(--ink);text-decoration:none}
+  a.dest-card-link{transition:transform .18s ease}
+  a.dest-card-link:hover{transform:translateY(-2px)}
+  a.dest-card-link:focus-visible{outline:2px solid var(--focus);outline-offset:3px}
+  .ph-note{border:2.5px dashed var(--lav-soft);border-radius:12px;padding:13px 15px;color:var(--muted);font-size:.9rem;line-height:1.55;margin-bottom:14px;background:var(--card)}
   .skill-head{display:flex;align-items:center;gap:10px;margin-bottom:6px}
-  .skill-head svg{width:22px;height:22px;flex:0 0 22px;color:#c084fc}
+  .skill-head svg{width:22px;height:22px;flex:0 0 22px;color:var(--lav)}
   .skill-head h3{margin-bottom:0}
+  #view-about .dest-intro{font-size:.88rem}
+
+  /* ================= footer (bottom of the home scroll page) ================= */
+  .site-footer{position:relative;z-index:1;max-width:620px;margin:0 auto;padding:28px 22px 48px;text-align:center;border-top:2.5px dashed var(--lav-soft)}
+  .site-footer[hidden]{display:none}
+  .foot-name{font-weight:900;font-size:1.05rem}
+  .foot-line{color:var(--muted);font-size:.9rem;margin-top:2px}
+  .foot-links{display:flex;flex-wrap:wrap;gap:8px 18px;justify-content:center;margin:14px 0 12px}
+  .foot-links a{color:var(--lav);font-weight:800;text-decoration:none;font-size:.92rem}
+  .foot-links a:hover{text-decoration:underline}
+  .foot-copy{color:var(--faint);font-size:.85rem}
 
   /* ================= gaming hub ================= */
   .gh-favs{margin-bottom:20px;scroll-margin-top:72px}
-  .gh-favs-title{font-size:1.05rem;margin:0 0 12px}
+  .gh-favs-title{font-size:1.05rem;margin:0 0 12px;font-weight:900}
   .gh-cat{margin-bottom:14px;scroll-margin-top:72px}
-  .gh-cat-head{width:100%;display:flex;align-items:center;gap:10px;background:var(--glassbox);border:1px solid rgba(168,85,247,.35);border-radius:14px;padding:13px 16px;color:var(--ink);font:inherit;font-weight:700;font-size:.98rem;text-align:left;cursor:pointer}
-  .gh-cat-head .gh-count{margin-left:auto;color:var(--muted);font-size:.85rem;font-weight:600}
-  .gh-cat-head .gh-chev{width:18px;height:18px;flex:0 0 18px;color:#c084fc;transition:transform .25s ease}
+  .gh-cat-head{width:100%;display:flex;align-items:center;gap:10px;background:var(--card);border:3px solid var(--line);border-radius:14px;box-shadow:4px 5px 0 var(--lav-soft);padding:13px 16px;color:var(--ink);font:inherit;font-weight:900;font-size:.98rem;text-align:left;cursor:pointer}
+  .gh-cat-head .gh-count{margin-left:auto;color:var(--muted);font-size:.85rem;font-weight:700}
+  .gh-cat-head .gh-chev{width:18px;height:18px;flex:0 0 18px;color:var(--lav);transition:transform .25s ease}
   .gh-cat-head[aria-expanded="true"] .gh-chev{transform:rotate(180deg)}
   .gh-items{display:grid;grid-template-rows:0fr;transition:grid-template-rows .28s ease}
   .gh-items.open{grid-template-rows:1fr}
   .gh-items > div{overflow:hidden;min-height:0}
   .gh-grid{display:grid;gap:12px;grid-template-columns:1fr;padding-top:12px}
-  .gh-card{position:relative;background:var(--glassbox);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
-  .gh-card::before{content:"";position:absolute;inset:0;padding:1px;background:linear-gradient(120deg,rgba(192,132,252,.95),rgba(147,51,234,.55) 50%,rgba(192,132,252,.95));border-radius:inherit;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;pointer-events:none}
-  .gh-card > *{position:relative;z-index:1}
+  .gh-card{position:relative;background:var(--card);border:3px solid var(--line);border-radius:16px;box-shadow:4px 5px 0 var(--lav-soft);overflow:hidden;display:flex;flex-direction:column}
   .gh-body{padding:16px 18px;display:flex;flex-direction:column;gap:6px;flex:1}
-  .gh-body h4{font-size:.95rem;margin:0;line-height:1.35}
+  .gh-body h4{font-size:.95rem;margin:0;line-height:1.35;font-weight:900}
   .gh-favstar{font-size:.85em}
-  .gh-meta{font-size:.78rem;color:var(--muted);line-height:1.4}
+  .gh-meta{font-size:.78rem;color:var(--muted);line-height:1.4;font-weight:700}
   .gh-body p{font-size:.86rem;color:var(--muted);line-height:1.5;margin:0;flex:1}
-  .gh-link{align-self:flex-start;color:var(--accent2);font-weight:700;font-size:.85rem;text-decoration:none;margin-top:4px}
+  .gh-link{align-self:flex-start;color:var(--lav);font-weight:800;font-size:.85rem;text-decoration:none;margin-top:4px}
   .gh-link:hover{text-decoration:underline}
-  .gh-note{font-size:.8rem;color:#e8c468;margin-top:4px}
-  @media (prefers-reduced-motion: reduce){.gh-items,.gh-cat-head .gh-chev{transition:none}}
-  .dest-card p{color:var(--muted);line-height:1.6;font-size:.95rem}
-  .dest-card p strong{color:var(--ink)}
-  .dest-card-link{display:block;color:var(--ink);text-decoration:none;transition:filter .18s ease}
-  .dest-card-link:hover{filter:drop-shadow(0 14px 26px rgba(0,0,0,.45)) brightness(1.08)}
-  .dest-card-link:focus-visible{outline:2px solid var(--accent2);outline-offset:2px}
-  .dest-card a{color:var(--accent2)}
-  .dest-quote{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.35rem;line-height:1.4;color:var(--ink);text-align:center}
-  /* About page only: smaller intro text, as requested */
-  #view-about .dest-intro{font-size:.88rem}
-  .ph-note{border:1px dashed var(--glass-brd);border-radius:12px;padding:13px 15px;color:var(--muted);font-size:.9rem;line-height:1.55;margin-bottom:14px}
-  .dest-social{display:flex;flex-direction:column;gap:14px;margin-top:6px}
-  .dest-btn{
-    display:inline-block;background:linear-gradient(120deg,#a855f7,#7e22ce);color:#fff !important;
-    border:0;border-radius:12px;padding:12px 20px;font:inherit;font-weight:700;font-size:.95rem;
-    cursor:pointer;text-decoration:none;transition:filter .18s ease;
-  }
-  .dest-btn:hover{filter:brightness(1.15)}
-  .dest-form{display:flex;flex-direction:column;gap:10px}
-  .field-label{font-weight:600;font-size:.92rem}
-  .field{
-    width:100%;background:var(--glassbox);border:1px solid var(--glass-brd);border-radius:12px;
-    padding:12px 14px;color:var(--ink);font:inherit;font-size:.95rem;resize:vertical;
-  }
-  .field::placeholder{color:var(--muted)}
-  @media (prefers-reduced-motion: reduce){
-    .drawer,.drawer-items,.drawer-cat-btn .chev{transition:none}
-  }
+  .gh-note{font-size:.8rem;color:var(--warn,#b97e06);margin-top:4px;font-weight:700}
 
-  /* ================= My PC (gaming-setup) ================= */
-  .pc-grid{display:grid;gap:10px;grid-template-columns:1fr;margin-bottom:14px}
-  @media (min-width:520px){.pc-grid{grid-template-columns:1fr 1fr}}
-  .pc-card{position:relative;background:var(--glassbox);border-radius:14px;padding:12px 14px;text-align:center;filter:drop-shadow(0 10px 22px rgba(0,0,0,.35))}
-  .pc-card::before{content:"";position:absolute;inset:0;padding:1px;background:linear-gradient(120deg,rgba(192,132,252,.95),rgba(147,51,234,.55) 50%,rgba(192,132,252,.95));border-radius:inherit;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;pointer-events:none}
-  .pc-card>*{position:relative;z-index:1}
-  .pc-card h3{font-size:1.02rem;margin-bottom:2px}
-  .pc-card p{color:var(--muted);line-height:1.45;font-size:.92rem;margin:0}
-  .pc-card p + p{margin-top:2px}
-  .pc-card p strong{color:var(--ink)}
-
-  /* ================= Access Denied (restricted page) ================= */
+  /* ================= Access Denied ================= */
   .denied{text-align:center;padding:38px 8px 22px;display:flex;flex-direction:column;align-items:center}
-  .denied-icon{position:relative;width:94px;height:94px;border-radius:50%;background:var(--glassbox);display:flex;align-items:center;justify-content:center;margin-bottom:20px;filter:drop-shadow(0 10px 22px rgba(0,0,0,.35))}
-  .denied-icon::before{content:"";position:absolute;inset:0;padding:1px;background:linear-gradient(120deg,rgba(192,132,252,.95),rgba(147,51,234,.55) 50%,rgba(192,132,252,.95));border-radius:inherit;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;pointer-events:none}
+  .denied-icon{width:94px;height:94px;border-radius:50%;background:var(--card);border:3px solid var(--line);box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center;margin-bottom:20px}
   .denied-icon svg{width:44px;height:44px;color:var(--ink)}
   .denied h2{margin:0 0 6px}
-  .denied-sub{font-size:1.06rem;font-weight:600;color:var(--ink);margin:0 0 10px}
+  .denied-sub{font-size:1.06rem;font-weight:800;color:var(--ink);margin:0 0 10px}
   .denied-msg{color:var(--muted);line-height:1.6;font-size:.95rem;max-width:430px;margin:0 0 22px}
-  .denied-btn{display:inline-block;padding:11px 24px;border-radius:999px;border:1px solid var(--glass-brd);background:var(--glassbox);color:var(--ink);text-decoration:none;font-weight:600;font-size:.95rem}
-  .denied-btn:hover{border-color:rgba(192,132,252,.8)}
+
+  /* ================= forms ================= */
+  .dest-form{display:flex;flex-direction:column;gap:10px}
+  .field-label{font-weight:900;font-size:.92rem;margin-top:6px}
+  .field{width:100%;background:var(--card);border:3px solid var(--line);border-radius:12px;padding:12px 14px;color:var(--ink);font:inherit;font-size:.95rem;font-weight:600;resize:vertical}
+  .field::placeholder{color:var(--faint)}
+  .fb-input{width:100%;min-height:46px;border:3px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);padding:8px 12px;font:inherit;font-weight:600}
+  .fb-range{width:100%;accent-color:var(--lav);height:40px}
+  .fb-bar{height:16px;border:3px solid var(--line);border-radius:999px;background:var(--lav-bg);overflow:hidden}
+  .fb-bar-fill{height:100%;width:0%;background:var(--lav);transition:width .15s linear}
+  .fb-check{display:flex;gap:10px;align-items:flex-start;padding:9px 0;font-weight:700;cursor:pointer;min-height:40px}
+  .fb-check input{width:22px;height:22px;accent-color:var(--lav);flex:none;margin-top:1px}
+  .fb-stars{display:flex;gap:4px}
+  .fb-stars button{background:none;border:none;font-size:2rem;line-height:1;cursor:pointer;color:var(--lav-soft);padding:4px;min-width:44px;min-height:44px;font-family:inherit}
+  .fb-stars button.on{color:var(--pink)}
+  .form-btn-row{display:flex;justify-content:center;margin-top:8px}
+  /* small confirm tick-box directly under the Send button */
+  .consent-row{display:flex;justify-content:center;margin-top:10px;padding:4px 8px;font-size:.88rem;border-radius:12px}
+  .consent-row.pulse{animation:consentPulse .45s ease-in-out 2}
+  @keyframes consentPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,95,168,0)}50%{box-shadow:0 0 0 5px rgba(255,95,168,.5)}}
+  .music-ctl{margin-top:14px}
+  .music-ctl .f-label{display:block;font-weight:900;margin:0 0 8px;font-size:.93rem}
+  /* Volume control: native range (the animated slider's thumb detached from
+     its track on touch). The % bubble rides above the thumb with clear
+     space under the label, and the track fills up to the thumb. */
+  .vol-wrap{position:relative;padding-top:40px}
+  .vol-bubble{position:absolute;top:0;left:50%;transform:translateX(-50%);background:var(--card);border:2.5px solid var(--line);border-radius:9px;padding:2px 8px;font-size:.8rem;font-weight:900;line-height:1.35;white-space:nowrap;pointer-events:none}
+  .vol-bubble::after{content:"";position:absolute;left:50%;bottom:-6px;width:9px;height:9px;background:var(--card);border-right:2.5px solid var(--line);border-bottom:2.5px solid var(--line);transform:translateX(-50%) rotate(45deg)}
+  .vol-range{-webkit-appearance:none;appearance:none;display:block;width:100%;height:44px;background:transparent;cursor:pointer;--vol-p:50%}
+  .vol-range::-webkit-slider-runnable-track{height:16px;border-radius:999px;border:3px solid var(--line);background:linear-gradient(90deg,var(--lav) var(--vol-p),var(--lav-bg) var(--vol-p))}
+  .vol-range::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:28px;height:28px;border-radius:50%;background:var(--card);border:3px solid var(--line);box-shadow:3px 3px 0 var(--lav-soft);margin-top:-9px;cursor:grab}
+  .vol-range::-moz-range-track{height:16px;border-radius:999px;border:3px solid var(--line);background:var(--lav-bg)}
+  .vol-range::-moz-range-progress{height:10px;border-radius:999px;background:var(--lav)}
+  .vol-range::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--card);border:3px solid var(--line);box-shadow:3px 3px 0 var(--lav-soft);cursor:grab}
+  .vol-range:focus-visible{outline:2px solid var(--focus);outline-offset:4px}
+  .progress-pad{padding:44px 0 64px;display:flex;justify-content:center}
+  #fbToast{position:fixed;left:14px;bottom:14px;z-index:90;background:var(--card);color:var(--ink);border:3px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:12px 16px;font-weight:900;max-width:min(320px,86vw)}
+  sakuga-toast{position:fixed;left:14px;bottom:14px;z-index:85}
+  sakuga-button:not(:defined){display:inline-block;padding:13px 26px;border:3px solid var(--line);border-radius:15px;background:var(--card);color:var(--ink);font-weight:900;font-style:italic;cursor:pointer;min-height:48px;box-shadow:var(--shadow);text-align:center}
+  sakuga-tabs:not(:defined){display:flex;gap:8px;flex-wrap:wrap}
+  sakuga-tabs:not(:defined) option{padding:10px 16px;border:2.5px solid var(--line);border-radius:999px;background:var(--lav-bg);cursor:pointer;font-weight:800}
+
+  @media (prefers-reduced-motion: reduce){
+    .cube,.skin-ph,.entry-quote,.entry-rule,.entry-btn-wrap,.consent-row.pulse{animation:none}
+    .rv{opacity:1;transform:none;transition:none}
+    .drawer,.drawer-items,.drawer-cat-btn .chev,.gh-items,.gh-cat-head .gh-chev{transition:none}
+    html{scroll-behavior:auto}
+  }
 </style>
 </head>
 <body>
@@ -497,9 +402,6 @@
   <div id="entryGate" class="entry" role="dialog" aria-modal="true" aria-labelledby="entryQuote">
     <div class="entry-frame">
       <div class="entry-art" aria-hidden="true">
-        <div class="nebula"></div>
-        <div class="nebula core"></div>
-        <div class="nebula low"></div>
         <div class="dust"></div>
         <div class="geo sq1"></div>
         <div class="geo sq2"></div>
@@ -511,42 +413,48 @@
       <div class="entry-inner">
         <p class="entry-quote" id="entryQuote">&ldquo;Not everyone knows the story behind the silence.&rdquo;</p>
         <div class="entry-rule" aria-hidden="true"></div>
-        <span class="entry-btn-wrap"><button id="entryBtn" class="entry-btn" type="button"><span>BEGIN THE JOURNEY</span></button></span>
+        <span class="entry-btn-wrap"><sakuga-button id="entryBtn" type="button">BEGIN THE JOURNEY</sakuga-button></span>
       </div>
     </div>
   </div>
 
-  <div class="bg" aria-hidden="true"><div class="cube c1"></div><div class="cube c2"></div><div class="cube c3"></div><div class="cube c4"></div><div class="cube c5"></div></div>
-
   <!-- Top bar: hamburger (navigation drawer) on the left; music, theme quick-toggle and settings on the right -->
   <header class="topbar">
-    <button id="navBtn" class="topbar-btn" type="button" aria-label="Menu" aria-haspopup="true" aria-expanded="false" aria-controls="navDrawer">
+    <sakuga-tooltip text="Menu" label="Menu"><button id="navBtn" class="topbar-btn" type="button" aria-label="Menu" aria-haspopup="true" aria-expanded="false" aria-controls="navDrawer">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" fill="none"/></svg>
-    </button>
+    </button></sakuga-tooltip>
     <div class="topbar-right">
-      <button id="musicToggleTop" class="topbar-btn music-btn" type="button" role="switch" aria-checked="false" aria-label="Music">
+      <sakuga-tooltip text="Music" label="Music"><button id="musicToggleTop" class="topbar-btn music-btn muted" type="button" role="switch" aria-checked="false" aria-label="Music">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l12-2v13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="18" r="3" fill="none" stroke="currentColor" stroke-width="2.4"/><circle cx="18" cy="16" r="3" fill="none" stroke="currentColor" stroke-width="2.4"/></svg>
-        <span class="slash" aria-hidden="true"></span>
-      </button>
-      <button id="themeToggleTop" class="topbar-btn theme-toggle" type="button" aria-label="Switch to light theme">
+        <span class="slash" aria-hidden="true"><i class="s-a"></i><i class="s-d"></i></span>
+      </button></sakuga-tooltip>
+      <sakuga-tooltip text="Theme" label="Theme"><button id="themeToggleTop" class="topbar-btn theme-toggle" type="button" aria-label="Switch to dark theme">
         <svg class="ic-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <svg class="ic-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><path d="M12 5V2.5M12 21.5V19M5 12H2.5M21.5 12H19M6.95 6.95L5.28 5.28M18.72 18.72L17.05 17.05M17.05 6.95L18.72 5.28M5.28 18.72L6.95 17.05" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>
-      </button>
-      <button id="settingsBtn" class="topbar-btn" type="button" aria-label="Settings" aria-haspopup="true" aria-expanded="false" aria-controls="settingsMenu">
+      </button></sakuga-tooltip>
+      <sakuga-tooltip text="Settings" label="Settings"><button id="settingsBtn" class="topbar-btn" type="button" aria-label="Settings" aria-haspopup="true" aria-expanded="false" aria-controls="settingsMenu">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M 9.93 3.04 A 9.2 9.2 0 0 1 14.07 3.04 L 14.05 5.31 A 7.0 7.0 0 0 1 16.77 6.88 L 18.73 5.73 A 9.2 9.2 0 0 1 20.80 9.31 L 18.82 10.43 A 7.0 7.0 0 0 1 18.82 13.57 L 20.80 14.69 A 9.2 9.2 0 0 1 18.73 18.27 L 16.77 17.12 A 7.0 7.0 0 0 1 14.05 18.69 L 14.07 20.96 A 9.2 9.2 0 0 1 9.93 20.96 L 9.95 18.69 A 7.0 7.0 0 0 1 7.23 17.12 L 5.27 18.27 A 9.2 9.2 0 0 1 3.20 14.69 L 5.18 13.57 A 7.0 7.0 0 0 1 5.18 10.43 L 3.20 9.31 A 9.2 9.2 0 0 1 5.27 5.73 L 7.23 6.88 A 7.0 7.0 0 0 1 9.95 5.31 Z" fill="none" stroke="currentColor" stroke-width="2.0" stroke-linejoin="round"/><circle cx="12" cy="12" r="3.4" fill="none" stroke="currentColor" stroke-width="2.0"/></svg>
-      </button>
+      </button></sakuga-tooltip>
     </div>
   </header>
   <div id="drawerBackdrop" class="drawer-backdrop" hidden></div>
   <nav id="navDrawer" class="drawer" aria-label="Site navigation">
     <div class="drawer-head">
       <a class="drawer-brand" href="/">
-        <img src="https://mc-heads.net/avatar/alxxq/100" alt="" width="48" height="48">
+        <img src="assets/avatar.png" alt="" width="48" height="48">
         <span class="drawer-brand-text"><strong>Shahin Ahmed Rafi</strong><small>rafiprx.bond</small></span>
       </a>
       <button id="drawerClose" class="topbar-btn" type="button" aria-label="Close menu">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" fill="none"/></svg>
       </button>
+    </div>
+    <div class="drawer-tabs">
+      <sakuga-tabs id="drawerTabs" label="Site sections">
+        <option value="about">About</option>
+        <option value="skills">Skills</option>
+        <option value="projects">Projects</option>
+        <option value="gaming-hub">Gaming</option>
+      </sakuga-tabs>
     </div>
     <div class="drawer-cats">
       <a class="drawer-link drawer-standalone" data-route="" href="/">
@@ -602,7 +510,6 @@
           <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
         <div class="drawer-items" id="drawer-items-community"><ul>
-          <li><a class="drawer-link" data-route="achievements" href="/achievements">Achievements</a></li>
           <li><a class="drawer-link" data-route="discord" href="/discord">Discord Space</a></li>
           <li><a class="drawer-link" data-route="social" href="/social">Social Links</a></li>
           <li><a class="drawer-link" data-route="email" href="/email">Email Me</a></li>
@@ -629,77 +536,57 @@
   <div id="settingsMenu" class="settings" role="menu" aria-label="Settings" hidden>
     <div class="set-row">
       <span class="set-label" id="musicLabel">Music</span>
-      <button id="musicToggle" class="switch" type="button" role="switch" aria-checked="false" aria-labelledby="musicLabel">
-        <span class="track" aria-hidden="true"></span><span id="musicState">Off</span>
-      </button>
+      <span class="toggle-cell"><sakuga-toggle id="musicToggle" label="Music on or off"></sakuga-toggle><span id="musicToggleFb"></span><span class="switch-state" id="musicState">Off</span></span>
     </div>
     <p id="musicNote" class="set-note" hidden>Music unavailable right now.</p>
     <p class="set-note">Track: Love Story</p>
     <div class="set-sep" aria-hidden="true"></div>
     <div class="set-row" style="flex-direction:column;align-items:stretch">
       <span class="set-label">Theme</span>
-      <div class="theme-opts">
-        <button class="theme-opt" type="button" role="menuitemradio" aria-checked="true" data-set-theme="dark"><span class="theme-name">Dark Theme <span class="rec">recommended</span></span> <span class="check" aria-hidden="true">&#10003;</span></button>
-        <button class="theme-opt" type="button" role="menuitemradio" aria-checked="false" data-set-theme="light">Light Theme <span class="check" aria-hidden="true">&#10003;</span></button>
-      </div>
+      <sakuga-radio id="themeRadioMenu" label="Theme" name="theme-menu">
+        <option value="dark">Dark Theme</option>
+        <option value="light" selected>Light Theme</option>
+      </sakuga-radio>
+      <div id="themeRadioMenuFb"></div>
     </div>
   </div>
 
   <main class="card" id="homeView">
-    <div class="avatar-wrap" id="avatarWrap">
-      <div class="skin-viewer" id="skinViewer">
-        <img id="skinPlaceholder" class="skin-ph" src="https://mc-heads.net/avatar/alxxq/100" alt="" aria-hidden="true" onerror="this.style.display='none'">
-        <canvas id="skinCanvas" role="img" aria-label="Interactive 3D Minecraft avatar for alxxq. Drag the character to move it. It runs toward your cursor or tap."></canvas>
-        <p id="skinNote" class="skin-note" hidden>3D avatar could not load. Minecraft username: <strong>alxxq</strong></p>
+    <div class="hero-top rv">
+      <div class="hero-text">
+        <p class="hero-name">Shahin Ahmed Rafi</p>
+        <p class="hero-roles">Honours Student &bull; Developer &bull; Minecraft Community Admin</p>
+        <p class="hero-intro">Developer and Minecraft community admin from Narayanganj, Bangladesh.</p>
+      </div>
+      <div class="avatar-wrap" id="avatarWrap">
+        <div class="char-layer" id="charLayer">
+          <div class="skin-viewer" id="skinViewer">
+            <img id="skinPlaceholder" class="skin-ph" src="assets/avatar.png" alt="" aria-hidden="true" onerror="this.style.display='none'">
+            <canvas id="skinCanvas" role="img" aria-label="3D Minecraft avatar for alxxq. It stands in the hero, runs after your cursor on desktop, and runs to wherever you tap on a phone."></canvas>
+            <p id="skinNote" class="skin-note" hidden>3D avatar could not load. Minecraft username: <strong>alxxq</strong></p>
+          </div>
+        </div>
       </div>
     </div>
 
     <h1 class="rv">Life is short focus on what truly matters, grow daily, and leave a positive impact.</h1>
-
-    <div class="pills pills-grid">
-      <a class="pill rv" href="https://www.facebook.com/shahinahmedrafi02" target="_blank" rel="noopener" aria-label="Facebook">
-        <span>Facebook</span>
-        <svg viewBox="0 0 24 24"><path d="M13.5 21v-7h2.4l.4-3h-2.8V9.1c0-.9.3-1.5 1.6-1.5h1.3V4.9c-.3 0-1.2-.1-2.2-.1-2.2 0-3.7 1.3-3.7 3.8V11H8v3h2.5v7z"/></svg>
-      </a>
-      <a class="pill rv" href="https://www.instagram.com/madara_1ea?igsi=MTZ6Y2d3cGNoamIxbA==" target="_blank" rel="noopener" aria-label="Instagram">
-        <span>Instagram</span>
-        <svg viewBox="0 0 24 24"><path d="M12 8.8A3.2 3.2 0 1 0 12 15.2 3.2 3.2 0 0 0 12 8.8zm0-2.1a5.3 5.3 0 1 1 0 10.6 5.3 5.3 0 0 1 0-10.6zm6.8-.3a1.2 1.2 0 1 1-2.4 0 1.2 1.2 0 0 1 2.4 0zM12 4.2c-2.5 0-2.9 0-3.9.1a5.2 5.2 0 0 0-1.7.3 3.5 3.5 0 0 0-2 2 5.2 5.2 0 0 0-.3 1.7c-.1 1-.1 1.4-.1 3.9s0 2.9.1 3.9a5.2 5.2 0 0 0 .3 1.7 3.5 3.5 0 0 0 2 2 5.2 5.2 0 0 0 1.7.3c1 .1 1.4.1 3.9.1s2.9 0 3.9-.1a5.2 5.2 0 0 0 1.7-.3 3.5 3.5 0 0 0 2-2 5.2 5.2 0 0 0 .3-1.7c.1-1 .1-1.4.1-3.9s0-2.9-.1-3.9a5.2 5.2 0 0 0-.3-1.7 3.5 3.5 0 0 0-2-2 5.2 5.2 0 0 0-1.7-.3c-1-.1-1.4-.1-3.9-.1z"/></svg>
-      </a>
-      <a class="pill rv" href="https://discord.com/users/1426988198692913363" target="_blank" rel="noopener" aria-label="Discord">
-        <span>Discord</span>
-        <svg viewBox="0 0 24 24"><path d="M18.6 5.3A16.4 16.4 0 0 0 14.5 4l-.5 1a15 15 0 0 0-3.7 0L9.8 4a16.4 16.4 0 0 0-4.1 1.3C3.4 8.9 2.7 12.3 3 15.7a16.1 16.1 0 0 0 4.9 2.5l1-1.6a10.4 10.4 0 0 1-1.7-.8l.4-.3a11.4 11.4 0 0 0 9.7 0l.4.3c-.5.3-1.1.6-1.7.8l1 1.6a16.1 16.1 0 0 0 4.9-2.5c.4-3.9-.7-7.3-2.3-10.4zM8.7 13.5c-1 0-1.7-.9-1.7-1.9s.7-1.9 1.7-1.9 1.8.9 1.7 1.9c0 1-.7 1.9-1.7 1.9zm6.6 0c-1 0-1.7-.9-1.7-1.9s.7-1.9 1.7-1.9 1.8.9 1.7 1.9c0 1-.7 1.9-1.7 1.9z"/></svg>
-      </a>
-      <a class="pill rv" href="https://t.me/Rafi_PRX" target="_blank" rel="noopener" aria-label="Telegram">
-        <span>Telegram</span>
-        <svg viewBox="0 0 24 24"><path d="M21.9 4.6 2.7 12.1c-.8.3-.8 1.4.1 1.6l4.8 1.5 1.8 5.7c.3.8 1.3.9 1.8.2l2.6-3.1 5 3.7c.6.4 1.4.1 1.7-.5l3.9-14.5c.3-.9-.6-1.7-1.5-1.1zM8.5 13.1l9.7-6.6c.2-.1.4.1.2.3l-8 7.4-.3 3-1.6-4.1z"/></svg>
-      </a>
-    </div>
-
-    <div class="contact-split rv">
-      <a class="contact-half" href="tel:+8809638766466" aria-label="Call">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><line x1="10.6" y1="18.6" x2="13.4" y2="18.6" stroke-linecap="round"/></svg>
-        <span>Call</span>
-      </a>
-      <a class="contact-half" href="mailto:user@domain.ext" aria-label="Email">
-        <svg viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4-8 5-8-5V6l8 5 8-5z"/></svg>
-        <span>Email</span>
-      </a>
-    </div>
   </main>
 
-  <!-- Destination views: single-file hash routing. Each section is shown
-       only when its hash route is active; otherwise the homepage (main.card) shows. -->
+  <!-- Destination views: single-file routing. On Home the sections stack
+       into one long scroll page under the hero; the remaining routes are
+       standalone views shown one at a time. -->
   <div id="destViews">
     <section class="dest" id="view-about" data-route="about" hidden>
       <h2>About Me</h2>
       <p class="dest-intro">A short introduction to who I am and what I do.</p>
       <div class="dest-card">
         <h3>Shahin Ahmed Rafi</h3>
-        <p>From Narayanganj, Bangladesh. Minecraft username <strong>Madara_1ea</strong>. Admin of the HavenCraft community, working on website development and Minecraft server development. Interests: anime and gaming. Languages: Bangla, English, Hindi.</p>
+        <p>I'm an Honours student, developer, and Minecraft community admin from Narayanganj, Bangladesh. I'm interested in web development, programming, and exploring new technologies. I also enjoy managing online communities and working on creative projects.</p>
       </div>
       <div class="dest-card">
-        <h3>What I focus on</h3>
-        <p>Life is short focus on what truly matters, grow daily, and leave a positive impact.</p>
+        <h3>A Little About Me</h3>
+        <p>I'm naturally quiet and introverted. I prefer peaceful environments, value my personal space, and enjoy spending time on my own. Most of my friends are online, and I enjoy my time with them just as much. I'm also an anime enthusiast and a gaming lover — and a true cat lover.</p>
+        <p>And yes — I can be bribed with cats. Cats work every time.</p>
       </div>
     </section>
 
@@ -776,6 +663,7 @@
         <p>Writing clear instructions for AI agents, explaining technical problems, reviewing generated results, requesting revisions, and preparing documentation and announcements.</p>
       </div>
     </section>
+
     <section class="dest" id="view-projects" data-route="projects" hidden>
       <h2>My Projects</h2>
       <p class="dest-intro">Things I have built or help run.</p>
@@ -791,7 +679,14 @@
         <h3>Minecraft 24/7 bot</h3>
         <p>A bot that keeps a Minecraft world presence running around the clock.</p>
       </a>
-      <div class="ph-note">More projects will be added over time.</div>
+      <div class="dest-card">
+        <h3>Quran 24/7 auto-play bot</h3>
+        <p>A Discord bot that plays the full Quran (Surah 1–114) on loop, around the clock.</p>
+      </div>
+      <div class="dest-card">
+        <h3>Haven AI — HavenCraft Support Bot</h3>
+        <p>An advanced AI support bot for the HavenCraft Minecraft community, built on an expert, pro-level knowledge base — it answers player questions, explains ranks, spawners and server systems, and handles reports and appeals in Bangla, Banglish and English.</p>
+      </div>
     </section>
 
     <section class="dest" id="view-apps-tools" data-route="apps-tools" hidden>
@@ -802,13 +697,11 @@
         <p>The HavenCraft site as an Android app — with server status and community links.</p>
         <p class="dest-muted">No download link is listed for this app.</p>
       </div>
-      <div class="ph-note">More apps and tools will be added over time.</div>
     </section>
 
     <section class="dest" id="view-experiments" data-route="experiments" hidden>
       <h2>Experiments</h2>
       <p class="dest-intro">Experimental features, prototypes, and new ideas.</p>
-      <div class="ph-note">This section is reserved for experimental pages and new ideas.</div>
     </section>
 
     <section class="dest" id="view-minecraft-world" data-route="minecraft-world" hidden>
@@ -826,7 +719,6 @@
         <h3>24/7 bot</h3>
         <p>A bot keeps a Minecraft world presence running around the clock.</p>
       </div>
-      <div class="ph-note">More Minecraft content, builds, and showcases will be added over time.</div>
     </section>
 
     <section class="dest" id="view-servers" data-route="servers" hidden>
@@ -847,9 +739,6 @@
       <div id="ghCats"></div>
     </section>
 
-    <!-- RESTRICTED by owner's request (2026-10-30): the original Gaming Setup
-         content is preserved in the site backup and can be restored from it.
-         Nothing private is kept in this section on purpose. -->
     <section class="dest" id="view-gaming-setup" data-route="gaming-setup" hidden>
       <div class="denied">
         <div class="denied-icon" aria-hidden="true">
@@ -858,7 +747,7 @@
         <h2>Access Denied!</h2>
         <p class="denied-sub">This page is restricted.</p>
         <p class="denied-msg">Sorry, this page is currently private and not available for public access.</p>
-        <a class="denied-btn" href="/">Back to Home</a>
+        <sakuga-button id="deniedBtn" type="button">Back to Home</sakuga-button>
       </div>
     </section>
 
@@ -884,27 +773,24 @@
       <div class="dest-card">
         <div class="set-row">
           <span class="set-label">Music</span>
-          <button id="musicToggleCorner" class="switch" type="button" role="switch" aria-checked="false">
-            <span class="track" aria-hidden="true"></span><span id="musicStateCorner">Off</span>
-          </button>
+          <span class="toggle-cell"><sakuga-toggle id="musicToggleCorner" label="Music on or off"></sakuga-toggle><span id="musicToggleCornerFb"></span><span class="switch-state" id="musicStateCorner">Off</span></span>
         </div>
         <p class="set-note">Track: Love Story</p>
         <p class="set-note">This is the same player as the topbar music button — one track, one system, not a second player.</p>
+        <div class="music-ctl">
+          <span class="f-label" id="volLabel">Volume</span>
+          <div class="vol-wrap">
+            <span class="vol-bubble" id="volBubble" aria-hidden="true">50%</span>
+            <input class="vol-range" id="volSlider" type="range" min="0" max="100" step="1" value="50" aria-labelledby="volLabel">
+          </div>
+        </div>
+        <div class="progress-pad"><sakuga-progress id="playProgress" label="Song playback"></sakuga-progress><div id="progFallback" hidden style="width:100%"><div class="fb-bar"><div class="fb-bar-fill" id="progFill"></div></div></div></div>
       </div>
       <div class="dest-card">
         <h3>Love Story</h3>
         <p>Artist: Indila</p>
         <p>A beautiful, emotional song about love, longing, and deep feelings. Its dreamy melody creates a peaceful and romantic atmosphere.</p>
       </div>
-    </section>
-
-    <section class="dest" id="view-achievements" data-route="achievements" hidden>
-      <h2>Achievements</h2>
-      <p class="dest-intro">Accomplishments and milestones.</p>
-      <div class="dest-card"><h3>HavenCraft admin</h3><p>Helping run the HavenCraft Minecraft community.</p></div>
-      <div class="dest-card"><h3>rafiprx.bond live</h3><p>Personal site with profile, social links, and an interactive Minecraft character.</p></div>
-      <div class="dest-card"><h3>Minecraft bot running 24/7</h3><p>A bot keeping a Minecraft world presence around the clock.</p></div>
-      <div class="ph-note">More milestones will be added over time.</div>
     </section>
 
     <section class="dest" id="view-discord" data-route="discord" hidden>
@@ -949,56 +835,40 @@
       <h2>Social Links</h2>
       <p class="dest-intro">All of my social profiles in one organized location.</p>
       <div class="dest-social">
-        <a class="pill" href="https://www.facebook.com/shahinahmedrafi02" target="_blank" rel="noopener">
-          <span>Facebook</span>
-          <svg viewBox="0 0 24 24"><path d="M13.5 21v-7h2.4l.4-3h-2.8V9.1c0-.9.3-1.5 1.6-1.5h1.3V4.9c-.3 0-1.2-.1-2.2-.1-2.2 0-3.7 1.3-3.7 3.8V11H8v3h2.5v7z"/></svg>
-        </a>
-        <a class="pill" href="https://www.instagram.com/madara_1ea?igsi=MTZ6Y2d3cGNoamIxbA==" target="_blank" rel="noopener">
-          <span>Instagram</span>
-          <svg viewBox="0 0 24 24"><path d="M12 8.8A3.2 3.2 0 1 0 12 15.2 3.2 3.2 0 0 0 12 8.8zm0-2.1a5.3 5.3 0 1 1 0 10.6 5.3 5.3 0 0 1 0-10.6zm6.8-.3a1.2 1.2 0 1 1-2.4 0 1.2 1.2 0 0 1 2.4 0zM12 4.2c-2.5 0-2.9 0-3.9.1a5.2 5.2 0 0 0-1.7.3 3.5 3.5 0 0 0-2 2 5.2 5.2 0 0 0-.3 1.7c-.1 1-.1 1.4-.1 3.9s0 2.9.1 3.9a5.2 5.2 0 0 0 .3 1.7 3.5 3.5 0 0 0 2 2 5.2 5.2 0 0 0 1.7.3c1 .1 1.4.1 3.9.1s2.9 0 3.9-.1a5.2 5.2 0 0 0 1.7-.3 3.5 3.5 0 0 0 2-2 5.2 5.2 0 0 0 .3-1.7c.1-1 .1-1.4.1-3.9s0-2.9-.1-3.9a5.2 5.2 0 0 0-.3-1.7 3.5 3.5 0 0 0-2-2 5.2 5.2 0 0 0-1.7-.3c-1-.1-1.4-.1-3.9-.1z"/></svg>
-        </a>
-        <a class="pill" href="https://discord.com/users/1426988198692913363" target="_blank" rel="noopener">
-          <span>Discord</span>
-          <svg viewBox="0 0 24 24"><path d="M18.6 5.3A16.4 16.4 0 0 0 14.5 4l-.5 1a15 15 0 0 0-3.7 0L9.8 4a16.4 16.4 0 0 0-4.1 1.3C3.4 8.9 2.7 12.3 3 15.7a16.1 16.1 0 0 0 4.9 2.5l1-1.6a10.4 10.4 0 0 1-1.7-.8l.4-.3a11.4 11.4 0 0 0 9.7 0l.4.3c-.5.3-1.1.6-1.7.8l1 1.6a16.1 16.1 0 0 0 4.9-2.5c.4-3.9-.7-7.3-2.3-10.4zM8.7 13.5c-1 0-1.7-.9-1.7-1.9s.7-1.9 1.7-1.9 1.8.9 1.7 1.9c0 1-.7 1.9-1.7 1.9zm6.6 0c-1 0-1.7-.9-1.7-1.9s.7-1.9 1.7-1.9 1.8.9 1.7 1.9c0 1-.7 1.9-1.7 1.9z"/></svg>
-        </a>
-        <a class="pill" href="https://t.me/Rafi_PRX" target="_blank" rel="noopener">
-          <span>Telegram</span>
-          <svg viewBox="0 0 24 24"><path d="M21.9 4.6 2.7 12.1c-.8.3-.8 1.4.1 1.6l4.8 1.5 1.8 5.7c.3.8 1.3.9 1.8.2l2.6-3.1 5 3.7c.6.4 1.4.1 1.7-.5l3.9-14.5c.3-.9-.6-1.7-1.5-1.1zM8.5 13.1l9.7-6.6c.2-.1.4.1.2.3l-8 7.4-.3 3-1.6-4.1z"/></svg>
-        </a>
+        <a class="pill-link" href="https://www.facebook.com/shahinahmedrafi02" target="_blank" rel="noopener"><sakuga-button variant="secondary">Facebook<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 21v-7h2.4l.4-3h-2.8V9.1c0-.9.3-1.5 1.6-1.5h1.3V4.9c-.3 0-1.2-.1-2.2-.1-2.2 0-3.7 1.3-3.7 3.8V11H8v3h2.5v7z"/></svg></sakuga-button></a>
+        <a class="pill-link" href="https://www.instagram.com/madara_1ea?igsi=MTZ6Y2d3cGNoamIxbA==" target="_blank" rel="noopener"><sakuga-button variant="secondary">Instagram<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8.8A3.2 3.2 0 1 0 12 15.2 3.2 3.2 0 0 0 12 8.8zm0-2.1a5.3 5.3 0 1 1 0 10.6 5.3 5.3 0 0 1 0-10.6zm6.8-.3a1.2 1.2 0 1 1-2.4 0 1.2 1.2 0 0 1 2.4 0zM12 4.2c-2.5 0-2.9 0-3.9.1a5.2 5.2 0 0 0-1.7.3 3.5 3.5 0 0 0-2 2 5.2 5.2 0 0 0-.3 1.7c-.1 1-.1 1.4-.1 3.9s0 2.9.1 3.9a5.2 5.2 0 0 0 .3 1.7 3.5 3.5 0 0 0 2 2 5.2 5.2 0 0 0 1.7.3c1 .1 1.4.1 3.9.1s2.9 0 3.9-.1a5.2 5.2 0 0 0 1.7-.3 3.5 3.5 0 0 0 2-2 5.2 5.2 0 0 0 .3-1.7c.1-1 .1-1.4.1-3.9s0-2.9-.1-3.9a5.2 5.2 0 0 0-.3-1.7 3.5 3.5 0 0 0-2-2 5.2 5.2 0 0 0-1.7-.3c-1-.1-1.4-.1-3.9-.1z"/></svg></sakuga-button></a>
+        <a class="pill-link" href="https://discord.com/users/1426988198692913363" target="_blank" rel="noopener"><sakuga-button variant="secondary">Discord<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.6 5.3A16.4 16.4 0 0 0 14.5 4l-.5 1a15 15 0 0 0-3.7 0L9.8 4a16.4 16.4 0 0 0-4.1 1.3C3.4 8.9 2.7 12.3 3 15.7a16.1 16.1 0 0 0 4.9 2.5l1-1.6a10.4 10.4 0 0 1-1.7-.8l.4-.3a11.4 11.4 0 0 0 9.7 0l.4.3c-.5.3-1.1.6-1.7.8l1 1.6a16.1 16.1 0 0 0 4.9-2.5c.4-3.9-.7-7.3-2.3-10.4zM8.7 13.5c-1 0-1.7-.9-1.7-1.9s.7-1.9 1.7-1.9 1.8.9 1.7 1.9c0 1-.7 1.9-1.7 1.9zm6.6 0c-1 0-1.7-.9-1.7-1.9s.7-1.9 1.7-1.9 1.8.9 1.7 1.9c0 1-.7 1.9-1.7 1.9z"/></svg></sakuga-button></a>
+        <a class="pill-link" href="https://t.me/Rafi_PRX" target="_blank" rel="noopener"><sakuga-button variant="secondary">Telegram<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.9 4.6 2.7 12.1c-.8.3-.8 1.4.1 1.6l4.8 1.5 1.8 5.7c.3.8 1.3.9 1.8.2l2.6-3.1 5 3.7c.6.4 1.4.1 1.7-.5l3.9-14.5c.3-.9-.6-1.7-1.5-1.1zM8.5 13.1l9.7-6.6c.2-.1.4.1.2.3l-8 7.4-.3 3-1.6-4.1z"/></svg></sakuga-button></a>
       </div>
       <p class="dest-note">Call and email live on the <a href="/contact">Contact Me</a> page.</p>
     </section>
 
     <section class="dest" id="view-email" data-route="email" hidden>
       <h2>Email Me</h2>
+      <p class="dest-intro">Have an idea for the site, a project, or anything else? Send it in.</p>
       <div class="dest-card">
         <form id="contactForm" class="dest-form">
           <h3>Let&rsquo;s work together.</h3>
-                    <label class="field-label" for="cfName">Name</label>
-          <input id="cfName" class="field" type="text" placeholder="Name *" required>
-                    <label class="field-label" for="cfEmail">Email</label>
-          <input id="cfEmail" class="field" type="email" placeholder="Email *" required>
-                    <label class="field-label" for="cfSubject">Subject</label>
-          <input id="cfSubject" class="field" type="text" placeholder="Your Subject *" required>
-                    <label class="field-label" for="cfMessage">Message</label>
-          <textarea id="cfMessage" class="field" rows="5" placeholder="Your Message *" required></textarea>
-          <button class="dest-btn" type="submit">Send Message</button>
+          <label class="field-label" for="cfName">Name</label>
+          <sakuga-input id="cfName" label="Name" name="cfName" placeholder="Name *"></sakuga-input><span id="cfNameFb"></span>
+          <label class="field-label" for="cfEmail">Email</label>
+          <sakuga-input id="cfEmail" label="Email" type="email" name="cfEmail" placeholder="Email *"></sakuga-input><span id="cfEmailFb"></span>
+          <label class="field-label" for="cfSubject">Subject</label>
+          <sakuga-input id="cfSubject" label="Subject" name="cfSubject" placeholder="Your Subject *"></sakuga-input><span id="cfSubjectFb"></span>
+          <label class="field-label" for="cfMessage">Message</label>
+          <textarea id="cfMessage" class="field" rows="5" placeholder="Your Message *"></textarea>
+          <div>
+            <sakuga-rating id="suggRating" label="Rating" name="stars"></sakuga-rating><span id="ratingFallback"></span>
+          </div>
+          <div class="form-btn-row">
+            <sakuga-button id="sendBtn" type="submit">Send Message</sakuga-button>
+          </div>
+          <div class="consent-row" id="consentRow">
+            <sakuga-checkbox id="consentBox">Tick to confirm, then Send opens your email app.</sakuga-checkbox><span id="consentFallback"></span>
+          </div>
           <p class="set-note">This opens your email app with your message filled in.</p>
-                  </form>
+        </form>
       </div>
-    </section>
-
-    <section class="dest" id="view-suggestions" data-route="suggestions" hidden>
-      <h2>Suggestions</h2>
-      <p class="dest-intro">Have an idea for the site, a project, or anything else? Send it in.</p>
-      <form id="suggForm" class="dest-form">
-        <label class="field-label" for="suggSubject">Subject</label>
-        <input id="suggSubject" class="field" type="text" placeholder="Suggestion for RAFI PRX" required>
-        <label class="field-label" for="suggMessage">Message</label>
-        <textarea id="suggMessage" class="field" rows="5" placeholder="Write your suggestion here..." required></textarea>
-        <button class="dest-btn" type="submit">Open email app to send</button>
-        <p class="set-note">This opens your email app — suggestions are NOT submitted to a server.</p>
-      </form>
     </section>
 
     <section class="dest" id="view-settings" data-route="settings" hidden>
@@ -1007,18 +877,17 @@
       <div class="dest-card">
         <div class="set-row">
           <span class="set-label">Music</span>
-          <button id="musicToggleSection" class="switch" type="button" role="switch" aria-checked="false">
-            <span class="track" aria-hidden="true"></span><span id="musicStateSection">Off</span>
-          </button>
+          <span class="toggle-cell"><sakuga-toggle id="musicToggleSection" label="Music on or off"></sakuga-toggle><span id="musicToggleSectionFb"></span><span class="switch-state" id="musicStateSection">Off</span></span>
         </div>
         <p class="set-note">Track: Love Story</p>
         <div class="set-sep" aria-hidden="true"></div>
         <div class="set-row" style="flex-direction:column;align-items:stretch">
           <span class="set-label">Theme</span>
-          <div class="theme-opts" role="radiogroup" aria-label="Theme">
-            <button class="theme-opt" type="button" role="radio" aria-checked="true" data-set-theme="dark"><span class="theme-name">Dark Theme <span class="rec">recommended</span></span> <span class="check" aria-hidden="true">&#10003;</span></button>
-            <button class="theme-opt" type="button" role="radio" aria-checked="false" data-set-theme="light">Light Theme <span class="check" aria-hidden="true">&#10003;</span></button>
-          </div>
+          <sakuga-radio id="themeRadioSettings" label="Theme" name="theme-settings">
+            <option value="dark">Dark Theme</option>
+            <option value="light" selected>Light Theme</option>
+          </sakuga-radio>
+          <div id="themeRadioSettingsFb"></div>
         </div>
       </div>
     </section>
@@ -1029,37 +898,75 @@
       <div class="dest-card">
         <div class="set-row" style="flex-direction:column;align-items:stretch">
           <span class="set-label">Theme</span>
-          <div class="theme-opts" role="radiogroup" aria-label="Theme">
-            <button class="theme-opt" type="button" role="radio" aria-checked="true" data-set-theme="dark"><span class="theme-name">Dark Theme <span class="rec">recommended</span></span> <span class="check" aria-hidden="true">&#10003;</span></button>
-            <button class="theme-opt" type="button" role="radio" aria-checked="false" data-set-theme="light">Light Theme <span class="check" aria-hidden="true">&#10003;</span></button>
-          </div>
+          <sakuga-radio id="themeRadioAppearance" label="Theme" name="theme-appearance">
+            <option value="dark">Dark Theme</option>
+            <option value="light" selected>Light Theme</option>
+          </sakuga-radio>
+          <div id="themeRadioAppearanceFb"></div>
         </div>
       </div>
     </section>
   </div>
 
-  <!-- Background music: the site owner's own uploaded track (love-story.m4a, kept in this repo).
-       To change it later, change MUSIC_SRC in the script below. -->
-  <audio id="bgMusic" loop preload="none"></audio>
+  <!-- Footer: bottom of the home scroll page. Basic information only. -->
+  <footer id="siteFooter" class="site-footer" hidden>
+    <p class="foot-name">Shahin Ahmed Rafi</p>
+    <p class="foot-line">rafiprx.bond</p>
+    <p class="foot-line">Narayanganj, Bangladesh</p>
+    <nav class="foot-links" aria-label="Footer links">
+      <a href="tel:+8809638766466">Call</a>
+      <a href="/email">Email</a>
+    </nav>
+    <p class="foot-copy">&copy; 2026 Shahin Ahmed Rafi</p>
+  </footer>
 
-<script defer src="https://cdn.jsdelivr.net/npm/skinview3d@3.4.1/bundles/skinview3d.bundle.js"></script>
+  <!-- Background music: the site owner's own uploaded track, kept with this page. -->
+  <audio id="bgMusic" loop preload="none" src="assets/love-story.m4a"></audio>
+
+  <sakuga-toast id="mainToast" message="Done"></sakuga-toast>
+  <div id="fbToast" role="status" hidden></div>
+
+<!-- Animated controls: one self-contained file each, vendored with this page. -->
+<script src="assets/controls/button.js"></script>
+<script src="assets/controls/toggle.js"></script>
+<script src="assets/controls/slider.js"></script>
+<script src="assets/controls/checkbox.js"></script>
+<script src="assets/controls/radio.js"></script>
+<script src="assets/controls/input.js"></script>
+<script src="assets/controls/tabs.js"></script>
+<script src="assets/controls/progress.js"></script>
+<script src="assets/controls/rating.js"></script>
+<script src="assets/controls/toast.js"></script>
+<script src="assets/controls/tooltip.js"></script>
+
 <script>
 (function(){
   'use strict';
 
   /* ================= config ================= */
   var MC_USERNAME = 'alxxq';
-  var SKIN_URL = 'https://mc-heads.net/skin/' + MC_USERNAME;
-  var SKIN_FALLBACK_DATA = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAMMklEQVR4nO2bbYhc13nHf2funXvv3Dtva+92o/XISmzXltwkAhsLi5TSF1Ak2hKDQz4Up6bEiYmJW2ihtKVfCsEuDm0pTr649oeWvviLqEsp2SpuiVuCXKdOYzfIKypZKFrvspqVZmfv3Jn7MndOP9w9d+/MzsvujiTL4D8MM+f9PM95znPO85xnBBPwwL2fkqZpUiqX8DsdoqhLPq8TRV2CIMA0zTStvkvlEu6mSz6v8/Y7PxGTxtgNPvfoIzI7/o3qNzepwiDxQRCkk1BlAEEQYBUK5PM67qabpm8UBse/UdAnVRgkXq14QlwHv9Oh1fIoFh2AlDkA7qY79QSzK58dX+VPKwkTGWCa1tavDpCstEpbhQLupkux6NBqebRaXlpH5U2LSeNPi4kMCAK/TwJ0XU8lwDQtKMN6fZ2vnTze1+6lxbOYpjn1BAfHz0rgNnP2j4kM8DudVNyTCQX4/na5In62WmKukuiDetPlayeP89Li2aknOGz8BJ2p+waYuH8+++BhOUzrK/F/8pceSomf3WLAetOl3nRZ33D5ve/8/Q3R1p998LDMjn/LToFBrZ8lPgiCPuJnq1ufylZetTT1BJde9iSwY/xs2TTQ1TmvuDvsW6FULmGaFs2NRpr33KtnRrYzTZNJ/b/81DmO/W5OQP8qv3tuSfzfX7dkHCXjqEVQzAcoViVLL3vy8FOOyI5z/uIlkWXQuHJdcTUIgvT4GpZWSsdxHILAJ7snx7Ubla/Sf/c3CYGvPivlt/7jMwA88clz/P65HN9+0SGMEsb8gvke/2MewzQtHrHfggePyBeed+j1kvY/b77Pj/NJ+68c6clX3suJ518oIITg4aOflkeD/+W/OUKx6PCb90v5Y/0If/5iAfHw0U9LxVV15o9Lm6bFer3edz8Y125Sf49230QIwfWO4Oihi3Sje2msSooVQTsP4QoUqxAXJXPV87SbD/DBFUEDqAKlT0gMH6ICVPJgV85xtXGYO3yND9ahkgNqdZo/neMTD7yPZjksnZuj3BNsCNDVyvr5ZEWHpdV+ZxMok/5OboGdvuNIrbLap5P6/350lJWr1yjbFu8sZ+4ObdhsJ8dNuWtR9B1YJy2fnZtlvb4Oy0m9sm0ll7GryRjvX16mbFtJWZjMr3jZYeXqNT51911cW79GseiQM02LIPDT1RpMu5suzY0NXDdhgrvp4rpbeZsuvh8QBH5CVGf7cqLSk/oHWF1dFecvXhJR1OX8xUvCNE3OX7wkFn7mTu45VAPg7Xd+IlotD1W2Xl/HNE1m52ZZXV0Vs3OzVKozWIUCP3jzh2J1dVWYpsk9h2rcVatRLDpYhQJl2yLwfe6q1YiiLkJdKbNi+Re/9Wu899MV/uwf3yDudvn8yVN8/58kv/NExHOvnsHp/iq/+AXB669/jziO+dZXvsBspcRTf/kPu9pG2fS755ZGHmdKKSqlBYlxptJKsY3rYxCfe/QR+YM3f5jWz6l97Hc6ySWn02G2WuLI3QsEQUA3jjlx6hStzhpH7l7gu889S6uzxolTp5Lybjc9AlX7wf7Gpcfh3XNLIks80MeM8xcvib0QD5AlHkBkj57s93efe5alyyvUmy5H7l5Iz3eApcsr6WVnrlLi8KEFHvuTl8YepaO+Bwm81dgx+Pz8fN/l4r2336VyYBaAK0sX+eTP3T92woPt94q1tbWx/d933319/W9sbPSVr6+v74mhE2+Civj94Pnf+BVe+PKJfbe/FZjIgP3ixa9/kbk7Z6hWZ3jlG1+8WcNMjYkMaK6u76tjx7YJgpDQ2+Rac3NffdwKiGn3bBa9Xg8hki0opeRPv3wC28jz26/8S19+Lrd7wSuVpjOoLly4MFYnCEBCcnGJ4y5Fp4RpGbvqvF6vMzc3l6azDDAMIz3mTNMkDENgNAPy+XxfOooSK+hmM0AXQmxN1qfoFAEIg5DGlsVXrVQROUGj0aBYLNJpdzAtk3a7PbJTw0gYaNs2AHEcYxhGyoQsoihK62maltbP5/O0222azeZead4Tco7tkM8bWGYBkcsRBH5KPEAYhUgpKRQKSCkRieVKYRf+uDiOieM4JWwU2u12Xx1N08Yy+EZCj3s9jLxBK3AJo8TnB5DL5ej1euRyOTY2NnAcB8/z0HWddrvNzMwMcoL2OHHnX3Hm2leJ43jiRFzXpVQqkROC5ua20jxof4mSVcP1l/vql6zERnD95R3l2bI63xk7rnCcovS8FnbBpt1JuG7kDcIopFQqE4bJPjYMgziO072p6zqmYfXpC6UD1BZ4SHyT2TvmOXPtqwCEYThUB6g+B5HP5+kpg3+fqNfr43VA3O1iGCbtThu74GDkDRCSaDOiF/cIggDbtnFdF9u208lGUUSn02Hemh/Z+Y/kH/PQ9W/25Y1SgINMUEpRSQCQrnJ2xdXvYVICTJYAtk6B7ASNvIGm6XjtFjMzMzQaDfJ5gyjaqcTm5/sZIKXEMAw0Tdsh+mEYpqfEILGapuG6iaurVCql0tbr9VL3ehAESCmxLAspJWEYJvPdkjjVRilcKeXEq3HqFldiX3RK/OuZRQCOHz9Orycpl8tEUYRpFsmJHGEY4gf+UGKyUEwYxoxhqJTL9IYoFillqpuEEEgpU6WpiFfjZSVpN2PqZ89u++4Hj5zTp08PbeQ4yTNYpVLhscceGzvApBMgi2HEK+QyzBZCjCVu2HE7Cjpsn9cKx44dA+C1114b2ujAgQMAI4+qYUptlKKbVF9KSbfbpdvtIrcY5GdeZhSxcRwnx/SWhOxWeeoPHLwntfgG7/0PH/7M0EaHHvxZABofXN1RpiYwSJSa3CiMY9A4ZCVh0pbcF64vr8k4jmUcx/L68toNsxtuF9xUf8BHATfNH/BRwU3zB3yMj/ExProwDEMC5HI5yYCtsBfUarXb/tgcGiIThqHQNE3GcSwKhYLsdPYejlKr1eQT91/hbzkol5eX931DeejQN2TJWsD1V/ryS9YCAG+c/yMxWF+Vu/4KP7r87d2PbRqmBOTWygNIx3H2tYq1Wk1+/aiUf/DLUt7OktAnAbZj0427xHEsdE2X3biL53n7Wr3l5WXxzxyUv86VqSaoJACS1R6UiMEVVhKgsCcJUNB1/Yat2O28+gDi7NmzEuD48eMppxYXFyXAyZMn07zTp0+nhGTN4Wy7mwHbtmWlUtlhqo/Kg36zvt1uj3eINJvNlNBBwhcXF6Xn9Ud7Pv7447f8NVcRlCUwS6RixrC8fUFZf/uf8kcH+vXlNTnKHzDK/M3Wv6M2/6G+70+LiZMfZNAkggffGv/r3/+Tg4fv3XX7G/3+Pwl7Moen9Q3cjr6Fj/0Be6k8rW/gdvQtTL2fpo0vuNnP35Mw8f8C0yDwQ1qei6bpW/HFyctTNqbgw8bUDPA8j1YreUKTPclGM9HaM9UZACzTouW10iCJXq/H2toatm0T+MHUj5/TYlAHpJag8glMQjZ2IMy8HTY2GgSBj8jlsMwC+byBYydXaBVboGINPkz0SUChUKDT6QhN02QYhruaned5OI7DxsYGxWISYaJiC+JeTOAlq1wxq4RRiGUVsCyLRqOBrusctL8EjH7vH/b2r+oAvFH/w775DFqLg74ElVYWZh+RjuOou7/I5XKy1+thGiZBGIxkhm3bUtO09InKMExcdzN9bAXS2APHKZLX8wShT7eb/PevWq3uhs8jMen9fxL6JGDL9pdbvgChaZq0HZsgHB/Tq2IH2u02upZHCIFt29jSIYxC2h0PwzCJu108r9XXdtT7v0oPrvhg3igJSOqu7FjxwbyR3NN1XXa73d1wV6rYARVL4NhF4rhLGIUTldxgfIGmaQgh+iLMIIkNUO+OQggsK/kPwJUrV6aTAGXnZ83cjFmcVlR+A9g2Tz3P48knnySOYwqFMr1eUuX1f/seAJ8/cZJNt9m3HRQRlmn1ve1nGZB98BxMZx9Afd/Htu10XlkTeDc+hEqlgsg6OiBxdgzzDywuLsqsg0RhsD3AwsJCH6OUHa+QZeAzzzyzgwFZCbBtmziOUwkYhOd5+yJcpYeKj/IFaJo2UbyGMUAFTbz11lspEbAdT6DSFy5c4Omnn+6LD1QxAFlxh+3ndZWvpKLRaEy3BcY9eauyQX9BNr05xutyoHwn5UplZPuKntwH9vLGrxi0l8iTcfh/kumIHM44Fr8AAAAASUVORK5CYII=';
-  /* Site music: the owner's uploaded track, stored in this same repo — replace this one line to use another track */
-  var MUSIC_SRC = './love-story.m4a';
+  var SKIN_URL = 'assets/skin.png';
+  var MUSIC_SRC = 'assets/love-story.m4a';
 
   function store(k, v){ try{ localStorage.setItem(k, v); }catch(e){} }
   function read(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
   function sStore(k, v){ try{ sessionStorage.setItem(k, v); }catch(e){} }
   function sRead(k){ try{ return sessionStorage.getItem(k); }catch(e){ return null; } }
+  function defined(n){ return !!(window.customElements && customElements.get(n)); }
+
+  /* ================= toast (form feedback) ================= */
+  var fbToastTimer = null;
+  function showToast(msg){
+    var t = document.getElementById('mainToast');
+    if (defined('sakuga-toast') && t && typeof t.show === 'function') { t.show(msg); return; }
+    var fb = document.getElementById('fbToast');
+    fb.textContent = '✓ ' + msg; fb.hidden = false;
+    clearTimeout(fbToastTimer);
+    fbToastTimer = setTimeout(function(){ fb.hidden = true; }, 2800);
+  }
 
   /* ================= scroll reveal (original behaviour) ================= */
+  document.querySelectorAll('.dest').forEach(function(el){ el.classList.add('rv'); });
   var els = document.querySelectorAll('.rv');
   if (!('IntersectionObserver' in window)) {
     els.forEach(function(el){ el.classList.add('in'); });
@@ -1068,15 +975,26 @@
       entries.forEach(function(e){
         if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
       });
-    }, {threshold: 0.1});
+    }, {threshold: 0, rootMargin: '0px 0px 18% 0px'});
     els.forEach(function(el){ io.observe(el); });
   }
+  /* fallback for fast/jump scrolling: anything already at or above the
+     fold line counts as seen, so a section can never stay invisible */
+  function revealPassed(){
+    document.querySelectorAll('.rv:not(.in)').forEach(function(el){
+      var r = el.getBoundingClientRect();
+      if (r.height && r.top < window.innerHeight * 0.95) el.classList.add('in');
+    });
+  }
+  window.addEventListener('scroll', revealPassed, { passive: true });
+  window.addEventListener('resize', revealPassed);
+  window.addEventListener('pointerdown', revealPassed, { passive: true });
+  setTimeout(revealPassed, 400);
+  /* periodic safety net: programmatic scrolls that fire no scroll event
+     (and fast flicks past a section) can otherwise leave a section faded */
+  setInterval(revealPassed, 700);
 
-  /* ================= top bar panels + navigation drawer =================
-     The hamburger now opens the left slide-out drawer (defined in the
-     routing section below; function declarations hoist, so this handler
-     can call openDrawer/closeDrawer). The settings panel keeps its own
-     small dropdown behaviour. */
+  /* ================= top bar panels + navigation drawer ================= */
   var navBtn = document.getElementById('navBtn');
   var settingsBtn = document.getElementById('settingsBtn');
   var settingsMenu = document.getElementById('settingsMenu');
@@ -1107,71 +1025,76 @@
   });
   settingsMenu.addEventListener('click', function(ev){ ev.stopPropagation(); });
 
-  /* ================= theme ================= */
-  var themeOpts = document.querySelectorAll('[data-set-theme]');
+  /* ================= theme =================
+     One theme system shared by the topbar quick-toggle, the settings panel,
+     the Settings page and the Appearance page. */
   var themeToggleTop = document.getElementById('themeToggleTop');
-  function reflectTheme(){
-    var cur = document.documentElement.getAttribute('data-theme') || 'dark';
-    themeOpts.forEach(function(b){
-      b.setAttribute('aria-checked', b.getAttribute('data-set-theme') === cur ? 'true' : 'false');
+  var themeGroups = [
+    { host: document.getElementById('themeRadioMenu'), fb: document.getElementById('themeRadioMenuFb'), name: 'theme-menu-fb' },
+    { host: document.getElementById('themeRadioSettings'), fb: document.getElementById('themeRadioSettingsFb'), name: 'theme-settings-fb' },
+    { host: document.getElementById('themeRadioAppearance'), fb: document.getElementById('themeRadioAppearanceFb'), name: 'theme-appearance-fb' }
+  ];
+  function currentTheme(){ return document.documentElement.getAttribute('data-theme') || 'light'; }
+  function syncThemeControls(){
+    var cur = currentTheme();
+    themeGroups.forEach(function(g){
+      if (!g.host) return;
+      if (defined('sakuga-radio')) { try { g.host.value = cur; } catch (e) {} }
+      if (g.fb) g.fb.querySelectorAll('input[type="radio"]').forEach(function(r){ r.checked = (r.value === cur); });
     });
     if (themeToggleTop) themeToggleTop.setAttribute('aria-label', cur === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
   }
-  themeOpts.forEach(function(b){
-    b.addEventListener('click', function(){
-      var t = b.getAttribute('data-set-theme');
-      document.documentElement.setAttribute('data-theme', t);
-      store('rafiprx-theme', t);
-      reflectTheme();
-      closePanel(settingsBtn, settingsMenu, false);
-    });
-  });
-  themeToggleTop.addEventListener('click', function(){
-    var cur = document.documentElement.getAttribute('data-theme') || 'dark';
-    var t = cur === 'dark' ? 'light' : 'dark';
+  function setTheme(t){
     document.documentElement.setAttribute('data-theme', t);
     store('rafiprx-theme', t);
-    reflectTheme();
+    syncThemeControls();
+  }
+  themeGroups.forEach(function(g){
+    if (!g.host) return;
+    g.host.addEventListener('change', function(){
+      var v = g.host.value;
+      if (v && v !== currentTheme()) setTheme(v);
+    });
   });
-  reflectTheme();
+  if (themeToggleTop) themeToggleTop.addEventListener('click', function(){
+    setTheme(currentTheme() === 'dark' ? 'light' : 'dark');
+  });
+  syncThemeControls();
 
-  /* ================= background music ================= */
+  /* ================= background music =================
+     One track, one system: the topbar button, the settings panel switch,
+     the Music Corner switch and the Settings page switch all reflect and
+     drive the same player. */
   var audio = document.getElementById('bgMusic');
-  audio.src = MUSIC_SRC;
   audio.volume = 0.5;
-  var musicToggle = document.getElementById('musicToggle');
-  var musicState = document.getElementById('musicState');
   var musicToggleTop = document.getElementById('musicToggleTop');
   var musicNote = document.getElementById('musicNote');
-  /* preview sections reuse the same music system: the Settings section
-     switch and the Music Corner switch below are reflected here, and their
-     clicks call the same setMusic() — no second player exists. */
-  var musicToggleSection = document.getElementById('musicToggleSection');
-  var musicStateSection = document.getElementById('musicStateSection');
-  var musicToggleCorner = document.getElementById('musicToggleCorner');
-  var musicStateCorner = document.getElementById('musicStateCorner');
+  var musicSlots = [
+    { host: document.getElementById('musicToggle'), fbSpan: document.getElementById('musicToggleFb'), state: document.getElementById('musicState'), fbBtn: null },
+    { host: document.getElementById('musicToggleCorner'), fbSpan: document.getElementById('musicToggleCornerFb'), state: document.getElementById('musicStateCorner'), fbBtn: null },
+    { host: document.getElementById('musicToggleSection'), fbSpan: document.getElementById('musicToggleSectionFb'), state: document.getElementById('musicStateSection'), fbBtn: null }
+  ];
   var musicWanted = read('rafiprx-music') === 'on';
   var musicBroken = false;
 
   function reflectMusic(){
     var on = musicWanted && !audio.paused;
-    var checked = (musicWanted && !musicBroken) ? 'true' : 'false';
-    musicToggle.setAttribute('aria-checked', checked);
-    musicState.textContent = on ? 'On' : 'Off';
+    var checked = (musicWanted && !musicBroken);
+    musicSlots.forEach(function(s){
+      if (s.host && defined('sakuga-toggle')) { try { s.host.checked = checked; } catch (e) {} }
+      if (s.fbBtn) {
+        s.fbBtn.setAttribute('aria-checked', checked ? 'true' : 'false');
+        var st = s.fbBtn.querySelector('.fb-state');
+        if (st) st.textContent = on ? 'On' : 'Off';
+      }
+      if (s.state) s.state.textContent = on ? 'On' : 'Off';
+    });
     if (musicToggleTop){
-      musicToggleTop.setAttribute('aria-checked', checked);
-      musicToggleTop.classList.toggle('muted', !(musicWanted && !musicBroken));
-      musicToggleTop.setAttribute('aria-label', (musicWanted && !musicBroken) ? 'Turn music off' : 'Turn music on');
+      musicToggleTop.setAttribute('aria-checked', checked ? 'true' : 'false');
+      musicToggleTop.classList.toggle('muted', !checked);
+      musicToggleTop.setAttribute('aria-label', checked ? 'Turn music off' : 'Turn music on');
     }
-    musicNote.hidden = !musicBroken;
-    if (musicToggleSection){
-      musicToggleSection.setAttribute('aria-checked', checked);
-      if (musicStateSection) musicStateSection.textContent = on ? 'On' : 'Off';
-    }
-    if (musicToggleCorner){
-      musicToggleCorner.setAttribute('aria-checked', checked);
-      if (musicStateCorner) musicStateCorner.textContent = on ? 'On' : 'Off';
-    }
+    if (musicNote) musicNote.hidden = !musicBroken;
   }
   function tryPlay(){
     if (musicBroken) { reflectMusic(); return; }
@@ -1186,11 +1109,18 @@
     if (on) { tryPlay(); }
     else { audio.pause(); reflectMusic(); }
   }
-  musicToggle.addEventListener('click', function(){ setMusic(!musicWanted); });
+  musicSlots.forEach(function(s){
+    if (!s.host) return;
+    s.host.addEventListener('change', function(){
+      var v = !!s.host.checked;
+      if (v !== musicWanted) setMusic(v);
+    });
+  });
   if (musicToggleTop) musicToggleTop.addEventListener('click', function(){ setMusic(!musicWanted); });
-  if (musicToggleSection) musicToggleSection.addEventListener('click', function(){ setMusic(!musicWanted); });
-  if (musicToggleCorner) musicToggleCorner.addEventListener('click', function(){ setMusic(!musicWanted); });
   audio.addEventListener('error', function(){
+    /* only a real media error (bad source / failed load) marks the track
+       unavailable — a blocked autoplay attempt must not */
+    if (!audio.error) return;
     musicBroken = true;
     musicWanted = false;
     reflectMusic();
@@ -1199,13 +1129,46 @@
   audio.addEventListener('pause', reflectMusic);
   reflectMusic();
 
+  /* Volume + playback progress (Music Corner) follow the real track. */
+  var volSlider = document.getElementById('volSlider');
+  var volBubble = document.getElementById('volBubble');
+  function applyVolume(v){
+    var n = Math.max(0, Math.min(100, Number(v) || 0));
+    audio.volume = n / 100;
+  }
+  /* Keep the track fill, the % bubble and the real volume in sync with the
+     thumb: the bubble follows the thumb's centre across its travel range
+     (thumb radius 14px at each end) and never overlaps the label above. */
+  function syncVol(){
+    if (!volSlider) return;
+    var v = Math.max(0, Math.min(100, Number(volSlider.value) || 0));
+    applyVolume(v);
+    volSlider.style.setProperty('--vol-p', v + '%');
+    if (volBubble) {
+      volBubble.textContent = v + '%';
+      volBubble.style.left = 'calc(14px + (100% - 28px) * ' + (v / 100) + ')';
+    }
+  }
+  if (volSlider) {
+    volSlider.addEventListener('input', syncVol);
+    volSlider.addEventListener('change', syncVol);
+    syncVol();
+  }
+  var prog = document.getElementById('playProgress');
+  function renderProgress(){
+    var pos = (isFinite(audio.duration) && audio.duration > 0) ? (audio.currentTime / audio.duration) : 0;
+    if (defined('sakuga-progress') && prog && typeof prog.set === 'function') { prog.set(pos); return; }
+    var fill = document.getElementById('progFill');
+    if (fill) fill.style.width = Math.round(pos * 100) + '%';
+  }
+  audio.addEventListener('timeupdate', renderProgress);
+  audio.addEventListener('loadedmetadata', renderProgress);
+
   /* ================= entry page + session music =================
      The Entry Page is the audio unlock: nothing plays before its button is
      clicked. Within the same tab session the gate is skipped and, if music
-     was on, playback resumes from the saved position instead of restarting —
-     so moving between pages of this site keeps one continuous track. A new
-     tab/session always starts at the Entry Page again. If the browser still
-     blocks a resume, the next tap anywhere starts it (graceful fallback). */
+     was on, playback resumes from the saved position instead of restarting.
+     A new tab/session always starts at the Entry Page again. */
   var entryGate = document.getElementById('entryGate');
   var entryBtn = document.getElementById('entryBtn');
   var sessionEntered = sRead('rafiprx-entered') === '1';
@@ -1248,7 +1211,10 @@
     resumeSessionMusic();
   } else if (entryBtn) {
     try { entryBtn.focus({ preventScroll: true }); } catch (e) {}
-    entryBtn.addEventListener('click', function(){
+    var entered = false;
+    var enterSite = function(){
+      if (entered) return;
+      entered = true;
       sStore('rafiprx-entered', '1');
       document.documentElement.classList.remove('gated');
       document.documentElement.classList.add('entered');
@@ -1256,13 +1222,16 @@
         entryGate.classList.add('leaving');
         setTimeout(function(){ if (entryGate) entryGate.style.display = 'none'; }, 520);
       }
-      setMusic(true); /* this click is the user gesture audio playback needs */
-    });
+      setMusic(true); /* this tap is the user gesture audio playback needs */
+    };
+    entryBtn.addEventListener('click', enterSite);
+    entryBtn.addEventListener('pointerup', enterSite);
   }
 
   /* ================= 3D Minecraft avatar (skinview3d) ================= */
   var canvas = document.getElementById('skinCanvas');
   var wrap = document.getElementById('skinViewer');
+  var charLayer = document.getElementById('charLayer');
   var skinNote = document.getElementById('skinNote');
   var skinPh = document.getElementById('skinPlaceholder');
   var skinReady = false; /* true once a skin texture is applied; drives the loading face */
@@ -1272,6 +1241,16 @@
     canvas.style.display = 'none'; /* author CSS display:block would otherwise override [hidden] */
     skinNote.hidden = false;
     if (skinPh) skinPh.style.display = 'none';
+    /* the character layer is a fixed full-screen shell: put it back in
+       flow too, so the fallback note sits inside the hero slot */
+    if (charLayer) {
+      charLayer.style.position = 'relative';
+      charLayer.style.inset = 'auto';
+      charLayer.style.overflow = 'visible';
+      charLayer.style.zIndex = 'auto';
+      charLayer.style.width = '100%';
+      charLayer.style.height = 'auto';
+    }
     /* the viewer is a fixed overlay: put it back in flow so the note shows */
     wrap.style.position = 'relative';
     wrap.style.transform = 'none';
@@ -1279,6 +1258,10 @@
     wrap.style.top = 'auto';
     wrap.style.zIndex = 'auto';
     wrap.style.margin = '0 auto';
+    /* stay inside the hero slot (104px): widening the viewer here pushed
+       the hero row past the phone viewport and scrolled the page sideways */
+    wrap.style.width = '100%';
+    wrap.style.height = 'auto';
   }
 
   function initViewer(){
@@ -1294,14 +1277,15 @@
       });
     } catch (e) { showFallback(); return; }
 
-    /* preview routing hook: keep a handle so the router can pause the
+    /* routing hook: keep a handle so the router can pause the
        viewer when a destination route hides the character wrapper */
     wrap._rafiViewer = viewer;
 
-    /* Still character: no animation is loaded and auto-rotate stays off.
-       Zoom and pan are disabled. Dragging the character itself moves it
-       (see setupCharacter); the camera-orbit controls are switched off
-       while a drag is active so the view never spins mid-drag. */
+    /* The character is pointer-events:none (CSS), so the viewer controls
+       can never receive input — they stay configured but inert, and every
+       tap/click passes straight through to the page underneath. Movement
+       is driven entirely by window-level pointer listeners (see
+       setupCharacter). Auto-rotate stays off. */
     viewer.autoRotate = false;
     if (viewer.controls) {
       viewer.controls.enablePan = false;
@@ -1310,50 +1294,41 @@
       viewer.controls.minPolarAngle = 1.0;
       viewer.controls.maxPolarAngle = 2.1;
     }
-    /* touch swipes starting on the character may scroll the page; only an
-       active drag switches this to 'none' (see endDrag) */
     canvas.style.touchAction = 'pan-y';
 
     viewer.loadSkin(SKIN_URL, { model: 'auto-detect' })
       .then(function(){ skinReady = true; if (skinPh) skinPh.style.display = 'none'; })
-      .catch(function(){ return viewer.loadSkin(SKIN_FALLBACK_DATA, { model: 'auto-detect' }); })
-      .then(function(){ skinReady = true; if (skinPh) skinPh.style.display = 'none'; })
       .catch(function(){ showFallback(); });
 
     /* ---- Character movement + head tracking ----
-       The viewer is a fixed overlay displayed at 40% (CSS scale) that runs
-       toward the pointer: on desktop it follows the mouse live; on touch
-       screens it runs to the last tap point. Before the first pointer
-       interaction it stays parked at the centre of its original spot.
-       Dragging the character itself moves it (the chase is replaced by
-       drag positioning while dragging). Links stay clickable: while chasing, the character stops
-       ~100px short of the cursor, so the click point is never under it;
-       it only closes right in when the pointer is already over it, so it
-       can still be grabbed and dragged. Movement covers the whole visible
-       viewport (8px margin), and the character renders above the card but
-       below the top bar and panels.
+       The viewer is a fixed overlay displayed at 27% scale (~100px tall)
+       with pointer-events:none: it runs after the pointer and never blocks
+       a tap, click, link or form field. On desktop it follows the mouse
+       live; on touch screens it runs to the last tap point and stands
+       there. Before the first pointer interaction it stands idle beside
+       the hero name (gentle bob, head tracking the pointer). While
+       running it plays the limb-swing run cycle and turns to face its
+       travel direction; on arrival it eases back to standing. While
+       chasing it stops ~100px short of the cursor, so the click point is
+       never under it; it only closes right in once the pointer is already
+       over it, or on touch where the tap point is the destination. The
+       chase pauses while a form field has focus, so it never runs over
+       the form while the visitor writes. Movement covers the whole
+       visible viewport (8px margin), and the character renders above the
+       cards but below the top bar and panels.
        SPEED MODELS (keyed off the event's pointerType, never the UA or
        the layout, so a phone in Desktop Site mode still gets phone
        behaviour): touch = one fixed comfortable pace (gain 1.75, cap
        260px/s) no matter how fast the finger flicks; mouse/pen = the cap
        follows the measured pointer speed (min 220, max 1600px/s), so a
        slow mouse means a slow run and a fast mouse means a fast catch-up,
-       with smooth acceleration and deceleration throughout.
-       DRAG & HOLD (on top of chasing): pressing the character itself
-       drags it — mouse/pen start dragging at once, touch arms a long-press
-       (350ms, 12px tolerance) so taps and swipes never drag by accident.
-       While dragging, the character glides quickly to sit directly under
-       the pointer (no snap: it eases there), the camera controls switch
-       off, and page scrolling is blocked only for the active drag. On
-       release, chasing resumes from the existing speed system, and a
-       click caused by the drag itself is swallowed once so no link
-       underneath can fire by accident. */
+       with smooth acceleration and deceleration throughout. */
     (function setupCharacter(){
       var spacer = document.getElementById('avatarWrap');
-      var SCALE = 0.4;
+      var SCALE = 0.27; /* displayed height ~100px: modest, covers little content */
       var STOP_CHASE = 100;  /* stop this far from the cursor while chasing */
       var STOP_ARRIVE = 10;  /* stop this close once the pointer is over it */
-      var TOUCH_GAIN = 1.75, TOUCH_CAP = 260;  /* phones: one comfortable pace, 50% of previous speed */
+      var TOUCH_GAIN = 1.75, TOUCH_CAP = 260;  /* phones: one comfortable pace */
       var PC_GAIN = 6;                          /* PCs: gain fixed, cap follows pointer speed */
       var PC_CAP_MIN = 220, PC_CAP_MAX = 1600;
       var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1383,59 +1358,39 @@
       var cYaw = 0, cPitch = 0;  /* head smoothed current values */
       var pos = spacerCenter();
       var target = { x: pos.x, y: pos.y };
-      var hasTarget = false, dragging = false, lastPointerType = 'mouse';
+      var hasTarget = false, lastPointerType = 'mouse';
+      var typing = false; /* chase pauses while a form field has focus */
       var lastPX = pos.x, lastPY = pos.y;
-      var pendingTouchDrag = null, grabPos = null, dragMoved = false, suppressClick = false;
       var ptrSpeed = 0, lastMoveT = 0, lastMX = 0, lastMY = 0; /* smoothed pointer speed (mouse/pen only) */
       var faceYaw = 0, runBlend = 0, runPhase = 0, lastT = 0;
 
-      function clearPendingTouchDrag(){
-        if (pendingTouchDrag) { clearTimeout(pendingTouchDrag.timer); pendingTouchDrag = null; }
-      }
-      function startDrag(){
-        if (dragging) return;
-        dragging = true;
-        grabPos = { x: pos.x, y: pos.y };
-        dragMoved = false;
-        try { if (viewer.controls) viewer.controls.enabled = false; } catch (e) {}
-        canvas.style.touchAction = 'none';
-      }
-      function endDrag(moved){
-        clearPendingTouchDrag();
-        if (!dragging) return;
-        dragging = false;
-        try { if (viewer.controls) viewer.controls.enabled = true; } catch (e) {}
-        canvas.style.touchAction = 'pan-y';
-        target = clampTarget(lastPX, lastPY); /* resume chasing from the release point */
-        hasTarget = true;
-        if (moved) {
-          /* swallow the single click the drag's own release would otherwise dispatch */
-          suppressClick = true;
-          setTimeout(function(){ suppressClick = false; }, 350);
-        }
-      }
-      /* one-shot click guard: eats only the click that ends a real drag */
-      window.addEventListener('click', function(e){
-        if (suppressClick) { suppressClick = false; e.stopPropagation(); e.preventDefault(); }
-      }, true);
-      /* block page scrolling only while a drag is actually active */
-      window.addEventListener('touchmove', function(e){
-        if (dragging) e.preventDefault();
-      }, { passive: false });
-
       /* Full visible viewport, 8px margin on every side: the character's
          box always stays fully on screen, and its centre can reach every
-         corner and edge. Bounds come from the actual viewport size read
-         fresh on every call — never from the card, the links, or any fixed
-         height — so tall viewports (e.g. a phone in Desktop Site mode,
-         where the layout viewport is much taller than the card) get their
-         whole bottom half too. The min/max guards keep a valid range on
-         viewports narrower or shorter than the character itself. */
+         corner and edge. */
+      /* …but never past the footer's bottom edge, so the character can
+         never wander into (or trail) empty space below the end of the
+         page. The footer's page-space bottom is re-measured at most twice
+         a second (layout shifts as fonts and sections settle); between
+         measures the current scroll offset converts it back to viewport
+         space. While the footer is hidden (destination routes) there is
+         no clamp — the character is hidden then too. */
+      var footerEl = document.getElementById('siteFooter');
+      var footerPageBottom = Infinity, footerMeasuredAt = 0;
+      function measureFooter(){
+        footerMeasuredAt = performance.now();
+        if (!footerEl || !footerEl.getClientRects().length) { footerPageBottom = Infinity; return; }
+        footerPageBottom = footerEl.getBoundingClientRect().bottom + window.scrollY;
+      }
       function clampTarget(tx, ty){
         var h = halfSize();
         var vw = window.innerWidth, vh = window.innerHeight;
         var left = Math.min(h.hw + 8, vw / 2), right = Math.max(vw - h.hw - 8, vw / 2);
         var top = Math.min(h.hh + 8, vh / 2), bottom = Math.max(vh - h.hh - 8, vh / 2);
+        if (performance.now() - footerMeasuredAt > 500) measureFooter();
+        if (isFinite(footerPageBottom)) {
+          var fb = footerPageBottom - window.scrollY; /* footer bottom, viewport space */
+          if (fb > top) bottom = Math.min(bottom, Math.max(top, fb - h.hh));
+        }
         return { x: Math.max(left, Math.min(right, tx)), y: Math.max(top, Math.min(bottom, ty)) };
       }
       function setHeadTarget(clientX, clientY){
@@ -1443,8 +1398,6 @@
         if (!r.width || !window.innerWidth) return;
         var hx = r.left + r.width / 2;
         var hy = r.top + r.height * 0.25; /* approx. head position on screen */
-        /* normalise against the distance to each screen edge, so the head
-           reaches its full turn exactly at the edges in every direction */
         var nx = clientX < hx ? (clientX - hx) / Math.max(hx, 1)
                               : (clientX - hx) / Math.max(window.innerWidth - hx, 1);
         var ny = clientY < hy ? (clientY - hy) / Math.max(hy, 1)
@@ -1457,14 +1410,8 @@
       window.addEventListener('pointermove', function(e){
         setHeadTarget(e.clientX, e.clientY);
         if (e.pointerType === 'touch') {
-          if (dragging) { lastPX = e.clientX; lastPY = e.clientY; return; }
-          /* a swipe before the long-press fires cancels the pending drag */
-          if (pendingTouchDrag &&
-              (Math.abs(e.clientX - pendingTouchDrag.x) > 12 || Math.abs(e.clientY - pendingTouchDrag.y) > 12)) clearPendingTouchDrag();
           return; /* touch: taps move it, scrolls must not */
         }
-        /* mouse released outside the window: a move with no button held ends the drag */
-        if (dragging && e.buttons === 0) { endDrag(dragMoved); return; }
         lastPointerType = e.pointerType || 'mouse';
         lastPX = e.clientX; lastPY = e.clientY;
         target = clampTarget(e.clientX, e.clientY);
@@ -1487,27 +1434,14 @@
         target = clampTarget(e.clientX, e.clientY);
         hasTarget = true;
       }, { passive: true });
-      canvas.addEventListener('pointerdown', function(e){
-        if (e.pointerType === 'touch') {
-          /* arm a long-press: only a still hold becomes a drag; a swipe or tap cancels it */
-          clearPendingTouchDrag();
-          var sx = e.clientX, sy = e.clientY;
-          pendingTouchDrag = { x: sx, y: sy, timer: setTimeout(function(){
-            pendingTouchDrag = null;
-            startDrag();
-          }, 350) };
-        } else if (e.button === 0 || e.button === undefined) {
-          startDrag();
-        }
-      }, { passive: true });
-      window.addEventListener('pointerup', function(){
-        if (dragging) endDrag(dragMoved);
-        else clearPendingTouchDrag();
-      }, { passive: true });
-      window.addEventListener('pointercancel', function(){
-        clearPendingTouchDrag();
-        if (dragging) endDrag(false);
-      }, { passive: true });
+      function inField(el){
+        if (!el || !el.closest) return false;
+        return !!el.closest('#contactForm, input, textarea, select, [contenteditable="true"]');
+      }
+      document.addEventListener('focusin', function(e){ typing = inField(e.target); });
+      document.addEventListener('focusout', function(){
+        setTimeout(function(){ typing = inField(document.activeElement); }, 0);
+      });
 
       (function tick(now){
         requestAnimationFrame(tick);
@@ -1525,23 +1459,8 @@
           var sc = spacerCenter();
           pos.x = sc.x; pos.y = sc.y;
           place(pos.x, pos.y);
-        } else if (dragging) {
-          /* dragged: glide quickly to sit directly under the pointer (no snap, no stop radius) */
-          var dc = clampTarget(lastPX, lastPY);
-          var ddx = dc.x - pos.x, ddy = dc.y - pos.y;
-          var ddist = Math.sqrt(ddx * ddx + ddy * ddy);
-          if (ddist > 0.5) {
-            var dk = 1 - Math.exp(-14 * dt);
-            var nnx = pos.x + ddx * dk, nny = pos.y + ddy * dk;
-            speed = Math.sqrt((nnx - pos.x) * (nnx - pos.x) + (nny - pos.y) * (nny - pos.y)) / Math.max(dt, 0.001);
-            pos.x = nnx; pos.y = nny;
-            if (grabPos && Math.sqrt((pos.x - grabPos.x) * (pos.x - grabPos.x) + (pos.y - grabPos.y) * (pos.y - grabPos.y)) > 12) dragMoved = true;
-            if (speed > 40 && Math.abs(ddx) > 20) {
-              var dwant = ddx > 0 ? Math.PI / 2 : -Math.PI / 2;
-              var ddiff = Math.atan2(Math.sin(dwant - faceYaw), Math.cos(dwant - faceYaw));
-              faceYaw += ddiff * (1 - Math.exp(-10 * dt));
-            }
-          }
+        } else if (typing) {
+          /* paused while the visitor writes: stand still, keep facing */
           place(pos.x, pos.y);
         } else {
           var pc = clampTarget(pos.x, pos.y);
@@ -1584,7 +1503,7 @@
           faceYaw += diff0 * (1 - Math.exp(-5 * dt));
         }
 
-        /* head smoothing (unchanged behaviour) */
+        /* head smoothing */
         cYaw += (tYaw - cYaw) * 0.10;
         cPitch += (tPitch - cPitch) * 0.10;
         var player = viewer.playerObject;
@@ -1600,7 +1519,7 @@
           if (skin.rightLeg) skin.rightLeg.rotation.x = 1.3 * b * lc;
           if (skin.leftArm) { skin.leftArm.rotation.x = 1.5 * b * lc; skin.leftArm.rotation.z = b * (0.1 * lc + 0.1 * Math.PI); }
           if (skin.rightArm) { skin.rightArm.rotation.x = -1.5 * b * lc; skin.rightArm.rotation.z = b * (-0.1 * lc - 0.1 * Math.PI); }
-          player.position.y = b * Math.cos(2 * ph);
+          player.position.y = b * Math.cos(2 * ph) + (1 - b) * 0.22 * Math.sin(t * 0.0022); /* gentle idle bob while standing */
           player.position.x = b * 0.15 * lc;
           player.rotation.z = b * 0.01 * Math.cos(ph + Math.PI);
         }
@@ -1626,35 +1545,43 @@
       try { viewer.renderPaused = document.hidden || currentRoute !== ''; } catch (e) {}
     });
 
-    /* preview routing: if a destination route is already active (e.g. the
-       page was refreshed on a destination path), hide the character right away */
+    /* if a destination route is already active, hide the character right away */
     try { setCharacterVisible(currentRoute === ''); } catch (e) {}
   }
 
-  /* ================= navigation drawer + path routing (preview) ============
-     Single-file path routing: the homepage is the default view ('/'); each
-     destination is a <section> shown only for its clean path ('/settings',
-     '/about', …). In-page clicks use history.pushState (no reload); back /
-     forward work through popstate; an unknown path falls back to the
-     homepage. Direct visits and refreshes on a destination path are served
-     by 404.html, which saves the path and sends the browser to '/', where
-     the restore step below turns it back into the clean path. Old '#slug'
-     links still work: they are rewritten to the clean path on load. The
-     entry gate overlays first load and routing applies underneath it. */
+  function startViewer(){
+    if (window.skinview3d) { initViewer(); return; }
+    /* primary CDN failed: try the mirror once, then show the fallback note */
+    var s = document.createElement('script');
+    s.src = 'https://unpkg.com/skinview3d@3.4.1/bundles/skinview3d.bundle.js';
+    s.onload = initViewer;
+    s.onerror = showFallback;
+    document.head.appendChild(s);
+  }
+
+  /* ================= navigation drawer + path routing =================
+     Single-file path routing: the homepage ('/') is one long scroll page —
+     the hero plus every main section stacked in priority order. A path
+     naming one of those sections ('/skills', '/projects', …) opens Home
+     scrolled to it; the remaining paths (Servers, Experiments, Gaming
+     Setup, Settings, Appearance) are standalone views. In-page clicks use
+     history.pushState (no reload); back / forward work through popstate;
+     an unknown path falls back to the homepage. Old '#slug' links still
+     work: they are rewritten to the clean path on load. The entry gate
+     overlays first load and routing applies underneath it. */
   var ROUTES = {
     'about': 'view-about', 'skills': 'view-skills', 'projects': 'view-projects', 'apps-tools': 'view-apps-tools',
     'experiments': 'view-experiments', 'minecraft-world': 'view-minecraft-world',
     'servers': 'view-servers', 'gaming-hub': 'view-gaming-hub', 'gaming-setup': 'view-gaming-setup',
     'youtube': 'view-youtube', 'designs': 'view-designs', 'music': 'view-music',
-    'achievements': 'view-achievements', 'discord': 'view-discord', 'contact': 'view-contact',
-    'social': 'view-social', 'email': 'view-email', 'suggestions': 'view-suggestions',
+    'discord': 'view-discord', 'contact': 'view-contact',
+    'social': 'view-social', 'email': 'view-email', 'suggestions': 'view-email',
     'settings': 'view-settings', 'appearance': 'view-appearance'
   };
   var currentRoute = '';
   /* Fallback when history.pushState is blocked (e.g. a sandboxed preview
-     viewer): without it a failed pushState leaves applyRoute reading the
-     old path and the page silently falls back to home. The override is
-     used only in that failure path; normal navigation is unchanged. */
+     viewer): the override is used only in that failure path; normal
+     navigation is unchanged. */
   var routeOverride = null;
   var drawer = document.getElementById('navDrawer');
   var drawerBackdrop = document.getElementById('drawerBackdrop');
@@ -1663,19 +1590,24 @@
 
   /* Character visibility per route: the homepage character is a fixed
      overlay parked at its original spacer. On a destination route the home
-     card is hidden, so the character would park at a meaningless spot —
-     hide its wrapper and pause its render loop instead; restore on home. */
+     card is hidden, so hide its wrapper and pause its render loop instead;
+     restore on home. */
   function setCharacterVisible(show){
     if (wrap) wrap.style.display = show ? '' : 'none';
     var v = wrap ? wrap._rafiViewer : null;
     if (v) { try { v.renderPaused = show ? document.hidden : true; } catch (e) {} }
   }
+  var drawerHideTimer = null;
   function openDrawer(){
     if (!drawer) return;
+    clearTimeout(drawerHideTimer);
+    drawer.style.display = 'block';
+    void drawer.offsetWidth; /* reflow, so the slide-in transition still runs */
     drawer.classList.add('open');
     if (drawerBackdrop) drawerBackdrop.hidden = false;
     navBtn.setAttribute('aria-expanded', 'true');
     document.body.style.overflow = 'hidden';
+    syncDrawerTabs();
     try { if (drawerClose) drawerClose.focus(); } catch (e) {}
   }
   function closeDrawer(){
@@ -1684,6 +1616,11 @@
     if (drawerBackdrop) drawerBackdrop.hidden = true;
     navBtn.setAttribute('aria-expanded', 'false');
     document.body.style.overflow = '';
+    /* take the closed drawer fully out of rendering once it has slid away */
+    clearTimeout(drawerHideTimer);
+    drawerHideTimer = setTimeout(function(){
+      if (drawer && !drawer.classList.contains('open')) drawer.style.display = 'none';
+    }, 300);
   }
   if (drawerClose) drawerClose.addEventListener('click', function(){ closeDrawer(); navBtn.focus(); });
   if (drawerBackdrop) drawerBackdrop.addEventListener('click', closeDrawer);
@@ -1718,7 +1655,7 @@
     catch (e) { routeOverride = slug; }
     applyRoute();
   }
-  /* Restore a destination path saved by 404.html, or rewrite a legacy
+  /* Restore a destination path saved by a 404 page, or rewrite a legacy
      '#slug' link to its clean path — both before the first applyRoute. */
   try {
     var savedPath = sessionStorage.getItem('rafiprx-path');
@@ -1732,22 +1669,59 @@
       }
     }
   } catch (e) {}
+  /* Home is one long scroll page: the hero first, then the About cards
+     directly under the hero quote, then Skills, Projects, Gaming, then
+     the remaining sections — with Suggestions just above Email at the
+     very bottom and the footer last. A path naming one of those sections
+     opens Home scrolled to that section; the other routes (Servers,
+     Experiments, Gaming Setup, Settings, Appearance) stay standalone
+     pages. */
+  var SCROLL_ORDER = ['about', 'skills', 'projects', 'gaming-hub', 'minecraft-world', 'apps-tools', 'youtube', 'designs', 'music', 'discord', 'social', 'contact', 'suggestions', 'email'];
+  var SCROLL_SET = {};
+  SCROLL_ORDER.forEach(function(s){ SCROLL_SET[s] = true; });
+  var destViewsEl = document.getElementById('destViews');
+  var siteFooter = document.getElementById('siteFooter');
+
   function applyRoute(){
     var slug = routeOverride !== null ? routeOverride : slugFromPath(location.pathname);
-    var viewId = ROUTES[slug];
-    var isDest = !!viewId;
+    var onHome = (slug === '' || !!SCROLL_SET[slug]);
+    var isDest = !onHome && !!ROUTES[slug];
     currentRoute = isDest ? slug : '';
-    if (homeView) homeView.hidden = isDest;
-    Object.keys(ROUTES).forEach(function(s){
-      var el = document.getElementById(ROUTES[s]);
-      if (el) el.hidden = (s !== slug);
-    });
+    if (homeView) { homeView.hidden = isDest; homeView.classList.toggle('home-top', onHome); }
+    if (onHome) {
+      /* show every scroll section, in priority order, below the hero */
+      SCROLL_ORDER.forEach(function(s){
+        var el = document.getElementById(ROUTES[s]);
+        if (el) { el.hidden = false; if (destViewsEl) destViewsEl.appendChild(el); }
+      });
+      Object.keys(ROUTES).forEach(function(s){
+        if (SCROLL_SET[s]) return;
+        var el = document.getElementById(ROUTES[s]);
+        if (el) el.hidden = true;
+      });
+      if (destViewsEl) destViewsEl.classList.add('home-scroll');
+      if (siteFooter) siteFooter.hidden = false;
+    } else {
+      Object.keys(ROUTES).forEach(function(s){
+        var el = document.getElementById(ROUTES[s]);
+        if (el) el.hidden = (s !== slug);
+      });
+      if (destViewsEl) destViewsEl.classList.remove('home-scroll');
+      if (siteFooter) siteFooter.hidden = true;
+    }
     setCharacterVisible(!isDest);
     document.querySelectorAll('.drawer-link').forEach(function(a){
       if (a.getAttribute('data-route') === slug) a.setAttribute('aria-current', 'page');
       else a.removeAttribute('aria-current');
     });
     closeDrawer();
+    if (onHome && slug) {
+      var tEl = document.getElementById(ROUTES[slug]);
+      if (tEl) {
+        setTimeout(function(){ tEl.scrollIntoView({ block: 'start' }); }, 90);
+        return;
+      }
+    }
     window.scrollTo(0, 0);
   }
   /* In-page navigation: plain left-clicks on internal route links move
@@ -1764,44 +1738,201 @@
   window.addEventListener('popstate', function(){ routeOverride = null; applyRoute(); });
   applyRoute();
 
-  /* Suggestions: mailto fallback (no server). Opens the visitor's email app. */
-  var suggForm = document.getElementById('suggForm');
-  if (suggForm) suggForm.addEventListener('submit', function(ev){
-    ev.preventDefault();
-    var subj = document.getElementById('suggSubject').value || 'Suggestion for RAFI PRX';
-    var msg = document.getElementById('suggMessage').value || '';
-    window.location.href = 'mailto:princerafi5801@gmail.com?subject=' + encodeURIComponent(subj) + '&body=' + encodeURIComponent(msg);
-  });
+  /* Drawer tabs: quick switcher for the four main sections. */
+  var drawerTabs = document.getElementById('drawerTabs');
+  var TAB_ROUTES = ['about', 'skills', 'projects', 'gaming-hub'];
+  function syncDrawerTabs(){
+    if (!drawerTabs || !defined('sakuga-tabs')) return;
+    if (TAB_ROUTES.indexOf(currentRoute) !== -1) { try { drawerTabs.value = currentRoute; } catch (e) {} }
+  }
+  if (drawerTabs) {
+    drawerTabs.addEventListener('change', function(e){
+      var v = (e.detail && e.detail.value) || drawerTabs.value;
+      if (v && ROUTES[v] && v !== currentRoute) goRoute(v);
+    });
+    /* fallback: clicking an option of the un-upgraded element still routes */
+    drawerTabs.addEventListener('click', function(e){
+      if (defined('sakuga-tabs')) return;
+      if (e.target && e.target.tagName === 'OPTION' && e.target.value !== currentRoute) goRoute(e.target.value);
+    });
+  }
+  var deniedBtn = document.getElementById('deniedBtn');
+  if (deniedBtn) {
+    var deniedAt = 0;
+    var goHome = function(){
+      var now = Date.now();
+      if (now - deniedAt < 500) return;
+      deniedAt = now;
+      goRoute('');
+    };
+    deniedBtn.addEventListener('click', goHome);
+    deniedBtn.addEventListener('pointerup', goHome);
+  }
 
-  /* Contact form: UI only for now (no backend yet). Same mailto mechanism as
-     suggestions: opens the visitor's email app with the message filled in.
-     Later this handler is swapped for a real form-service endpoint. */
+  /* ================= forms ================= */
+  var consentState = false;
+  var consentBox = document.getElementById('consentBox');
+  if (consentBox) consentBox.addEventListener('change', function(){ consentState = !!consentBox.checked; });
+  var ratingState = 0;
+  var suggRating = document.getElementById('suggRating');
+  if (suggRating) suggRating.addEventListener('change', function(){ ratingState = Number(suggRating.value || 0); });
+
+  function fieldVal(id){
+    var el = document.getElementById(id);
+    if (!el) return '';
+    if (defined('sakuga-input')) return el.value || '';
+    if (el._fb) return el._fb.value || '';
+    return el.value || '';
+  }
+
+  /* One merged form (Email Me + Suggestions): mailto only, no server.
+     Opens the visitor's email app with name, email, subject, message and
+     the star rating (when given) filled in. */
   var contactForm = document.getElementById('contactForm');
   if (contactForm) contactForm.addEventListener('submit', function(ev){
     ev.preventDefault();
-    var name = document.getElementById('cfName').value.trim();
-    var email = document.getElementById('cfEmail').value.trim();
-    var subj = document.getElementById('cfSubject').value.trim();
+    /* Unticked confirm box: the Send button's own click animation still
+       plays (it is internal to the button), but the email app does NOT
+       open — the tick-box pulses instead to show what to do first. */
+    if (!consentState) {
+      var row = document.getElementById('consentRow');
+      if (row) {
+        row.classList.remove('pulse');
+        void row.offsetWidth; /* restart the pulse if Send is tapped twice */
+        row.classList.add('pulse');
+        setTimeout(function(){ row.classList.remove('pulse'); }, 1000);
+      }
+      return;
+    }
+    var name = fieldVal('cfName').trim();
+    var email = fieldVal('cfEmail').trim();
+    var subj = fieldVal('cfSubject').trim();
     var msg = document.getElementById('cfMessage').value.trim();
+    if (!name || !email || !subj || !msg) { showToast('Fill in all the fields first'); return; }
     var body = 'Name: ' + name + '\nEmail: ' + email + '\n\n' + msg;
+    if (ratingState > 0) body += '\n\nRating: ' + ratingState + ' / 5';
+    showToast('This opens your email app with your message filled in.');
     window.location.href = 'mailto:princerafi5801@gmail.com?subject=' + encodeURIComponent(subj) + '&body=' + encodeURIComponent(body);
   });
 
-  function startViewer(){
-    if (window.skinview3d) { initViewer(); return; }
-    /* primary CDN failed: try the mirror once, then show the fallback note */
-    var s = document.createElement('script');
-    s.src = 'https://unpkg.com/skinview3d@3.4.1/bundles/skinview3d.bundle.js';
-    s.onload = initViewer;
-    s.onerror = showFallback;
-    document.head.appendChild(s);
+  /* Fallback submit for an un-upgraded submit button inside a form */
+  document.addEventListener('click', function(e){
+    var b = e.target && e.target.closest ? e.target.closest('sakuga-button') : null;
+    if (!b || defined('sakuga-button')) return;
+    if (b.getAttribute('type') === 'submit') {
+      var f = b.closest('form');
+      if (f) { e.preventDefault(); f.dispatchEvent(new Event('submit', { cancelable: true })); }
+    }
+  });
+
+  /* ================= native fallbacks =================
+     Built only for a control whose component file genuinely failed to load;
+     each fallback drives the same actions as the real control. */
+  function mk(tag, cls, text){ var d = document.createElement(tag); if (cls) d.className = cls; if (text != null) d.textContent = text; return d; }
+  function initFallbacks(){
+    /* music switches -> native switch buttons */
+    if (!defined('sakuga-toggle')) {
+      musicSlots.forEach(function(s){
+        if (!s.host || !s.fbSpan || s.fbBtn) return;
+        var btn = mk('button', 'switch'); btn.type = 'button';
+        btn.setAttribute('role', 'switch'); btn.setAttribute('aria-checked', 'false');
+        btn.setAttribute('aria-label', 'Music on or off');
+        var tr = mk('span', 'track'); tr.setAttribute('aria-hidden', 'true');
+        var st = mk('span', 'fb-state', 'Off');
+        btn.appendChild(tr); btn.appendChild(st);
+        btn.addEventListener('click', function(){ setMusic(!musicWanted); });
+        s.fbSpan.appendChild(btn);
+        s.fbBtn = btn;
+        s.host.style.display = 'none';
+        if (s.state) s.state.style.display = 'none';
+      });
+      reflectMusic();
+    }
+    /* volume is a native range input in the markup — nothing to fall back */
+    /* playback -> native bar */
+    if (!defined('sakuga-progress')) {
+      var pf = document.getElementById('progFallback');
+      if (pf && prog) { pf.hidden = false; prog.style.display = 'none'; renderProgress(); }
+    }
+    /* theme groups -> native radios */
+    if (!defined('sakuga-radio')) {
+      themeGroups.forEach(function(g){
+        if (!g.host || !g.fb || g.fb.firstChild) return;
+        [['dark', 'Dark Theme'], ['light', 'Light Theme']].forEach(function(pair){
+          var lab = mk('label', 'fb-radio');
+          var inp = mk('input'); inp.type = 'radio'; inp.name = g.name; inp.value = pair[0];
+          inp.checked = (pair[0] === currentTheme());
+          inp.addEventListener('change', function(){ if (inp.checked) setTheme(inp.value); });
+          lab.appendChild(inp); lab.appendChild(document.createTextNode(pair[1]));
+          g.fb.appendChild(lab);
+        });
+        g.host.style.display = 'none';
+      });
+    }
+    /* text fields -> native inputs */
+    if (!defined('sakuga-input')) {
+      [['cfName', 'cfNameFb', 'text', 'Name *'], ['cfEmail', 'cfEmailFb', 'email', 'Email *'], ['cfSubject', 'cfSubjectFb', 'text', 'Your Subject *'], ['suggSubject', 'suggSubjectFb', 'text', 'Suggestion for RAFI PRX']].forEach(function(cfg){
+        var host = document.getElementById(cfg[0]);
+        var fbSpan = document.getElementById(cfg[1]);
+        if (!host || !fbSpan || fbSpan.firstChild) return;
+        var inp = mk('input', 'fb-input'); inp.type = cfg[2]; inp.placeholder = cfg[3];
+        inp.setAttribute('aria-label', cfg[3].replace(' *', ''));
+        fbSpan.appendChild(inp);
+        host._fb = inp;
+        host.style.display = 'none';
+      });
+    }
+    /* consent -> native checkbox */
+    if (!defined('sakuga-checkbox')) {
+      var ch = document.getElementById('consentFallback');
+      if (ch && !ch.firstChild && consentBox) {
+        var lab = mk('label', 'fb-check');
+        var inp = mk('input'); inp.type = 'checkbox';
+        inp.addEventListener('change', function(){ consentState = inp.checked; });
+        lab.appendChild(inp); lab.appendChild(document.createTextNode('Tick to confirm, then Send opens your email app.'));
+        ch.appendChild(lab);
+        consentBox.style.display = 'none';
+      }
+    } else if (consentBox) {
+      consentState = !!consentBox.checked;
+    }
+    /* rating -> star buttons */
+    if (!defined('sakuga-rating')) {
+      var rh = document.getElementById('ratingFallback');
+      if (rh && !rh.firstChild && suggRating) {
+        var box = mk('div', 'fb-stars');
+        for (var i = 1; i <= 5; i++) {
+          (function(n){
+            var b = mk('button', null, '★'); b.type = 'button'; b.setAttribute('aria-label', n + ' star' + (n > 1 ? 's' : ''));
+            b.addEventListener('click', function(){
+              ratingState = (ratingState === n) ? 0 : n;
+              var kids = box.children;
+              for (var j = 0; j < kids.length; j++) kids[j].className = (j < ratingState) ? 'on' : '';
+            });
+            box.appendChild(b);
+          })(i);
+        }
+        rh.appendChild(box);
+        suggRating.style.display = 'none';
+      }
+    }
+    /* tooltips -> title text on the wrapped buttons */
+    if (!defined('sakuga-tooltip')) {
+      document.querySelectorAll('sakuga-tooltip').forEach(function(t){
+        var btn = t.querySelector('button');
+        if (btn && !btn.title) btn.title = t.getAttribute('text') || '';
+      });
+    }
   }
+  window.addEventListener('load', function(){ setTimeout(initFallbacks, 150); });
+
+  /* start the 3D avatar (original behaviour: after the page is parsed) */
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', startViewer);
   } else { startViewer(); }
 })();
 </script>
-  <script>
+<script>
   /* Gaming Hub: single shared game list. Favorites render from the same
      records (by id) — no duplicated game data. No photos: cards are
      full-width text rows, like the drawer menu items. */
@@ -1872,7 +2003,7 @@
       if (open && scroll) {
         var sec = document.getElementById('gh-cat-' + code);
         var smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        setTimeout(function(){ sec.scrollIntoView({behavior: smooth ? 'smooth' : 'auto', block: 'start'}); }, 300);
+        setTimeout(function(){ sec.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'start' }); }, 300);
       }
     }
     catsWrap.addEventListener('click', function(ev){
@@ -1880,9 +2011,16 @@
       if (!head) return;
       var code = head.getAttribute('aria-controls').replace('gh-items-', '');
       var willOpen = head.getAttribute('aria-expanded') !== 'true';
+      /* Single-open accordion: opening a category closes every other one,
+         so exactly one category's games are visible at a time. Tapping the
+         open category again still closes it. The .gh-items grid-rows
+         transition animates both the close and the open. */
+      if (willOpen) {
+        CATS.forEach(function(c){ if (c.code !== code) setCatOpen(c.code, false, false); });
+      }
       setCatOpen(code, willOpen, willOpen);
     });
   })();
-  </script>
+</script>
 </body>
 </html>
