@@ -114,9 +114,10 @@
      window-level listeners and the character never blocks a tap, click,
      link or form field underneath it. Only the canvas itself re-enables
      pointer events, so a press that lands on the character's own small
-     displayed box (~78×100px) grabs the character instead of passing
-     through to the text below: drag to spin it (skinview3d OrbitControls).
-     touch-action:none makes a finger drag rotate rather than scroll, and
+     displayed box (~78×100px) is captured by the character instead of
+     passing through to the text below: hold and drag to lead it around —
+     it runs after the pointer while the press lasts.
+     touch-action:none makes a finger drag move it rather than scroll, and
      user-select / -webkit-touch-callout:none make sure pressing and
      holding the character can never select or call out page text. */
   .skin-viewer{width:min(74vw,290px);height:372px;margin:0;position:absolute;left:0;top:0;transform-origin:0 0;pointer-events:none}
@@ -572,7 +573,7 @@
         <div class="char-layer" id="charLayer">
           <div class="skin-viewer" id="skinViewer">
             <img id="skinPlaceholder" class="skin-ph" src="assets/avatar.png" alt="" aria-hidden="true" onerror="this.style.display='none'">
-            <canvas id="skinCanvas" role="img" aria-label="3D Minecraft avatar for alxxq. It stands in the hero, runs after your cursor on desktop, and runs to wherever you tap on a phone. Drag the character itself to spin it around."></canvas>
+            <canvas id="skinCanvas" role="img" aria-label="3D Minecraft avatar for alxxq. It stands in the hero, runs after your cursor on desktop, and runs to wherever you tap on a phone. Press and drag the character itself to lead it around — it runs after your finger or mouse while you hold it."></canvas>
             <p id="skinNote" class="skin-note" hidden>3D avatar could not load. Minecraft username: <strong>alxxq</strong></p>
           </div>
         </div>
@@ -1295,32 +1296,34 @@
        viewer when a destination route hides the character wrapper */
     wrap._rafiViewer = viewer;
 
-    /* Grab-and-spin: the canvas (and only the canvas) accepts pointer
-       events, so the viewer's OrbitControls receive drags that land on
-       the character itself — drag horizontally to spin it, with a little
-       pitch from vertical drags. Everything else still passes straight
-       through to the page underneath, and roaming movement is driven by
-       window-level pointer listeners (see setupCharacter). Auto-rotate
-       stays off; pan and zoom stay disabled so a drag can only rotate. */
+    /* Finger-follow drag: the canvas (and only the canvas) accepts
+       pointer events, so a press that lands on the character itself is
+       captured by it. While that press is held and dragged, the
+       character runs after the pointer (see setupCharacter) instead of
+       rotating — so OrbitControls rotation is disabled entirely and the
+       camera keeps its normal view. Everything else still passes
+       straight through to the page underneath, and roaming movement is
+       driven by window-level pointer listeners. Auto-rotate stays off;
+       pan and zoom stay disabled too. */
     viewer.autoRotate = false;
     if (viewer.controls) {
       viewer.controls.enablePan = false;
       viewer.controls.enableZoom = false;
-      viewer.controls.enableRotate = true;
+      viewer.controls.enableRotate = false;
       viewer.controls.autoRotate = false;
-      viewer.controls.minPolarAngle = 1.0;
-      viewer.controls.maxPolarAngle = 2.1;
     }
     /* OrbitControls sets this too; state it explicitly so no other rule
        re-opens page scroll or text selection from a character drag. */
     canvas.style.touchAction = 'none';
 
-    /* Drag state shared with setupCharacter: while the visitor is
-       spinning the character, roaming pauses; on release the camera
-       keeps its new angle (the character keeps its new facing) and the
-       normal idle/run behaviour resumes. preventDefault on the press
-       (plus the canvas CSS) guarantees a grab can never start a text
-       selection, even as the pointer moves off the character mid-drag. */
+    /* Drag state shared with setupCharacter: while the visitor holds a
+       press on the character, it is in follow mode — it keeps running
+       toward the pointer's current position for as long as the press
+       lasts, and on release it stops at that spot and the normal
+       idle/run behaviour resumes. It never stands frozen mid-drag.
+       preventDefault on the press (plus the canvas CSS) guarantees a
+       grab can never start a text selection, even as the pointer moves
+       off the character mid-drag. */
     var charDrag = { active: false };
     canvas.addEventListener('pointerdown', function(e){
       charDrag.active = true;
@@ -1337,7 +1340,8 @@
     /* ---- Character movement + head tracking ----
        The viewer is a fixed overlay displayed at 27% scale (~100px tall).
        Its layer stays pointer-events:none — only the canvas takes input,
-       for grab-and-spin drags — so the character runs after the pointer
+       for press-and-hold follow drags on the character itself — so the
+       character runs after the pointer
        and never blocks a tap, click, link or form field. On desktop it follows the mouse
        live; on touch screens it runs to the last tap point and stands
        there. Before the first pointer interaction it stands idle beside
@@ -1444,8 +1448,11 @@
       }
       window.addEventListener('pointermove', function(e){
         setHeadTarget(e.clientX, e.clientY);
-        if (e.pointerType === 'touch') {
-          return; /* touch: taps move it, scrolls must not */
+        if (e.pointerType === 'touch' && !charDrag.active) {
+          return; /* touch: taps move it, scrolls must not — but a held
+             follow-drag on the character is not a scroll: it falls
+             through so the pointer's current position stays the
+             character's live target for as long as the press lasts */
         }
         lastPointerType = e.pointerType || 'mouse';
         lastPX = e.clientX; lastPY = e.clientY;
@@ -1494,9 +1501,11 @@
           var sc = spacerCenter();
           pos.x = sc.x; pos.y = sc.y;
           place(pos.x, pos.y);
-        } else if (typing || charDrag.active) {
-          /* paused while the visitor writes, or while they are holding
-             the character to spin it: stand still, keep facing */
+        } else if (typing) {
+          /* paused only while the visitor writes in a form field.
+             Holding the character is NOT a pause: charDrag follow mode
+             runs through the normal movement branch below, chasing the
+             live pointer target. */
           place(pos.x, pos.y);
         } else {
           var pc = clampTarget(pos.x, pos.y);
@@ -1505,7 +1514,9 @@
           var over = lastPointerType !== 'touch' &&
             Math.abs(lastPX - pos.x) <= h.hw + 4 && Math.abs(lastPY - pos.y) <= h.hh + 4;
           var isTouch = lastPointerType === 'touch';
-          var stopR = (over || isTouch) ? STOP_ARRIVE : STOP_CHASE;
+          /* while being led by a held press, close right in on the
+             pointer instead of stopping short of it */
+          var stopR = (charDrag.active || over || isTouch) ? STOP_ARRIVE : STOP_CHASE;
           var dx = target.x - pos.x, dy = target.y - pos.y;
           var dist = Math.sqrt(dx * dx + dy * dy);
           if (dist > stopR) {
